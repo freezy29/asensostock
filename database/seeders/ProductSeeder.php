@@ -17,28 +17,24 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'Nescafe 3-in-1 Sachet',
                 'product_category_id' => 1,
-                'critical_level' => 20,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'name' => 'Great Taste White',
                 'product_category_id' => 1,
-                'critical_level' => 30,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'name' => 'Tang Mango Powder',
                 'product_category_id' => 2,
-                'critical_level' => 15,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'name' => 'Minute Maid Orange Bottle',
                 'product_category_id' => 2,
-                'critical_level' => 10,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
