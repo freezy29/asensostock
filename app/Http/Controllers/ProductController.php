@@ -42,18 +42,16 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        //
-    }
+    public function show(Product $product) {}
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Product $product)
     {
-        //
-        return view('product.edit', compact('product'));
+        $variants = ProductVariant::whereBelongsTo($product)->get();
+
+        return view('product.edit', ['product' => $product, 'variants' => $variants]);
     }
 
     /**
