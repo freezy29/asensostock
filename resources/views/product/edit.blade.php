@@ -51,15 +51,19 @@
 
                 @forelse ($variants as $variant)
                 <tr>
-                    <th></th>
-                    <td></td>
-                    <td>Quality Control Specialist</td>
-                    <td>Blue</td>
-                    <td>Blue</td>
-                    <td>Blue</td>
-                    <td>Blue</td>
-                    <td>Blue</td>
-                    <td>aciton</td>
+                    <th>{{ $variant->type->name }}</th>
+                    <td>{{ (int)$variant->measure_value }}</td>
+                    <td>{{ $variant->unit->name }}</td>
+                    <td>{{ $variant->conversion_rate }}</td>
+                    <td>₱{{ $variant->price }}</td>
+                    <td>{{ $variant->current_qty }}</td>
+                    <td>{{ $variant->critical_level }}</td>
+                    <td>{{ $variant->updated_at}}</td>
+                    <td>
+                        <a href="" class="btn">✏</a>
+                        <a href="" class="btn">🔄</a>
+                        <a href="" class="btn">🗑</a>
+                    </td>
                 </tr>
                @empty
                 <p class="text-gray-500">No variants??</p>

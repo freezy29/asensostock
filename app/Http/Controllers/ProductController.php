@@ -20,7 +20,7 @@ class ProductController extends Controller
 
         $variants = ProductVariant::whereBelongsTo($products)->get();
 
-        return view('products', ['products' => $products, 'variants' => $variants]);
+        return view('product.index', ['products' => $products, 'variants' => $variants]);
     }
 
     /**
