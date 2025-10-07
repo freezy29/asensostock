@@ -1,4 +1,3 @@
-@use(function Illuminate\Support\Number)
 <x-layout>
     <x-slot:title>
      Product Details

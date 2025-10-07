@@ -52,13 +52,13 @@
         </thead>
         <tbody>
             @forelse ($products as $product)
-
           <tr>
             <th>{{ $product->id }}</th>
             <td>{{ $product->name }}</td>
             <td>{{ $product->category->name }}</td>
             <td>{{ $product->status }}</td>
             <td>{{ $variants->where('product_id', $product->id)->count() }}</td>
+
             @php
                 $product_variants = $variants->where('product_id', $product->id);
                 $total_stocks = 0;
@@ -83,4 +83,3 @@
       </table>
     </div>
 
-</x-layout>
