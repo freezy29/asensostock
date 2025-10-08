@@ -13,8 +13,13 @@ class ProductVariant extends Model
         return $this->belongsTo(Product::class);
     }
 
-    public function type(): HasMany
+    public function type(): BelongsTo
     {
-        return $this->hasMany(VariantType::class);
+        return $this->belongsTo(VariantType::class, 'variant_type_id');
+    }
+
+    public function unit(): BelongsTo
+    {
+        return $this->belongsTo(MeasureUnit::class, 'measure_unit_id');
     }
 }

@@ -18,7 +18,7 @@
             </button>
           </div>
           <div class="flex-1">
-            <a class="btn btn-ghost text-xl">AsensoStock</a>
+            <a href="/" class="btn btn-ghost text-xl">AsensoStock</a>
           </div>
           <div class="flex-none">
             <div class="dropdown dropdown-end">
