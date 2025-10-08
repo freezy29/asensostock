@@ -13,4 +13,9 @@ Route::get('/login', function () {
 
 Route::get('/stocks', function () {
     return view('stocks');
-});
+}); 
+
+Route::get('/stocks', function () {
+    return view('stocks');
+}); 
+
