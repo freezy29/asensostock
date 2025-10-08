@@ -13,9 +13,8 @@ Route::get('/login', function () {
 
 Route::get('/stocks', function () {
     return view('stocks');
-}); 
-
-Route::get('/stocks', function () {
-    return view('stocks');
-}); 
+ 
+=======
+}); //weww
+>>>>>>> ba4f26394730cea02532689d6c9112df92fe7c23
 
