@@ -1,5 +1,4 @@
-
-<x-layout>
+<x-layouts.app>
     <x-slot:title>Product Details</x-slot:title>
 
     <div class="mb-6">
@@ -130,5 +129,4 @@
         </div>
     </section>
 
-</x-layout>
-
+</x-layouts.app>

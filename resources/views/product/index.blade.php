@@ -1,4 +1,4 @@
-<x-layout>
+<x-layouts.app>
   <x-slot:title>Products</x-slot:title>
 
   <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-8">
@@ -142,4 +142,4 @@
     </div>
   </div>
 
-</x-layout>
+</x-layouts.app>
