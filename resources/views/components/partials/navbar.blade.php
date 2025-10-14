@@ -1,4 +1,4 @@
-<nav class="navbar w-full py-0 bg-primary text-primary-content px-4 lg:bg-base-300 lg:text-base-content">
+<nav class="navbar w-full py-0 bg-primary text-primary-content px-4 lg:bg-base-200 lg:text-base-content">
   <div class="navbar-start flex flex-1 item-center gap-2">
     <div class="lg:hidden">
         <label for="drawer" aria-label="open sidebar" class="btn btn-square btn-ghost">
@@ -23,7 +23,7 @@
     </a>
   </div>
   <div class="navbar-end flex-none">
-    <div class="hidden lg:block dropdown dropdown-end">
+    <div class="dropdown dropdown-end text-neutral-content">
       <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
         <div class="w-10 rounded-full">
           <img
