@@ -1,13 +1,77 @@
 <x-layouts.app>
   <x-slot:title>Products</x-slot:title>
 
+  <div class="product-page">
+    {{-- Mobile-only tweaks scoped to this page. These rules apply only on small screens (<=640px)
+        and won't change the desktop/tablet layout. --}}
+    <style>
+      /* Desktop/tablet: prevent stray horizontal scrollbar while preserving layout */
+      .product-page { overflow-x: hidden; }
+      .product-page .overflow-x-auto { overflow-x: visible; }
+
+      @media (max-width: 640px) {
+        /* avoid page-level horizontal scrollbar on phones */
+        html, body { overflow-x: hidden; }
+
+        /* Stack the search/input controls and make them full width */
+        .product-page form.flex { display: flex !important; flex-direction: column; align-items: stretch; gap: .5rem; }
+        .product-page .input-group { width: 100%; display: flex; gap: .5rem; }
+        .product-page .input-group .input { flex: 1 1 auto; width: 100%; }
+        .product-page .input-group .btn { flex: 0 0 auto; }
+
+        /* Reduce card / table paddings so table fits better on small screens */
+        .product-page .card .p-4 { padding: .5rem !important; }
+        .product-page table.table th, .product-page table.table td { padding-top: .45rem; padding-bottom: .45rem; }
+
+        /* Allow action buttons to wrap instead of forcing width */
+        .product-page .inline-flex { flex-wrap: wrap; gap: .25rem; }
+
+        /* Slightly reduce left/right spacing around main content on phones */
+        .product-page .px-6 { padding-left: 1rem !important; padding-right: 1rem !important; }
+
+        /* If a horizontal scrollbar remains from a wide element, make the table scroll internally */
+        .product-page .overflow-x-auto { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      }
+    </style>
+
   <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-8">
     <div>
       <h1 class="text-4xl sm:text-5xl font-bold">Products</h1>
       <p class="text-base text-gray-500 mt-2">Manage your product catalog and stock levels</p>
     </div>
 
-    <div class="flex items-center gap-4 w-full sm:w-auto">
+    {{-- Mobile-only controls: Filter (below description), then Search, then Add Product --}}
+    <div class="block sm:hidden mt-4">
+      <div class="mb-3 flex items-center">
+        <!-- compact filter button (small rectangle) -->
+        <button class="btn btn-outline btn-md w-24">Filter</button>
+      </div>
+
+      <form method="GET" action="" class="w-full mb-3">
+        <div class="input-group w-full">
+          <input type="search" name="q" class="input input-bordered input-lg w-full" placeholder="Search products..." aria-label="Search products" />
+          <button type="submit" class="btn btn-primary btn-square btn-lg" aria-label="Search" title="Search">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="7"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </button>
+        </div>
+      </form>
+
+      <div class="flex">
+        <!-- compact add button with fixed width to match screenshot -->
+        <a href="/products/create" class="btn btn-primary w-44 inline-flex items-center justify-center gap-3 py-2 rounded-md shadow-md" title="Add Product" aria-label="Add Product">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          Add Product
+        </a>
+      </div>
+    </div>
+
+  <div class="hidden sm:flex items-center gap-4 w-full sm:w-auto">
       <form method="GET" action="" class="flex items-center gap-3 w-full sm:w-auto">
         <div class="input-group w-full sm:w-auto">
           <input type="search" name="q" class="input input-bordered input-lg w-full sm:w-80" placeholder="Search products..." aria-label="Search products" />
@@ -143,3 +207,4 @@
   </div>
 
 </x-layouts.app>
+  </div>
