@@ -1,6 +1,7 @@
-<nav class="navbar bg-primary text-primary-content px-4 lg:bg-base-300 lg:text-base-content">
-    <div class="lg:hidden flex-none">
-        <label for="my-drawer-3" aria-label="open sidebar" class="btn btn-square btn-ghost">
+<nav class="navbar w-full py-0 bg-primary text-primary-content px-4 lg:bg-base-300 lg:text-base-content">
+  <div class="navbar-start flex flex-1 item-center gap-2">
+    <div class="lg:hidden">
+        <label for="drawer" aria-label="open sidebar" class="btn btn-square btn-ghost">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -16,8 +17,7 @@
           </svg>
         </label>
       </div>
-  <div class="flex-1">
-    <a class="lg:hidden btn btn-ghost text-xl p-4">
+    <a class="lg:hidden me-2 flex w-35 shrink-0 items-center gap-2 text-xl" href="/" aria-current="page aria-label="AsensoStock">
      <img src="{{ asset('images/AsensoStock.svg') }}" class="w-10 rounded-full">
         AsensoStock
     </a>
