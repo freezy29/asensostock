@@ -20,7 +20,7 @@ class ProductController extends Controller
 
         $variants = ProductVariant::whereBelongsTo($products)->get();
 
-        return view('product.index', ['products' => $products, 'variants' => $variants]);
+        return view('products.index', ['products' => $products, 'variants' => $variants]);
     }
 
     /**
@@ -28,7 +28,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('product.create');
+        return view('products.create');
     }
 
     /**
@@ -45,7 +45,7 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         //
-        return view('product.show');
+        return view('products.show');
     }
 
     /**
@@ -55,7 +55,7 @@ class ProductController extends Controller
     {
         $variants = ProductVariant::whereBelongsTo($product)->get();
 
-        return view('product.edit', ['product' => $product, 'variants' => $variants]);
+        return view('products.edit', ['product' => $product, 'variants' => $variants]);
     }
 
     /**
