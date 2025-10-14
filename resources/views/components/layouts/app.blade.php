@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="light" style="scroll-padding-top: 5rem; scroll-behavior: smooth;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,18 +10,24 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-    <body class="min-h-screen font-sans">
+    <body>
 
-    <div class="drawer lg:drawer-open">
-      <input id="my-drawer-3" type="checkbox" class="drawer-toggle" />
-      <div class="drawer-content flex flex-col items-center justify-center">
+    <div class="drawer lg:drawer-open mx-auto ">
+      <input id="drawer" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content">
         <!-- Page content here -->
-        <x-partials.navbar>
-        </x-partials.navbar>
+        <div class="sticky top-0 z-30 flex h-16 w-full flex justify-center">
+            <x-partials.navbar>
+            </x-partials.navbar>
+        </div>
 
-        <main class="flex-1 container mx-auto p-4 ">
-            {{ $slot }}
-        </main>
+
+        <div class="relative max-w-[100vw] px-6 pb-16 xl:pe-2">
+            <main class="prose prose-sm md:prose-base w-full grow pt-10">
+                {{ $slot }}
+            </main>
+        </div>
+
 
       </div>
 
