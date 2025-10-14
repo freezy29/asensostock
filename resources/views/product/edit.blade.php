@@ -1,5 +1,5 @@
 <x-layouts.app>
-    <x-slot:title>Product Details</x-slot:title>
+    <x-slot:title>Edit Product Details</x-slot:title>
 
     <div class="mb-6">
         <h1 class="text-4xl font-bold">Product details</h1>

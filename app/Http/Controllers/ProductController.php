@@ -28,7 +28,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return view('product.create');
     }
 
     /**
@@ -36,13 +36,17 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return redirect('/')->with('success', 'product created!');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Product $product) {}
+    public function show(Product $product)
+    {
+        //
+        return view('product.show');
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -59,14 +63,16 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        return redirect('/')->with('success', 'Product updated!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Product $product)
     {
-        //
+        $product->delete();
+
+        return redirect('/')->with('success', 'Product deleted from the list');
     }
 }
