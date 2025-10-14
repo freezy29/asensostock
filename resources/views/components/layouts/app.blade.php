@@ -12,12 +12,12 @@
 </head>
     <body>
 
-    <div class="drawer lg:drawer-open mx-auto ">
+    <div class="drawer lg:drawer-open mx-auto pt-16 lg:pt-0">
       <input id="drawer" type="checkbox" class="drawer-toggle" />
       <div class="drawer-content">
         <!-- Page content here -->
         <div class="
-        bg-base-100/90 text-base-content sticky top-0 z-30 flex h-16 w-full [transform:translate3d(0,0,0)] justify-center backdrop-blur transition-shadow duration-100 print:hidden
+        bg-base-100/90 text-base-content fixed lg:sticky top-0 z-30 flex h-16 w-full [transform:translate3d(0,0,0)] justify-center backdrop-blur transition-shadow duration-100 print:hidden
         shadow-xs
         ">
             <x-partials.navbar>
