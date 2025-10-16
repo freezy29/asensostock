@@ -173,15 +173,22 @@
                         </a>
                       </div>
 
-                      <div class="tooltip" data-tip="Delete">
-                        <a href="#" class="inline-flex items-center justify-center w-9 h-9 rounded-md bg-white border border-gray-200 shadow-sm hover:bg-red-50 hover:shadow-md transition" title="Delete" aria-label="Delete">
+
+
+                    <form method="POST" action="/products/{{ $product->id }}">
+                        @csrf
+                        @method('DELETE')
+                      <div class="tooltip" data-tip="Delet">
+                        <button type="submit" href="#" class="inline-flex items-center justify-center w-9 h-9 rounded-md bg-white border border-gray-200 shadow-sm hover:bg-red-50 hover:shadow-md transition btn btn-ghost btn-xs text-error" title="Delete" aria-label="Delete"
+                            onclick="return confirm('Are you sure you want to delete this product?')">
                           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 7h12" />
                             <path stroke-linecap="round" stroke-linejoin="round" d="M10 11v6m4-6v6" />
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 7l1-3h4l1 3" />
                           </svg>
-                        </a>
+                        </button>
                       </div>
+                    </form>
 
                       <div class="tooltip" data-tip="Add variant">
                         <a href="#" class="inline-flex items-center justify-center w-9 h-9 rounded-md bg-white border border-gray-200 shadow-sm hover:bg-primary/10 hover:shadow-md transition" title="Add variant" aria-label="Add variant">

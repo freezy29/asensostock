@@ -1,6 +1,6 @@
 <div class="drawer-side z-40">
 <label for="drawer" aria-label="close sidebar" class="drawer-overlay"></label>
-<aside class="bg-base-200 text-base-content min-h-screen w-80 flex flex-col">
+<aside class="bg-base-300 text-base-content min-h-screen w-80 flex flex-col">
    <div class="navbar hidden sticky bg-primary text-primary-content top-0 z-30 py-0 px-4 items-center lg:flex">
 
         <div class="flex item-center">

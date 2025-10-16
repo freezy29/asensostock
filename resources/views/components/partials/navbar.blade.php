@@ -1,4 +1,4 @@
-<nav class="navbar w-full py-0 bg-primary text-primary-content px-4 lg:bg-base-200 lg:text-base-content">
+<nav class="navbar w-full py-0 bg-primary text-primary-content px-4">
   <div class="navbar-start flex flex-1 item-center gap-2">
     <div class="lg:hidden">
         <label for="drawer" aria-label="open sidebar" class="btn btn-square btn-ghost">
@@ -34,12 +34,6 @@
       <ul
         tabindex="-1"
         class="menu menu-lg dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-        <li>
-          <a class="justify-between">
-            Profile
-            <span class="badge">New</span>
-          </a>
-        </li>
         <li><a>Settings</a></li>
         <li><a>Logout</a></li>
       </ul>

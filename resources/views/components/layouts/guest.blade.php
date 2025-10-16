@@ -12,7 +12,16 @@
 </head>
     <body class="min-h-screen flex flex-col bg-base-200 font-sans">
 
-        <main class="flex-1 container mx-auto px-4 py-8">
+    <nav class="navbar w-full py-0 bg-primary text-primary-content px-4">
+      <div class="navbar-start flex flex-1 item-center gap-2">
+        <a class="me-2 flex w-35 shrink-0 items-center gap-2 text-xl" href="/" aria-current="page aria-label="AsensoStock">
+         <img src="{{ asset('images/AsensoStock.svg') }}" class="w-10 rounded-full">
+            AsensoStock
+        </a>
+      </div>
+    </nav>
+
+        <main class="flex-1 container flex items-center mx-auto px-4 py-8">
             {{ $slot }}
         </main>
 
