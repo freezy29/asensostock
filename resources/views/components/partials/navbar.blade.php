@@ -22,20 +22,37 @@
         AsensoStock
     </a>
   </div>
-  <div class="navbar-end flex-none">
-    <div class="dropdown dropdown-end text-base-content">
-      <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
-        <div class="w-10 rounded-full">
-          <img
-            alt="Tailwind CSS Navbar component"
-            src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+  <div class="navbar-end flex-none gap-2 text-primary-content">
+
+    <div class="dropdown dropdown-end ">
+      <div tabindex="0" role="button" class="md:pl-4 btn btn-ghost btn-circle md:btn-wide">
+     @auth
+    <div class="hidden md:block">
+        <p class="font-bold text-sm"> {{ auth()->user()->name }} </p>
+        <p class="text-xs text-end w-full">admin</p>
+    </div>
+    @endauth
+        <div class="avatar">
+            <div class="w-10 rounded-full">
+
+              <img
+                alt="Tailwind CSS Navbar component"
+                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+            </div>
         </div>
       </div>
       <ul
         tabindex="-1"
-        class="menu menu-lg dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+        class="menu menu-lg dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow text-base-content">
+         @auth
+            <h2 class="menu-title md:hidden">{{ auth()->user()->name }} (admin)</h2>
+         @endauth
+
         <li><a>Settings</a></li>
-        <li><a>Logout</a></li>
+        <form method="POST" action="/logout" class="inline">
+            @csrf
+            <li><button type="submit">Logout</button><li>
+        </form>
       </ul>
     </div>
 </nav>
