@@ -14,9 +14,14 @@
             </div>
             <div class="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
               <div class="card-body">
-                <fieldset class="fieldset gap-4">
+
+                <form method="POST" action="/login">
+                @csrf
+
+                <fieldset class="fieldset">
                 <legend class="fieldset-legend">Login</legend>
 
+                <!-- email -->
                 <label class="input validator floating-label">
                     <span>Email</span>
                     <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -31,11 +36,23 @@
                             <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
                         </g>
                     </svg>
-                    <input type="email" placeholder="mail@site.com" required />
+                    <input type="email"
+                           name="email"
+                           placeholder="mail@example.com"
+                           value="{{ old('email') }}"
+                           class="@error('email') input-error @enderror"
+                           required
+                           autofocus/>
                 </label>
-                <div class="validator-hint hidden">Enter valid email address</div>
 
-                <label class="input validator floating-label">
+                @error('email')
+                   <div class="label mb-2">
+                        <span class="label-text-alt text-error">{{ $message }}</span>
+                   </div>
+                @enderror
+
+                <!-- password -->
+                <label class="input validator floating-label ">
                 <span>Password</span>
                   <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <g
@@ -53,24 +70,27 @@
                   </svg>
                   <input
                     type="password"
+                    name="password"
                     required
-                    placeholder="Password"
-                    minlength="8"
-                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                    title="Must be more than 8 characters, including number, lowercase letter, uppercase letter"
+                    placeholder="password"
+                   class="@error('password') input-error @enderror"
                   />
                 </label>
-                <p class="validator-hint hidden">
-                  Must be more than 8 characters, including
-                  <br />At least one number <br />At least one lowercase letter <br />At least one uppercase letter
-                </p>
+                @error('password')
+                   <div class="label mb-2">
+                        <span class="label-text-alt text-error">{{ $message }}</span>
+                   </div>
+                @enderror
 
+                    <!-- remember me -->
                   <label class="label">
-                    <input type="checkbox" class="checkbox" />
+                    <input type="checkbox" name="remember" class="checkbox" />
                     Remember me
                   </label>
-                  <button class="btn btn-primary mt-4">Login</button>
+                  <button type="submit" class="btn btn-primary mt-4">Login</button>
                 </fieldset>
+                </form>
+
               </div>
             </div>
           </div>
