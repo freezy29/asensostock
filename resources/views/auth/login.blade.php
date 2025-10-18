@@ -22,7 +22,7 @@
                 <legend class="fieldset-legend">Login</legend>
 
                 <!-- email -->
-                <label class="input validator floating-label">
+                <label class="input validator floating-label mb-2">
                     <span>Email</span>
                     <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <g
@@ -46,13 +46,13 @@
                 </label>
 
                 @error('email')
-                   <div class="label mb-2">
+                   <div class="label mb-2 -mt-2">
                         <span class="label-text-alt text-error">{{ $message }}</span>
                    </div>
                 @enderror
 
                 <!-- password -->
-                <label class="input validator floating-label ">
+                <label class="input validator floating-label mb-2">
                 <span>Password</span>
                   <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <g
@@ -77,7 +77,7 @@
                   />
                 </label>
                 @error('password')
-                   <div class="label mb-2">
+                   <div class="label mb-2 -mt-2">
                         <span class="label-text-alt text-error">{{ $message }}</span>
                    </div>
                 @enderror
