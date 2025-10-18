@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name', 150);
             $table->foreignId('product_category_id')->constrained()->cascadeOnDelete();
             $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

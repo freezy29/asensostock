@@ -28,7 +28,7 @@
       <div tabindex="0" role="button" class="md:pl-4 btn btn-ghost btn-circle md:btn-wide">
      @auth
     <div class="hidden md:block">
-        <p class="font-bold text-sm"> {{ auth()->user()->name }} </p>
+        <p class="font-bold text-sm"> {{ auth()->user()->first_name . " " . auth()->user()->last_name }} </p>
         <p class="text-xs text-end w-full">{{ auth()->user()->role }}</p>
     </div>
     @endauth
@@ -45,7 +45,7 @@
         tabindex="-1"
         class="menu menu-lg dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow text-base-content">
          @auth
-            <h2 class="menu-title md:hidden">{{ auth()->user()->name }} (admin)</h2>
+            <h2 class="menu-title md:hidden">{{ auth()->user()->first_name . " " .  auth()->user()->last_name }} ({{ auth()->user()->role }}) </h2>
          @endauth
 
         <li><a>Settings</a></li>
