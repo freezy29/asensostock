@@ -29,7 +29,7 @@
      @auth
     <div class="hidden md:block">
         <p class="font-bold text-sm"> {{ auth()->user()->name }} </p>
-        <p class="text-xs text-end w-full">admin</p>
+        <p class="text-xs text-end w-full">{{ auth()->user()->role }}</p>
     </div>
     @endauth
         <div class="avatar">

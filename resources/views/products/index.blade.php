@@ -96,6 +96,8 @@
           </ul>
         </div>
 
+
+        @can('create', App\Models\Product::class)
         <div class="tooltip" data-tip="Add product">
           <a href="/products/create" class="btn btn-primary ml-2 hidden sm:inline-flex items-center gap-3 btn-md" title="Add product" aria-label="Add product">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -105,6 +107,7 @@
           Add Product
           </a>
         </div>
+        @endcan
 
         <!-- on very small screens keep a compact Add button -->
         <div class="tooltip" data-tip="Add product">
@@ -164,6 +167,8 @@
                         </a>
                       </div>
 
+
+                    @canany(['update', 'delete'], auth()->user() )
                       <div class="tooltip" data-tip="Edit">
                         <a href="/products/{{ $product->id }}/edit" class="inline-flex items-center justify-center w-9 h-9 rounded-md bg-white border border-gray-200 shadow-sm hover:bg-yellow-50 hover:shadow-md transition" title="Edit" aria-label="Edit">
                           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
@@ -189,6 +194,7 @@
                         </button>
                       </div>
                     </form>
+                    @endcanany
 
                       <div class="tooltip" data-tip="Add variant">
                         <a href="#" class="inline-flex items-center justify-center w-9 h-9 rounded-md bg-white border border-gray-200 shadow-sm hover:bg-primary/10 hover:shadow-md transition" title="Add variant" aria-label="Add variant">
@@ -214,4 +220,3 @@
   </div>
 
 </x-layouts.app>
-  </div>
