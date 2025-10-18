@@ -1,7 +1,7 @@
 <x-layouts.app>
   <x-slot:title>Products</x-slot:title>
 
-  <div class="product-page">
+  <div class="product-page ">
     {{-- Mobile-only tweaks scoped to this page. These rules apply only on small screens (<=640px)
         and won't change the desktop/tablet layout. --}}
     <style>
@@ -74,21 +74,25 @@
   <div class="hidden sm:flex items-center gap-4 w-full sm:w-auto">
       <form method="GET" action="" class="flex items-center gap-3 w-full sm:w-auto">
         <div class="input-group w-full sm:w-auto">
-          <input type="search" name="q" class="input input-bordered input-lg w-full sm:w-80" placeholder="Search products..." aria-label="Search products" />
-          <div class="tooltip" data-tip="Search">
-            <button type="submit" class="btn btn-primary btn-square btn-md" aria-label="Search" title="Search">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="7"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-              </svg>
-            </button>
-          </div>
+                <label class="input">
+                    <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <g
+                            stroke-linejoin="round"
+                            stroke-linecap="round"
+                            stroke-width="2.5"
+                            fill="none"
+                            stroke="currentColor"
+                        >
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.3-4.3"></path>
+                        </g>
+                    </svg>
+                    <input type="search" required placeholder="Search" />
+                </label>
         </div>
 
         <div class="dropdown">
-          <div class="tooltip" data-tip="Filter">
             <button tabindex="0" class="btn btn-outline btn-md ml-0 sm:ml-2" title="Filter">Filter</button>
-          </div>
           <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-56">
             <li><a>All categories</a></li>
             <li><a>Active</a></li>
@@ -98,7 +102,6 @@
 
 
         @can('create', App\Models\Product::class)
-        <div class="tooltip" data-tip="Add product">
           <a href="/products/create" class="btn btn-primary ml-2 hidden sm:inline-flex items-center gap-3 btn-md" title="Add product" aria-label="Add product">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -106,7 +109,6 @@
           </svg>
           Add Product
           </a>
-        </div>
         @endcan
 
         <!-- on very small screens keep a compact Add button -->
@@ -194,7 +196,6 @@
                         </button>
                       </div>
                     </form>
-                    @endcanany
 
                       <div class="tooltip" data-tip="Add variant">
                         <a href="#" class="inline-flex items-center justify-center w-9 h-9 rounded-md bg-white border border-gray-200 shadow-sm hover:bg-primary/10 hover:shadow-md transition" title="Add variant" aria-label="Add variant">
@@ -204,6 +205,8 @@
                           </svg>
                         </a>
                       </div>
+                    @endcanany
+
                     </div>
                   </td>
                 </tr>

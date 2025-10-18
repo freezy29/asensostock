@@ -25,7 +25,7 @@
         </div>
 
 
-        <div class="relative max-w-[100vw] px-6 pb-16 xl:pe-2">
+        <div class="relative max-w-[100vw] px-6 pb-16">
             <main class="prose prose-sm md:prose-base w-full grow pt-10">
                 {{ $slot }}
             </main>
