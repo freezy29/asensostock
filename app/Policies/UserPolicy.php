@@ -13,7 +13,7 @@ class UserPolicy
             return true;
         }
 
-        return null;
+        return false;
     }
     /**
      * Determine whether the user can view any models.
@@ -36,7 +36,7 @@ class UserPolicy
      */
     public function create(User $user): bool
     {
-        return $user->role == 'admin';
+        return $user->role === 'admin';
     }
 
     /**
