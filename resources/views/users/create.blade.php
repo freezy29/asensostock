@@ -1,6 +1,19 @@
 <x-layouts.app>
   <x-slot:title>Create User</x-slot:title>
 
+    <div class="flex flex-col md:flex-row w-full md:justify-between md:items-end">
+        <div>
+            <x-ui.breadcrumbs>
+                <li><a>Dashboard</a></li>
+                <li><a href="{{ route('users.index') }}">Users</a></li>
+                <li>Add User</li>
+            </x-ui.breadcrumbs>
+            <h1 class="text-4xl font-bold mb-2">Add a User</h1>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
     <form method="POST" action="{{ route('users.store') }}">
         @csrf
         <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xl border p-4">

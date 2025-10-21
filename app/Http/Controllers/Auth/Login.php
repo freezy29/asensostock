@@ -18,6 +18,11 @@ class Login extends Controller
             'password' => 'required',
         ]);
 
+        $user = \App\Models\User::where('email', $request->email)->first();
+        if ($user->status !== 'active') {
+            return back()->withErrors(['email' => 'Your account is inactive. Contact the administrator.']);
+        }
+
         // Attempt to log in
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
 

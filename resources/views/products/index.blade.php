@@ -126,7 +126,6 @@
           <table class="table w-full table-zebra text-sm sm:text-base">
             <thead>
               <tr>
-                <th class="w-24 py-3 sm:py-4 text-center">#</th>
                 <th class="py-3 sm:py-4">Product Name</th>
                 <th class="py-3 sm:py-4">Category</th>
                 <th class="py-3 sm:py-4">Status</th>
@@ -145,7 +144,6 @@
                   }
                 @endphp
                 <tr class="align-middle">
-                  <th class="py-3 sm:py-4 text-center">{{ $product->id }}</th>
                   <td class="font-medium py-3 sm:py-4">{{ $product->name }}</td>
                   <td class="py-3 sm:py-4">{{ optional($product->category)->name ?? '-' }}</td>
                   <td class="py-3 sm:py-4">
