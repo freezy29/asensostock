@@ -22,7 +22,6 @@
             <!-- head -->
             <thead>
                 <tr>
-                    <th></th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Phone Number</th>
@@ -34,8 +33,7 @@
             <tbody>
               @foreach ($users as $user)
                 <tr>
-                    <th>{{ $user->id }}</th>
-                    <td>{{ $user->first_name ." " .  $user->last_name }}</td>
+                    <td>{{ $user->first_name . " " .  $user->last_name }}</td>
                     <td>{{ $user->email }}</td>
                     <td>{{ $user->phone }}</td>
                     <td>{{ $user->role }}</td>
@@ -43,7 +41,7 @@
                     <td>
 
                     <div class="tooltip" data-tip="View Details">
-                        <a href="" class="btn btn-square">
+                        <a href="{{ route('users.show', $user->id) }}" class="btn btn-square">
                           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                             <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />

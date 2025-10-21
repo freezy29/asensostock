@@ -6,7 +6,6 @@ use App\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 class UserController extends Controller
@@ -56,15 +55,15 @@ class UserController extends Controller
 
         User::create($validated);
 
-        return redirect()->route('users.index')->with('success', 'user details edited!');
+        return redirect()->route('users.index')->with('success', 'Succesfully added a user!');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(User $user)
     {
-        return view('users.show');
+        return view('users.show', ['user' => $user]);
     }
 
     /**
@@ -93,9 +92,15 @@ class UserController extends Controller
             'role' => 'required|in:admin,staff',
         ]);
 
+        //don't allow admin status to be updated
+        if ($request->input('status') && $validated['role'] === 'admin') {
+            return back()->with('error', 'Admin accounts cannot be deactivated.');
+        }
 
+        // update the user status
         $validated['status'] =  $request->input('status') ?  'active' : 'inactive';
 
+        // optional password
         if ($request->filled('password')) {
             $validated['password'] = bcrypt($validated['password']);
         } else {
@@ -104,7 +109,7 @@ class UserController extends Controller
 
         $user->update($validated);
 
-        return redirect()->route('users.index')->with('success', 'user details edited!');
+        return redirect()->route('users.index')->with('success', 'User details updated!');
     }
 
     /**
@@ -116,6 +121,6 @@ class UserController extends Controller
 
         $user->delete();
 
-        return redirect()->route('users.index')->with('success', 'user deleted!');
+        return redirect()->route('users.index')->with('success', 'User deleted from the list!');
     }
 }

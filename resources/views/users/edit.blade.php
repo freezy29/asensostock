@@ -81,6 +81,7 @@
                 @endif
             </select>
 
+            @if ($user->role === 'staff')
             <label class="label">Status</label>
             <label class="label">
             <input type="checkbox"
@@ -90,6 +91,7 @@
                 name="status"
                 class="toggle" />
                 Active </label>
+            @endif
 
             <button type="submit" class="btn btn-neutral mt-4">edit user</button>
         </fieldset>
