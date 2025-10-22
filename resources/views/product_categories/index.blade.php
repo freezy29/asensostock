@@ -1,5 +1,5 @@
 <x-layouts.app>
-  <x-slot:title>Product Categories</x-slot:title>
+  <x-slot:title>Categories</x-slot:title>
 
     <div class="flex flex-col md:flex-row w-full md:justify-between md:items-end">
         <div>
@@ -7,7 +7,7 @@
                 <li><a>Dashboard</a></li>
                 <li>Categories</li>
             </x-ui.breadcrumbs>
-            <h1 class="text-4xl font-bold mb-2">Product Categories</h1>
+            <h1 class="text-4xl font-bold mb-2">Categories</h1>
         </div>
 
         <div>
