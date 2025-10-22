@@ -219,15 +219,16 @@
                             <label class="label">
                                 <span class="label-text font-medium">Account Status</span>
                             </label>
-                            <div class="flex items-center gap-3 p-4  rounded-lg">
+                            <div class="mt-2">
+                                <label class="label">
                                 <input type="checkbox"
                                        name="status"
                                        value="active"
                                        @if (old('status', $user->status) === 'active') checked @endif
                                        class="toggle toggle-primary" />
-                                <div>
-                                    <div class="font-medium">Active </div>
-                                </div>
+                                    Active
+                                </label>
+
                             </div>
                         </div>
                     </div>
