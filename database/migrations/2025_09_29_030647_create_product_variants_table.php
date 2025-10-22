@@ -21,6 +21,8 @@ return new class extends Migration
             $table->decimal('price', total: 10, places: 2);
             $table->integer('current_qty');
             $table->integer('critical_level');
+            $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

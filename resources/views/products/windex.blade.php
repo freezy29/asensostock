@@ -10,8 +10,11 @@
             <h1 class="text-4xl font-bold mb-2">Products</h1>
         </div>
 
+
         <div>
+            @can('create', App\Models\Product::class)
             <a href="{{ route('products.create') }}" class="btn bg-primary text-primary-content">add product</a>
+            @endcan
         </div>
     </div>
 
@@ -24,9 +27,12 @@
                 <tr>
                     <th>Name</th>
                     <th>Category</th>
-                    <th>Variants</th>
-                    <th>Total Stocks</th>
+                    <th>Total Variants</th>
+                    <th>Total Stock</th>
+                    <th>Low Stock Items</th>
+                    @if (auth()->user()->role === 'admin')
                     <th>Status</th>
+                    @endif
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -45,6 +51,9 @@
                     <td>{{ $product->category->name }}</td>
                     <td>{{ $product_variants->count() }}</td>
                     <td>{{ $total_stocks }}</td>
+                    <td></td>
+
+                    @if (auth()->user()->role === 'admin')
                     <td>
 
                     @if(strtolower($product->status) === 'active')
@@ -54,6 +63,7 @@
                     @endif
 
                     </td>
+                    @endif
                     <td>
 
                     <div class="tooltip" data-tip="View Details">
@@ -66,6 +76,7 @@
                     </div>
 
 
+                    @canany(['update', 'delete'], $product)
                     <div class="tooltip" data-tip="Edit">
                         <a href="{{ route('products.edit', $product->id) }}" class="btn btn-square">
                           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
@@ -91,6 +102,7 @@
                             </button>
                             </form>
                         </div>
+                        @endcanany
 
                     </td>
                 </tr>
