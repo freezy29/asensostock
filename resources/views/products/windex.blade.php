@@ -1,17 +1,17 @@
 <x-layouts.app>
-  <x-slot:title>Product Variants</x-slot:title>
+  <x-slot:title>Products</x-slot:title>
 
     <div class="flex flex-col md:flex-row w-full md:justify-between md:items-end">
         <div>
             <x-ui.breadcrumbs>
                 <li><a>Dashboard</a></li>
-                <li>Variants</li>
+                <li>Products</li>
             </x-ui.breadcrumbs>
-            <h1 class="text-4xl font-bold mb-2">Product Variants</h1>
+            <h1 class="text-4xl font-bold mb-2">Products</h1>
         </div>
 
         <div>
-            <a href="{{ route('variants.create') }}" class="btn bg-primary text-primary-content">add variant</a>
+            <a href="{{ route('products.create') }}" class="btn bg-primary text-primary-content">add product</a>
         </div>
     </div>
 
@@ -23,25 +23,41 @@
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Email</th>
-                    <th>Phone Number</th>
-                    <th>Role</th>
+                    <th>Category</th>
+                    <th>Variants</th>
+                    <th>Total Stocks</th>
                     <th>Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-              @foreach ($users as $user)
+              @forelse ($products as $product)
+                @php
+                  $product_variants = $variants->where('product_id', $product->id);
+                  $total_stocks = 0;
+                  foreach ($product_variants as $variant) {
+                    $total_stocks += $variant->current_qty;
+                  }
+                @endphp
+
                 <tr>
-                    <td>{{ $user->first_name . " " .  $user->last_name }}</td>
-                    <td>{{ $user->email }}</td>
-                    <td>{{ $user->phone }}</td>
-                    <td>{{ $user->role }}</td>
-                    <td>{{ $user->status }}</td>
+                    <td>{{ $product->name }}</td>
+                    <td>{{ $product->category->name }}</td>
+                    <td>{{ $product_variants->count() }}</td>
+                    <td>{{ $total_stocks }}</td>
+                    <td>
+
+                    @if(strtolower($product->status) === 'active')
+                      <span class="badge badge-success badge-md">Active</span>
+                    @else
+                      <span class="badge badge-ghost">{{ $product->status }}</span>
+                    @endif
+
+                    </td>
                     <td>
 
                     <div class="tooltip" data-tip="View Details">
-                        <a href="{{ route('users.show', $user->id) }}" class="btn btn-square">
+                        <a href="{{ route('products.show', $product->id) }}" class="btn btn-square">
                           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                             <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -51,7 +67,7 @@
 
 
                     <div class="tooltip" data-tip="Edit">
-                        <a href="{{ route('users.edit', $user->id) }}" class="btn btn-square">
+                        <a href="{{ route('products.edit', $product->id) }}" class="btn btn-square">
                           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536" />
                             <path stroke-linecap="round" stroke-linejoin="round" d="M4 20l4-1 11-11-3-3L6 16l-2 4z" />
@@ -60,12 +76,12 @@
                     </div>
 
                         <div class="tooltip" data-tip="Delete">
-                        <form method="POST" action="{{ route('users.destroy', $user->id) }}">
+                        <form method="POST" action="{{ route('products.destroy', $product->id) }}">
                             @csrf
                             @method('DELETE')
                             <button
                                 type="submit"
-                                onclick="return confirm('Are you sure you want to delete this user?')"
+                                onclick="return confirm('Are you sure you want to delete this product?')"
                                 class="btn btn-square">
                               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 7h12" />
@@ -78,9 +94,14 @@
 
                     </td>
                 </tr>
-                @endforeach
+                  @empty
+                <tr>
+                  <td colspan="7" class="text-center text-gray-500 py-6">No products yet.</td>
+                </tr>
+                @endforelse
             </tbody>
         </table>
     </div>
+
 
 </x-layouts.app>

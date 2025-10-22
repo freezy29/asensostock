@@ -34,8 +34,8 @@
                     Inventory
             </h2>
             <ul class="ml-8">
-                <li><a href="/products">Products</a></li>
                 <li><a href="/categories">Categories</a></li>
+                <li><a href="/products">Products</a></li>
                 <li><a href="/variants">Variants</a></li>
             </ul>
         </li>
