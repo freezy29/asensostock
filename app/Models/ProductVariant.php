@@ -18,7 +18,7 @@ class ProductVariant extends Model
         return $this->belongsTo(VariantType::class, 'variant_type_id');
     }
 
-    public function unit(): BelongsTo
+    public function measure(): BelongsTo
     {
         return $this->belongsTo(MeasureUnit::class, 'measure_unit_id');
     }
