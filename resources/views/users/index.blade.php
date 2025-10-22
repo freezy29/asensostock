@@ -42,7 +42,6 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Phone Number</th>
-                    <th>Role</th>
                     <th>Status</th>
                     <th>Actions</th>
                 </tr>
@@ -53,7 +52,6 @@
                     <td>{{ $user->first_name . " " .  $user->last_name }}</td>
                     <td>{{ $user->email }}</td>
                     <td>{{ $user->phone }}</td>
-                    <td>{{ $user->role }}</td>
                     <td>{{ $user->status }}</td>
                     <td>
 
