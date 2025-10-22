@@ -14,6 +14,7 @@
               stroke-width="2"
               d="M4 6h16M4 12h16M4 18h16"
             ></path>
+
           </svg>
         </label>
       </div>
@@ -29,7 +30,7 @@
      @auth
     <div class="hidden md:block">
         <p class="font-bold text-sm"> {{ auth()->user()->first_name . " " . auth()->user()->last_name }} </p>
-        <p class="text-xs text-end w-full">{{ auth()->user()->role }}</p>
+        <p class="text-xs text-end w-full">{{ (auth()->user()->role === 'staff') ? 'Staff' : 'Admin'}}</p>
     </div>
     @endauth
         <div class="avatar">

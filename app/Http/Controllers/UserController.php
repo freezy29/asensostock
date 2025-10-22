@@ -17,6 +17,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all()
+            ->where('role', 'staff')
             ->take(50);
 
         return view('users.index', ['users' => $users]);
@@ -45,7 +46,6 @@ class UserController extends Controller
             'email' => 'required|email|max:255|unique:users',
             'phone' => 'nullable',
             'password' => 'required|string|confirmed',
-            'role' => 'required|in:admin,staff',
         ]);
 
         $validated['password'] = bcrypt($validated['password']);
@@ -89,13 +89,7 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email,' . $user->id,
             'phone' => 'nullable',
             'password' => 'nullable|string|confirmed|',
-            'role' => 'required|in:admin,staff',
         ]);
-
-        //don't allow admin status to be updated
-        if ($request->input('status') && $validated['role'] === 'admin') {
-            return back()->with('error', 'Admin accounts cannot be deactivated.');
-        }
 
         // update the user status
         $validated['status'] =  $request->input('status') ?  'active' : 'inactive';

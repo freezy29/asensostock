@@ -18,7 +18,7 @@
         <form method="POST" action="{{ route('users.update', $user->id) }}" class="space-y-6">
             @csrf
             @method('PUT')
-            
+
             <!-- Personal Information Section -->
             <div class="card bg-base-100 shadow-xl border border-base-300">
                 <div class="card-body">
@@ -30,7 +30,7 @@
                         </div>
                         <h2 class="card-title text-xl">Personal Information</h2>
                     </div>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- First Name -->
                         <div class="form-control">
@@ -39,7 +39,7 @@
                                 <span class="label-text-alt text-error">*</span>
                             </label>
                             <div class="relative">
-                                <input type="text" 
+                                <input type="text"
                                        name="first_name"
                                        value="{{ old('first_name', $user->first_name) }}"
                                        class="input input-bordered w-full @error('first_name') input-error @enderror"
@@ -68,7 +68,7 @@
                                 <span class="label-text-alt text-error">*</span>
                             </label>
                             <div class="relative">
-                                <input type="text" 
+                                <input type="text"
                                        name="last_name"
                                        value="{{ old('last_name', $user->last_name) }}"
                                        class="input input-bordered w-full @error('last_name') input-error @enderror"
@@ -104,7 +104,7 @@
                         </div>
                         <h2 class="card-title text-xl">Contact Information</h2>
                     </div>
-                    
+
                     <div class="space-y-6">
                         <!-- Email -->
                         <div class="form-control">
@@ -113,7 +113,7 @@
                                 <span class="label-text-alt text-error">*</span>
                             </label>
                             <div class="relative">
-                                <input type="email" 
+                                <input type="email"
                                        name="email"
                                        value="{{ old('email', $user->email) }}"
                                        class="input input-bordered w-full @error('email') input-error @enderror"
@@ -142,7 +142,7 @@
                                 <span class="label-text-alt text-base-content/60">Optional</span>
                             </label>
                             <div class="relative">
-                                <input type="tel" 
+                                <input type="tel"
                                        name="phone"
                                        value="{{ old('phone', $user->phone) }}"
                                        class="input input-bordered w-full tabular-nums"
@@ -168,7 +168,7 @@
                         </div>
                         <h2 class="card-title text-xl">Security & Access</h2>
                     </div>
-                    
+
                     <div class="space-y-6">
                         <!-- Password -->
                         <div class="form-control">
@@ -177,8 +177,8 @@
                                 <span class="label-text-alt text-base-content/60">Leave blank to keep current</span>
                             </label>
                             <div class="relative">
-                                <input type="password" 
-                                       name="password" 
+                                <input type="password"
+                                       name="password"
                                        class="input input-bordered w-full @error('password') input-error @enderror"
                                        placeholder="Enter new password" />
                                 <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -194,8 +194,8 @@
                                 <span class="label-text-alt text-base-content/60">Leave blank to keep current</span>
                             </label>
                             <div class="relative">
-                                <input type="password" 
-                                       name="password_confirmation" 
+                                <input type="password"
+                                       name="password_confirmation"
                                        class="input input-bordered w-full"
                                        placeholder="Confirm new password" />
                                 <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -215,68 +215,36 @@
                             </label>
                         @enderror
 
-                        <!-- Role -->
-                        <div class="form-control">
-                            <label class="label">
-                                <span class="label-text font-medium">User Role</span>
-                                <span class="label-text-alt text-error">*</span>
-                            </label>
-                            <div class="relative">
-                                <select name="role" 
-                                        class="select select-bordered w-full @error('role') select-error @enderror" 
-                                        required>
-                                    <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Administrator</option>
-                                    <option value="staff" {{ old('role', $user->role) == 'staff' ? 'selected' : '' }}>Staff Member</option>
-                                </select>
-                                <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                            </div>
-                            @error('role')
-                                <label class="label">
-                                    <span class="label-text-alt text-error flex items-center gap-1">
-                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                        </svg>
-                                        {{ $message }}
-                                    </span>
-                                </label>
-                            @enderror
-                        </div>
-
-                        <!-- Status (for staff only) -->
-                        @if ($user->role === 'staff')
                         <div class="form-control">
                             <label class="label">
                                 <span class="label-text font-medium">Account Status</span>
                             </label>
-                            <div class="flex items-center gap-3 p-4 bg-base-200 rounded-lg">
+                            <div class="mt-2">
+                                <label class="label">
                                 <input type="checkbox"
                                        name="status"
                                        value="active"
                                        @if (old('status', $user->status) === 'active') checked @endif
                                        class="toggle toggle-primary" />
-                                <div>
-                                    <div class="font-medium">Active Account</div>
-                                    <div class="text-sm text-base-content/70">User can log in and access the system</div>
-                                </div>
+                                    Active
+                                </label>
+
                             </div>
                         </div>
-                        @endif
                     </div>
                 </div>
             </div>
 
             <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row gap-4 justify-end">
-                <a href="{{ route('users.index') }}" 
+                <a href="{{ route('users.index') }}"
                    class="btn btn-outline btn-lg flex-1 sm:flex-none">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                     Cancel
                 </a>
-                <button type="submit" 
+                <button type="submit"
                         class="btn btn-primary btn-lg flex-1 sm:flex-none">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>

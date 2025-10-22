@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 
 class ProductVariantController extends Controller
@@ -11,7 +12,12 @@ class ProductVariantController extends Controller
      */
     public function index()
     {
-        return view('product_variants.index');
+        $variants = ProductVariant::with('product')
+            ->latest()
+            ->take(50)
+            ->get();
+
+        return view('product_variants.index', ['variants' => $variants]);
     }
 
     /**

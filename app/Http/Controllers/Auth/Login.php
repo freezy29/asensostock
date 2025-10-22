@@ -18,16 +18,16 @@ class Login extends Controller
             'password' => 'required',
         ]);
 
-        $user = \App\Models\User::where('email', $request->email)->first();
-        if ($user->status !== 'active') {
-            return back()->withErrors(['email' => 'Your account is inactive. Contact the administrator.']);
-        }
 
         // Attempt to log in
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
 
             // Regenerate session for security
             $request->session()->regenerate();
+
+            $user = Auth::user();
+            $user->last_login_at = now();
+            $user->save();
 
             // Redirect to intended page or home
             return redirect()->intended('/')->with('success', 'Welcome back!');
@@ -37,5 +37,10 @@ class Login extends Controller
         return back()
             ->withErrors(['email' => 'The provided credentials do not match our records.'])
             ->onlyInput('email');
+
+        $user = \App\Models\User::where('email', $request->email)->first();
+        if ($user->status !== 'active') {
+            return back()->withErrors(['email' => 'Your account is inactive. Contact the administrator.']);
+        }
     }
 }

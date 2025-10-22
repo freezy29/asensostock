@@ -27,14 +27,28 @@
                 <input type="search" required placeholder="Search" />
             </label>
 
+            <div class="dropdown">
+              <div tabindex="0" role="button" class="btn ">Status</div>
+              <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                <li><a>Active</a></li>
+                <li><a>Inactive</a></li>
+              </ul>
+            </div>
 
-            <a href="{{ route('users.create') }}" class="btn bg-primary text-primary-content">add user</a>
+
+            <a href="{{ route('users.create') }}" class="btn bg-primary text-primary-content">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+            Create User
+            </a>
         </div>
     </div>
 
     <div class="divider"></div>
 
-    <div class="overflow-x-auto m-8">
+    <div class="hidden lg:block overflow-x-auto m-8">
         <table class="table table-zebra table-lg">
             <!-- head -->
             <thead>
@@ -42,8 +56,8 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Phone Number</th>
-                    <th>Role</th>
                     <th>Status</th>
+                    <th>Last Login</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -52,9 +66,16 @@
                 <tr>
                     <td>{{ $user->first_name . " " .  $user->last_name }}</td>
                     <td>{{ $user->email }}</td>
-                    <td>{{ $user->phone }}</td>
-                    <td>{{ $user->role }}</td>
-                    <td>{{ $user->status }}</td>
+                    <td>{{ $user->phone ?? 'N/A' }}</td>
+                    <td>
+                        @if(strtolower($user->status) === 'active')
+                          <span class="badge badge-success badge-md">Active</span>
+                        @else
+                          <span class="badge badge-error badge-md">Inactive</span>
+                        @endif
+                    </td>
+                    <td>{{ $user->last_login_at ? $user->last_login_at->toDateTimeString() : 'Never' }}</td>
+
                     <td>
 
                     <div class="tooltip" data-tip="View Details">
@@ -99,6 +120,7 @@
             </tbody>
         </table>
     </div>
+
 
 
 </x-layouts.app>

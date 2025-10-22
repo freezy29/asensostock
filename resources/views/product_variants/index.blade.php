@@ -11,7 +11,9 @@
         </div>
 
         <div>
+            @can('create', App\Models\Product::class)
             <a href="{{ route('variants.create') }}" class="btn bg-primary text-primary-content">add variant</a>
+            @endcan
         </div>
     </div>
 
@@ -22,26 +24,41 @@
             <!-- head -->
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Phone Number</th>
-                    <th>Role</th>
+                    <th>Product</th>
+                    <th>Variant</th>
+                    <th>Measure</th>
+                    <th>Price</th>
+                    <th>Current Stock</th>
+                    @if (auth()->user()->role === 'admin')
                     <th>Status</th>
+                    @endif
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-              @foreach ($users as $user)
+              @foreach ($variants as $variant)
                 <tr>
-                    <td>{{ $user->first_name . " " .  $user->last_name }}</td>
-                    <td>{{ $user->email }}</td>
-                    <td>{{ $user->phone }}</td>
-                    <td>{{ $user->role }}</td>
-                    <td>{{ $user->status }}</td>
+                    <td>{{ $variant->product->name }}</td>
+                    <td>{{ $variant->type->name }}</td>
+                    <td>{{ $variant->measure->name }}</td>
+                    <td>{{ $variant->price}}</td>
+                    <td>{{ $variant->current_qty }}</td>
+
+                    @if (auth()->user()->role === 'admin')
+                    <td>
+
+                    @if(strtolower($variant->status) === 'active')
+                      <span class="badge badge-success badge-md">Active</span>
+                    @else
+                      <span class="badge badge-ghost">{{ $variant->status }}</span>
+                    @endif
+
+                    </td>
+                    @endif
                     <td>
 
                     <div class="tooltip" data-tip="View Details">
-                        <a href="{{ route('users.show', $user->id) }}" class="btn btn-square">
+                        <a href="{{ route('variants.show', $variant->id) }}" class="btn btn-square">
                           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                             <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -50,8 +67,9 @@
                     </div>
 
 
+                    @canany(['update', 'delete'], $variant)
                     <div class="tooltip" data-tip="Edit">
-                        <a href="{{ route('users.edit', $user->id) }}" class="btn btn-square">
+                        <a href="{{ route('variants.edit', $variant->id) }}" class="btn btn-square">
                           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536" />
                             <path stroke-linecap="round" stroke-linejoin="round" d="M4 20l4-1 11-11-3-3L6 16l-2 4z" />
@@ -60,12 +78,12 @@
                     </div>
 
                         <div class="tooltip" data-tip="Delete">
-                        <form method="POST" action="{{ route('users.destroy', $user->id) }}">
+                        <form method="POST" action="{{ route('variants.destroy', $variant->id) }}">
                             @csrf
                             @method('DELETE')
                             <button
                                 type="submit"
-                                onclick="return confirm('Are you sure you want to delete this user?')"
+                                onclick="return confirm('Are you sure you want to delete this product variant?')"
                                 class="btn btn-square">
                               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 7h12" />
@@ -75,6 +93,7 @@
                             </button>
                             </form>
                         </div>
+                        @endcanany
 
                     </td>
                 </tr>

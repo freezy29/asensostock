@@ -42,11 +42,16 @@ Route::middleware('admin')->group(function () {
         ->name('products.destroy');
 
     //product variants
-    Route::get('/variants/create', [ProductVariantController::class, 'create']);
-    Route::post('/variants', [ProductVariantController::class, 'store']);
-    Route::get('/variants/{variant}/edit', [ProductVariantController::class, 'edit']);
-    Route::put('/variants/{variant}', [ProductVariantController::class, 'update']);
-    Route::delete('/variants/{variant}', [ProductVariantController::class, 'destroy']);
+    Route::get('/variants/create', [ProductVariantController::class, 'create'])
+        ->name('variants.create');
+    Route::post('/variants', [ProductVariantController::class, 'store'])
+        ->name('variants.store');
+    Route::get('/variants/{variant}/edit', [ProductVariantController::class, 'edit'])
+        ->name('variants.edit');
+    Route::put('/variants/{variant}', [ProductVariantController::class, 'update'])
+        ->name('variants.update');
+    Route::delete('/variants/{variant}', [ProductVariantController::class, 'destroy'])
+        ->name('variants.destroy');
 });
 
 //users

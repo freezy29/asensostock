@@ -6,9 +6,9 @@
             <x-ui.breadcrumbs>
                 <li><a>Dashboard</a></li>
                 <li><a href="{{ route('users.index') }}">Users</a></li>
-                <li>Add User</li>
+                <li>Create User</li>
             </x-ui.breadcrumbs>
-            <h1 class="text-4xl font-bold mb-2">Add a User</h1>
+            <h1 class="text-4xl font-bold mb-2">Create User</h1>
         </div>
     </div>
 
@@ -17,7 +17,7 @@
     <div class="max-w-2xl mx-auto">
         <form method="POST" action="{{ route('users.store') }}" class="space-y-6">
             @csrf
-            
+
             <!-- Personal Information Section -->
             <div class="card bg-base-100 shadow-xl border border-base-300">
                 <div class="card-body">
@@ -29,7 +29,7 @@
                         </div>
                         <h2 class="card-title text-xl">Personal Information</h2>
                     </div>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- First Name -->
                         <div class="form-control">
@@ -38,7 +38,7 @@
                                 <span class="label-text-alt text-error">*</span>
                             </label>
                             <div class="relative">
-                                <input type="text" 
+                                <input type="text"
                                        name="first_name"
                                        value="{{ old('first_name') }}"
                                        class="input input-bordered w-full @error('first_name') input-error @enderror"
@@ -67,7 +67,7 @@
                                 <span class="label-text-alt text-error">*</span>
                             </label>
                             <div class="relative">
-                                <input type="text" 
+                                <input type="text"
                                        name="last_name"
                                        value="{{ old('last_name') }}"
                                        class="input input-bordered w-full @error('last_name') input-error @enderror"
@@ -103,7 +103,7 @@
                         </div>
                         <h2 class="card-title text-xl">Contact Information</h2>
                     </div>
-                    
+
                     <div class="space-y-6">
                         <!-- Email -->
                         <div class="form-control">
@@ -112,7 +112,7 @@
                                 <span class="label-text-alt text-error">*</span>
                             </label>
                             <div class="relative">
-                                <input type="email" 
+                                <input type="email"
                                        name="email"
                                        value="{{ old('email') }}"
                                        class="input input-bordered w-full @error('email') input-error @enderror"
@@ -141,7 +141,7 @@
                                 <span class="label-text-alt text-base-content/60">Optional</span>
                             </label>
                             <div class="relative">
-                                <input type="tel" 
+                                <input type="tel"
                                        name="phone"
                                        value="{{ old('phone') }}"
                                        class="input input-bordered w-full tabular-nums"
@@ -167,7 +167,7 @@
                         </div>
                         <h2 class="card-title text-xl">Security & Access</h2>
                     </div>
-                    
+
                     <div class="space-y-6">
                         <!-- Password -->
                         <div class="form-control">
@@ -176,8 +176,8 @@
                                 <span class="label-text-alt text-error">*</span>
                             </label>
                             <div class="relative">
-                                <input type="password" 
-                                       name="password" 
+                                <input type="password"
+                                       name="password"
                                        class="input input-bordered w-full @error('password') input-error @enderror"
                                        placeholder="Enter secure password"
                                        required />
@@ -194,8 +194,8 @@
                                 <span class="label-text-alt text-error">*</span>
                             </label>
                             <div class="relative">
-                                <input type="password" 
-                                       name="password_confirmation" 
+                                <input type="password"
+                                       name="password_confirmation"
                                        class="input input-bordered w-full"
                                        placeholder="Confirm your password"
                                        required />
@@ -217,51 +217,22 @@
                         @enderror
 
                         <!-- Role -->
-                        <div class="form-control">
-                            <label class="label">
-                                <span class="label-text font-medium">User Role</span>
-                                <span class="label-text-alt text-error">*</span>
-                            </label>
-                            <div class="relative">
-                                <select name="role" 
-                                        class="select select-bordered w-full @error('role') select-error @enderror" 
-                                        required>
-                                    <option disabled selected value="">Select a role</option>
-                                    <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Administrator</option>
-                                    <option value="staff" {{ old('role') == 'staff' ? 'selected' : '' }}>Staff Member</option>
-                                </select>
-                                <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                            </div>
-                            @error('role')
-                                <label class="label">
-                                    <span class="label-text-alt text-error flex items-center gap-1">
-                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                        </svg>
-                                        {{ $message }}
-                                    </span>
-                                </label>
-                            @enderror
-                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row gap-4 justify-end">
-                <a href="{{ route('users.index') }}" 
+                <a href="{{ route('users.index') }}"
                    class="btn btn-outline btn-lg flex-1 sm:flex-none">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                     Cancel
                 </a>
-                <button type="submit" 
-                        class="btn btn-primary btn-lg flex-1 sm:flex-none">
+                <button type="submit" class="btn btn-primary btn-lg flex-1 sm:flex-none">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15,4A4,4 0 0,0 11,8A4,4 0 0,0 15,12A4,4 0 0,0 19,8A4,4 0 0,0 15,4M15,5.9C16.16,5.9 17.1,6.84 17.1,8C17.1,9.16 16.16,10.1 15,10.1A2.1,2.1 0 0,1 12.9,8A2.1,2.1 0 0,1 15,5.9M4,7V10H1V12H4V15H6V12H9V10H6V7H4M15,13C12.33,13 7,14.33 7,17V20H23V17C23,14.33 17.67,13 15,13M15,14.9C17.97,14.9 21.1,16.36 21.1,17V18.1H8.9V17C8.9,16.36 12,14.9 15,14.9Z"></path>
                     </svg>
                     Create User
                 </button>
