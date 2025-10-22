@@ -25,7 +25,7 @@ class ProductVariantController extends Controller
      */
     public function create()
     {
-        //
+        return view('product_variants.create');
     }
 
     /**
