@@ -81,7 +81,7 @@
                         <tr class="align-middle">
                             <td class="font-medium">{{ $variant->type->name }}</td>
                             <td class="text-center">{{ (int) $variant->measure_value }}</td>
-                            <td>{{ $variant->unit->name }}</td>
+                            <td>{{ $variant->measure->name }}</td>
                             <td class="text-center">{{ $variant->conversion_rate }}</td>
                             <td class="text-center">₱{{ number_format($variant->price, 2) }}</td>
                             <td class="text-center">{{ $variant->current_qty }}</td>
