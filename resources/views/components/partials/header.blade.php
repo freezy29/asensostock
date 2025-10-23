@@ -2,7 +2,7 @@
     <div>
         <div class="breadcrumbs text-md">
           <ul>
-                <li><a href="{{ route('users.index') }}">Dashboard</a></li>
+                <li><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
                 {{ $breadcrumb_list }}
             </ul>
         </div>
@@ -13,3 +13,5 @@
         {{ $slot }}
     </div>
 </div>
+
+<div class="divider"></div>

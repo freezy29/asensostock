@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\Route;
 
 //index
 Route::get('/', [ProductController::class, 'index'])->middleware('auth');
+Route::get('/dashboard', function () {
+    return view('dashboard.index');
+})->middleware('auth')
+    ->name('dashboard.index');
 
 Route::middleware('auth')->group(function () {
     Route::resource('categories', ProductCategoryController::class);
