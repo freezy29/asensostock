@@ -1,16 +1,17 @@
 <x-layouts.app>
   <x-slot:title>Users</x-slot:title>
 
-    <div class="flex flex-col md:flex-row w-full md:justify-between md:items-end">
-        <div>
-            <x-ui.breadcrumbs>
-                <li><a>Dashboard</a></li>
-                <li>Users</li>
-            </x-ui.breadcrumbs>
-            <h1 class="text-4xl font-bold mb-2">Users</h1>
-        </div>
+            <x-partials.header>
 
-        <div class="flex gap-2">
+                <x-slot:breadcrumb_list>
+                    <li>Users</li>
+                </x-slot:breadcrumb_list>
+
+                <x-slot:page_title>
+                    Users
+                </x-slot:page_title>
+
+
             <label class="input">
                 <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <g
@@ -39,8 +40,7 @@
                 Create User
             </x-ui.create-button>
 
-        </div>
-    </div>
+        </x-partials.header>
 
     <div class="divider"></div>
 
