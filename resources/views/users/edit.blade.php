@@ -1,16 +1,19 @@
 <x-layouts.app>
   <x-slot:title>Edit User Details</x-slot:title>
 
-    <div class="flex flex-col md:flex-row w-full md:justify-between md:items-end">
-        <div>
-            <x-ui.breadcrumbs>
-                <li><a>Dashboard</a></li>
-                <li><a href="{{ route('users.index') }}">Users</a></li>
-                <li>Edit User</li>
-            </x-ui.breadcrumbs>
-            <h1 class="text-4xl font-bold mb-2">Edit User Details</h1>
-        </div>
-    </div>
+        <x-partials.header>
+
+                <x-slot:breadcrumb_list>
+                    <li><a href="{{ route('users.index') }}">Users</a></li>
+                    <li>Create User</li>
+                </x-slot:breadcrumb_list>
+
+                <x-slot:page_title>
+                  Create User
+                </x-slot:page_title>
+
+
+        </x-partials.header>
 
     <div class="divider"></div>
 

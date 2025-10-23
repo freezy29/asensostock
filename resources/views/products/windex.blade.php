@@ -1,24 +1,40 @@
 <x-layouts.app>
   <x-slot:title>Products</x-slot:title>
 
-    <div class="flex flex-col md:flex-row w-full md:justify-between md:items-end">
-        <div>
-            <x-ui.breadcrumbs>
-                <li><a>Dashboard</a></li>
-                <li>Products</li>
-            </x-ui.breadcrumbs>
-            <h1 class="text-4xl font-bold mb-2">Products</h1>
-        </div>
+            <x-partials.header>
+
+                <x-slot:breadcrumb_list>
+                    <li>Products</li>
+                </x-slot:breadcrumb_list>
+
+                <x-slot:page_title>
+                   Products
+                </x-slot:page_title>
 
 
-        <div>
+            <label class="input">
+                <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <g
+                        stroke-linejoin="round"
+                        stroke-linecap="round"
+                        stroke-width="2.5"
+                        fill="none"
+                        stroke="currentColor"
+                    >
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.3-4.3"></path>
+                    </g>
+                </svg>
+                <input type="search" required placeholder="Search" />
+            </label>
+
             @can('create', App\Models\Product::class)
             <x-ui.create-button href="{{ route('products.create') }}">
                 Create Product
             </x-ui.create-button>
             @endcan
-        </div>
-    </div>
+
+        </x-partials.header>
 
     <div class="divider"></div>
 

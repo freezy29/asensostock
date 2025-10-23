@@ -2,7 +2,7 @@
     <div>
         <div class="breadcrumbs text-md">
           <ul>
-                <li><a>Dashboard</a></li>
+                <li><a href="{{ route('users.index') }}">Dashboard</a></li>
                 {{ $breadcrumb_list }}
             </ul>
         </div>
