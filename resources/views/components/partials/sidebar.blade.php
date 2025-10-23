@@ -13,7 +13,7 @@
     </div>
 
     <ul class="flex-1 menu menu-xl w-full px-4 py-6">
-      <li><a>
+      <li><a href="{{ route('dashboard.index') }}">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 -960 960 960"

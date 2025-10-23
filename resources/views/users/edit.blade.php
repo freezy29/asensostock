@@ -15,8 +15,6 @@
 
         </x-partials.header>
 
-    <div class="divider"></div>
-
     <div class="max-w-2xl mx-auto">
         <form method="POST" action="{{ route('users.update', $user->id) }}" class="space-y-6">
             @csrf
