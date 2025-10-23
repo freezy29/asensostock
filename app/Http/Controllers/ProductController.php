@@ -16,8 +16,6 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::with('category')
-            ->latest()
-            ->take(50)
             ->get();
 
         $variants = ProductVariant::whereBelongsTo($products)->get();
@@ -38,9 +36,19 @@ class ProductController extends Controller
      */
     public function store(Request $request, Product $product)
     {
-        $this->authorize('create', $product);
+        if ($request->user()->cannot('create', $product)) {
+            abort(403);
+        }
 
-        return redirect('/')->with('success', 'product created!');
+        $validated = $request->validate([
+            'name' => 'required|max:255',
+            'product_category_id' => 'required',
+        ]);
+
+
+        Product::create($validated);
+
+        return redirect()->route('products.index')->with('success', 'Product created successfully!');
     }
 
     /**
@@ -68,9 +76,20 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        $this->authorize('update', $product);
+        if ($request->user()->cannot('update', $product)) {
+            abort(403);
+        }
 
-        return redirect('/')->with('success', 'Product updated!');
+        $validated = $request->validate([
+            'name' => 'required|max:255',
+            'product_category_id' => 'required',
+        ]);
+
+        $validated['status'] =  $request->input('status') ?  'active' : 'inactive';
+
+        $product->update($validated);
+
+        return redirect()->route('products.index')->with('success', 'Product created successfully!');
     }
 
     /**
