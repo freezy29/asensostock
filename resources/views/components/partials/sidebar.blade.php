@@ -53,7 +53,7 @@
     <div class="flex justify-center px-4 py-6">
             <label class="flex cursor-pointer gap-2">
                 <span class="label-text">light</span>
-                <input type="checkbox" value="dark" class="toggle theme-controller" />
+                <input type="checkbox" id="theme-toggle" value="dark" class="toggle theme-controller" />
                 <span class="label-text">dark</span>
             </label>
     </div>
