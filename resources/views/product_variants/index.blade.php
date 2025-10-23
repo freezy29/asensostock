@@ -12,7 +12,9 @@
 
         <div>
             @can('create', App\Models\Product::class)
-            <a href="{{ route('variants.create') }}" class="btn bg-primary text-primary-content">add variant</a>
+            <x-ui.create-button href="{{ route('variants.create') }}">
+                Create Variant
+            </x-ui.create-button>
             @endcan
         </div>
     </div>

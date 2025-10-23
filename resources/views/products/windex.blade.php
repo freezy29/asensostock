@@ -13,7 +13,9 @@
 
         <div>
             @can('create', App\Models\Product::class)
-            <a href="{{ route('products.create') }}" class="btn bg-primary text-primary-content">add product</a>
+            <x-ui.create-button href="{{ route('products.create') }}">
+                Create Product
+            </x-ui.create-button>
             @endcan
         </div>
     </div>
