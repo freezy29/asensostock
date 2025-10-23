@@ -1,10 +1,20 @@
 <x-layouts.app>
     <x-slot:title>Edit Product Details</x-slot:title>
 
-    <div class="mb-6">
-        <h1 class="text-4xl font-bold">Product details</h1>
-        <p class="text-sm text-gray-500 mt-1">Edit product information and manage variants</p>
-    </div>
+
+        <x-partials.header>
+
+                <x-slot:breadcrumb_list>
+                    <li><a href="{{ route('products.index') }}">Products</a></li>
+                    <li>Edit Product</li>
+                </x-slot:breadcrumb_list>
+
+                <x-slot:page_title>
+                    Edit Product Details
+                </x-slot:page_title>
+
+
+        </x-partials.header>
 
     <form method="POST" action="{{ url('/products/' . $product->id) }}" class="space-y-6">
         @csrf
@@ -39,13 +49,13 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="label"><span class="label-text">Created at</span></label>
-                    <div class="bg-base-100 border border-base-300 rounded p-4 text-center text-base-content select-all">
+                    <div class="border border-base-200 rounded p-4 text-center select-all text-base-content">
                         {{ $product->created_at }}
                     </div>
                 </div>
                 <div>
                     <label class="label"><span class="label-text">Last updated</span></label>
-                    <div class="bg-base-100 border border-base-300 rounded p-4 text-center text-base-content select-all">
+                    <div class="border border-base-200 rounded p-4 text-center select-all text-base-content">
                         {{ $product->updated_at }}
                     </div>
                 </div>
@@ -89,14 +99,33 @@
                             <td class="text-center">{{ $variant->updated_at }}</td>
                             <td class="text-center">
                                 <div class="inline-flex gap-2 justify-center">
-                                    <!-- Edit variant action button -->
-                                    <x-ui.action-icon type="edit" href="/variants/{{ $variant->id }}/edit" tooltip="Edit variant" />
-                                    
-                                    <!-- Restock action button -->
-                                    <x-ui.action-icon type="restock" href="/variants/{{ $variant->id }}/restock" tooltip="Restock" />
-                                    
-                                    <!-- Delete variant action button -->
-                                    <x-ui.action-icon type="delete" href="#" tooltip="Delete variant" />
+<div class="tooltip" data-tip="Edit variant">
+                                        <a href="/variants/{{ $variant->id }}/edit" class="inline-flex items-center justify-center w-9 h-9 rounded-md bg-white border border-gray-200 shadow-sm hover:bg-yellow-50 transition" title="Edit variant">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 20l4-1 11-11-3-3L6 16l-2 4z" />
+                                            </svg>
+                                        </a>
+                                    </div>
+                                    <div class="tooltip" data-tip="Restock">
+                                        <a href="/variants/{{ $variant->id }}/restock" class="inline-flex items-center justify-center w-9 h-9 rounded-md bg-white border border-gray-200 shadow-sm hover:bg-green-50 transition" title="Restock" aria-label="Restock">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                                <!-- circular refresh / restock icon -->
+                                                <path stroke-linecap="round" stroke-linejoin="round" opacity="0.25" d="M12 3a9 9 0 100 18 9 9 0 000-18z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 3v6h-6" />
+                                            </svg>
+                                        </a>
+                                    </div>
+                                    <div class="tooltip" data-tip="Delete variant">
+                                        <a href="#" class="inline-flex items-center justify-center w-9 h-9 rounded-md bg-white border border-gray-200 shadow-sm hover:bg-red-50 transition" title="Delete variant">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 7h12" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M10 11v6m4-6v6" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 7l1-3h4l1 3" />
+                                            </svg>
+                                        </a>
+                                    </div>
                                 </div>
                             </td>
                         </tr>

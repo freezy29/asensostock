@@ -67,7 +67,16 @@
                     <td>{{ $product->category->name }}</td>
                     <td>{{ $product_variants->count() }}</td>
                     <td>{{ $total_stocks }}</td>
-                    <td></td>
+                    <td>
+                    @php
+                    $low_stocks = 0;
+                      foreach ($product_variants as $variant) {
+                        if ($variant->current_qty <= $variant->critical_level)
+                        $low_stocks++;
+                      }
+                    @endphp
+                    {{ $low_stocks }}
+                    </td>
 
                     @if (auth()->user()->role === 'admin')
                     <td>
