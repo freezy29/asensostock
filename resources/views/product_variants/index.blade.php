@@ -58,7 +58,7 @@
                     <td>{{ $variant->product->name }}</td>
                     <td>{{ $variant->type->name }}</td>
                     <td>{{ $variant->measure->name }}</td>
-                    <td>{{ $variant->price}}</td>
+                    <td> ₱{{ $variant->price }} </td>
                     <td>{{ $variant->current_qty }}</td>
 
                     @if (auth()->user()->role === 'admin')
