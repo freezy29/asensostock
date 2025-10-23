@@ -157,52 +157,22 @@
                   <td class="text-center py-3 sm:py-4">{{ $total_stocks }}</td>
                   <td class="text-center py-3 sm:py-4">
                     <div class="inline-flex gap-2 justify-center">
-                      <!-- realistic small square action buttons -->
-                      <div class="tooltip" data-tip="View">
-                        <a href="#" class="inline-flex items-center justify-center w-9 h-9 rounded-md bg-white border border-gray-200 shadow-sm hover:shadow-md transition" title="View" aria-label="View">
-                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                          </svg>
-                        </a>
-                      </div>
-
+                      <!-- View action button -->
+                      <x-ui.action-icon type="view" href="#" />
 
                     @canany(['update', 'delete'], auth()->user() )
-                      <div class="tooltip" data-tip="Edit">
-                        <a href="/products/{{ $product->id }}/edit" class="inline-flex items-center justify-center w-9 h-9 rounded-md bg-white border border-gray-200 shadow-sm hover:bg-yellow-50 hover:shadow-md transition" title="Edit" aria-label="Edit">
-                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 20l4-1 11-11-3-3L6 16l-2 4z" />
-                          </svg>
-                        </a>
-                      </div>
+                      <!-- Edit action button -->
+                      <x-ui.action-icon type="edit" href="/products/{{ $product->id }}/edit" />
 
+                      <!-- Delete action button -->
+                      <x-ui.action-icon 
+                        type="delete" 
+                        href="/products/{{ $product->id }}" 
+                        method="POST"
+                        onclick="return confirm('Are you sure you want to delete this product?')" />
 
-
-                    <form method="POST" action="/products/{{ $product->id }}">
-                        @csrf
-                        @method('DELETE')
-                      <div class="tooltip" data-tip="Delet">
-                        <button type="submit" href="#" class="inline-flex items-center justify-center w-9 h-9 rounded-md bg-white border border-gray-200 shadow-sm hover:bg-red-50 hover:shadow-md transition btn btn-ghost btn-xs text-error" title="Delete" aria-label="Delete"
-                            onclick="return confirm('Are you sure you want to delete this product?')">
-                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 7h12" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M10 11v6m4-6v6" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 7l1-3h4l1 3" />
-                          </svg>
-                        </button>
-                      </div>
-                    </form>
-
-                      <div class="tooltip" data-tip="Add variant">
-                        <a href="#" class="inline-flex items-center justify-center w-9 h-9 rounded-md bg-white border border-gray-200 shadow-sm hover:bg-primary/10 hover:shadow-md transition" title="Add variant" aria-label="Add variant">
-                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
-                          </svg>
-                        </a>
-                      </div>
+                      <!-- Add variant action button -->
+                      <x-ui.action-icon type="add-variant" href="#" />
                     @endcanany
 
                     </div>
