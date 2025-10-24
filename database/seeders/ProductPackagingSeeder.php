@@ -4,38 +4,28 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
-class MeasureUnitSeeder extends Seeder
+class ProductPackagingSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        DB::table('measure_units')->insert([
+        DB::table('product_packaging')->insert([
             [
-                'name' => 'Gram',
-                'abbreviation' => 'g',
+                'name' => '10 sachets per pack',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'Milliliter',
-                'abbreviation' => 'ml',
+                'name' => '24 sachets per box',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'Liter',
-                'abbreviation' => 'L',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'Piece',
-                'abbreviation' => 'pcs',
+                'name' => '1 liter bottle',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

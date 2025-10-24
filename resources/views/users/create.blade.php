@@ -19,8 +19,6 @@
     <div class="max-w-2xl mx-auto">
         <form method="POST" action="{{ route('users.store') }}" class="space-y-6">
             @csrf
-
-            <!-- Personal Information Section -->
             <div class="card bg-base-100 shadow-xl border border-base-300">
                 <div class="card-body">
                     <div class="flex items-center gap-3 mb-6">
@@ -29,7 +27,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                             </svg>
                         </div>
-                        <h2 class="card-title text-xl">Personal Information</h2>
+                        <h2 class="card-title text-xl">User Details</h2>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -44,7 +42,7 @@
                                        name="first_name"
                                        value="{{ old('first_name') }}"
                                        class="input input-bordered w-full @error('first_name') input-error @enderror"
-                                       placeholder="Enter first name"
+                                       placeholder="First Name"
                                        required />
                                 <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
@@ -73,7 +71,7 @@
                                        name="last_name"
                                        value="{{ old('last_name') }}"
                                        class="input input-bordered w-full @error('last_name') input-error @enderror"
-                                       placeholder="Enter last name"
+                                       placeholder="Last Name"
                                        required />
                                 <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
@@ -90,24 +88,7 @@
                                 </label>
                             @enderror
                         </div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Contact Information Section -->
-            <div class="card bg-base-100 shadow-xl border border-base-300">
-                <div class="card-body">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="p-2 bg-secondary/10 rounded-lg">
-                            <svg class="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                            </svg>
-                        </div>
-                        <h2 class="card-title text-xl">Contact Information</h2>
-                    </div>
-
-                    <div class="space-y-6">
-                        <!-- Email -->
                         <div class="form-control">
                             <label class="label">
                                 <span class="label-text font-medium">Email Address</span>
@@ -154,24 +135,7 @@
                                 </svg>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Security Section -->
-            <div class="card bg-base-100 shadow-xl border border-base-300">
-                <div class="card-body">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="p-2 bg-accent/10 rounded-lg">
-                            <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                            </svg>
-                        </div>
-                        <h2 class="card-title text-xl">Security & Access</h2>
-                    </div>
-
-                    <div class="space-y-6">
-                        <!-- Password -->
                         <div class="form-control">
                             <label class="label">
                                 <span class="label-text font-medium">Password</span>
@@ -181,7 +145,7 @@
                                 <input type="password"
                                        name="password"
                                        class="input input-bordered w-full @error('password') input-error @enderror"
-                                       placeholder="Enter secure password"
+                                       placeholder="Password"
                                        required />
                                 <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
@@ -199,7 +163,7 @@
                                 <input type="password"
                                        name="password_confirmation"
                                        class="input input-bordered w-full"
-                                       placeholder="Confirm your password"
+                                       placeholder="Confirm Password"
                                        required />
                                 <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
@@ -218,25 +182,25 @@
                             </label>
                         @enderror
 
-                        <!-- Role -->
                     </div>
                 </div>
             </div>
 
+
             <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row gap-4 justify-end">
                 <a href="{{ route('users.index') }}"
-                   class="btn btn-outline btn-lg flex-1 sm:flex-none">
+                   class="btn btn-outline btn-lg flex-1 sm:flex-none min-h-12">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                     Cancel
                 </a>
-                <button type="submit" class="btn btn-primary btn-lg flex-1 sm:flex-none">
+                <button type="submit" class="btn btn-primary btn-lg flex-1 sm:flex-none min-h-12">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15,4A4,4 0 0,0 11,8A4,4 0 0,0 15,12A4,4 0 0,0 19,8A4,4 0 0,0 15,4M15,5.9C16.16,5.9 17.1,6.84 17.1,8C17.1,9.16 16.16,10.1 15,10.1A2.1,2.1 0 0,1 12.9,8A2.1,2.1 0 0,1 15,5.9M4,7V10H1V12H4V15H6V12H9V10H6V7H4M15,13C12.33,13 7,14.33 7,17V20H23V17C23,14.33 17.67,13 15,13M15,14.9C17.97,14.9 21.1,16.36 21.1,17V18.1H8.9V17C8.9,16.36 12,14.9 15,14.9Z"></path>
                     </svg>
-                    Create User
+                    Create
                 </button>
             </div>
         </form>

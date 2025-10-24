@@ -15,26 +15,22 @@ class ProductSeeder extends Seeder
     {
         DB::table('products')->insert([
             [
-                'name' => 'Nescafe 3-in-1 Sachet',
-                'product_category_id' => 1,
+                'name' => 'Juan Palamig Guyabano',
+                'product_category_id' => 1, // Juice
+                'product_unit_id' => 1, // Sachet
+                'product_packaging_id' => 1, // 10 sachets per pack
+                'price' => 25.00,
+                'status' => 'Active',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'Great Taste White',
-                'product_category_id' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'Tang Mango Powder',
-                'product_category_id' => 2,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'Minute Maid Orange Bottle',
-                'product_category_id' => 2,
+                'name' => 'Juan Coffee Classic',
+                'product_category_id' => 2, // Coffee
+                'product_unit_id' => 1, // Sachet
+                'product_packaging_id' => 2, // 24 sachets per box
+                'price' => 55.00,
+                'status' => 'Active',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

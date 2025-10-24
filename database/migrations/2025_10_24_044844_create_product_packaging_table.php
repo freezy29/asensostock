@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('measure_units', function (Blueprint $table) {
+        Schema::create('product_packaging', function (Blueprint $table) {
             $table->id();
             $table->string('name', 150);
-            $table->string('abbreviation', 150);
+            $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('measure_units');
+        Schema::dropIfExists('product_packaging');
     }
 };

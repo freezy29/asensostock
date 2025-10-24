@@ -18,9 +18,7 @@ class ProductController extends Controller
         $products = Product::with('category')
             ->get();
 
-        $variants = ProductVariant::whereBelongsTo($products)->get();
-
-        return view('products.windex', ['products' => $products, 'variants' => $variants]);
+        return view('products.index', ['products' => $products]);
     }
 
     /**
@@ -65,8 +63,6 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         $this->authorize('update', $product);
-
-        $variants = ProductVariant::whereBelongsTo($product)->get();
 
         return view('products.edit', ['product' => $product, 'variants' => $variants]);
     }
