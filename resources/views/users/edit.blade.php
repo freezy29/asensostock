@@ -5,11 +5,11 @@
 
                 <x-slot:breadcrumb_list>
                     <li><a href="{{ route('users.index') }}">Users</a></li>
-                    <li>Create User</li>
+                    <li>Edit User</li>
                 </x-slot:breadcrumb_list>
 
                 <x-slot:page_title>
-                  Create User
+                  Edit User Details
                 </x-slot:page_title>
 
 
@@ -20,7 +20,6 @@
             @csrf
             @method('PUT')
 
-            <!-- Personal Information Section -->
             <div class="card bg-base-100 shadow-xl border border-base-300">
                 <div class="card-body">
                     <div class="flex items-center gap-3 mb-6">
@@ -29,7 +28,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                             </svg>
                         </div>
-                        <h2 class="card-title text-xl">Personal Information</h2>
+                        <h2 class="card-title text-xl">User Details</h2>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -90,24 +89,7 @@
                                 </label>
                             @enderror
                         </div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Contact Information Section -->
-            <div class="card bg-base-100 shadow-xl border border-base-300">
-                <div class="card-body">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="p-2 bg-secondary/10 rounded-lg">
-                            <svg class="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                            </svg>
-                        </div>
-                        <h2 class="card-title text-xl">Contact Information</h2>
-                    </div>
-
-                    <div class="space-y-6">
-                        <!-- Email -->
                         <div class="form-control">
                             <label class="label">
                                 <span class="label-text font-medium">Email Address</span>
@@ -154,24 +136,7 @@
                                 </svg>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Security Section -->
-            <div class="card bg-base-100 shadow-xl border border-base-300">
-                <div class="card-body">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="p-2 bg-accent/10 rounded-lg">
-                            <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                            </svg>
-                        </div>
-                        <h2 class="card-title text-xl">Security & Access</h2>
-                    </div>
-
-                    <div class="space-y-6">
-                        <!-- Password -->
                         <div class="form-control">
                             <label class="label">
                                 <span class="label-text font-medium">Password</span>
@@ -215,8 +180,9 @@
                                 </span>
                             </label>
                         @enderror
+                    </div>
 
-                        <div class="form-control">
+                        <div class="form-control mt-4">
                             <label class="label">
                                 <span class="label-text font-medium">Account Status</span>
                             </label>
@@ -234,23 +200,24 @@
                         </div>
                     </div>
                 </div>
-            </div>
+
+
 
             <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row gap-4 justify-end">
                 <a href="{{ route('users.index') }}"
-                   class="btn btn-outline btn-lg flex-1 sm:flex-none">
+                   class="btn btn-outline btn-lg flex-1 sm:flex-none min-h-12">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                     Cancel
                 </a>
                 <button type="submit"
-                        class="btn btn-primary btn-lg flex-1 sm:flex-none">
+                        class="btn btn-primary btn-lg flex-1 sm:flex-none min-h-12">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                     </svg>
-                    Update User
+                    Update
                 </button>
             </div>
         </form>

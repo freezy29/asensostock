@@ -1,193 +1,102 @@
 <x-layouts.app>
   <x-slot:title>Products</x-slot:title>
 
-  <div class="product-page ">
-    {{-- Mobile-only tweaks scoped to this page. These rules apply only on small screens (<=640px)
-        and won't change the desktop/tablet layout. --}}
-    <style>
-      /* Desktop/tablet: prevent stray horizontal scrollbar while preserving layout */
-      .product-page { overflow-x: hidden; }
-      .product-page .overflow-x-auto { overflow-x: visible; }
+            <x-partials.header>
 
-      @media (max-width: 640px) {
-        /* avoid page-level horizontal scrollbar on phones */
-        html, body { overflow-x: hidden; }
+                <x-slot:breadcrumb_list>
+                    <li>Products</li>
+                </x-slot:breadcrumb_list>
 
-        /* Stack the search/input controls and make them full width */
-        .product-page form.flex { display: flex !important; flex-direction: column; align-items: stretch; gap: .5rem; }
-        .product-page .input-group { width: 100%; display: flex; gap: .5rem; }
-        .product-page .input-group .input { flex: 1 1 auto; width: 100%; }
-        .product-page .input-group .btn { flex: 0 0 auto; }
-
-        /* Reduce card / table paddings so table fits better on small screens */
-        .product-page .card .p-4 { padding: .5rem !important; }
-        .product-page table.table th, .product-page table.table td { padding-top: .45rem; padding-bottom: .45rem; }
-
-        /* Allow action buttons to wrap instead of forcing width */
-        .product-page .inline-flex { flex-wrap: wrap; gap: .25rem; }
-
-        /* Slightly reduce left/right spacing around main content on phones */
-        .product-page .px-6 { padding-left: 1rem !important; padding-right: 1rem !important; }
-
-        /* If a horizontal scrollbar remains from a wide element, make the table scroll internally */
-        .product-page .overflow-x-auto { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-      }
-    </style>
-
-  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-8">
-    <div>
-      <h1 class="text-4xl sm:text-5xl font-bold">Products</h1>
-      <p class="text-base text-gray-500 mt-2">Manage your product catalog and stock levels</p>
-    </div>
-
-    {{-- Mobile-only controls: Filter (below description), then Search, then Add Product --}}
-    <div class="block sm:hidden mt-4">
-      <div class="mb-3 flex items-center">
-        <!-- compact filter button (small rectangle) -->
-        <button class="btn btn-outline btn-md w-24">Filter</button>
-      </div>
-
-      <form method="GET" action="" class="w-full mb-3">
-        <div class="input-group w-full">
-          <input type="search" name="q" class="input input-bordered input-lg w-full" placeholder="Search products..." aria-label="Search products" />
-          <button type="submit" class="btn btn-primary btn-square btn-lg" aria-label="Search" title="Search">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="7"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-          </button>
-        </div>
-      </form>
-
-      <div class="flex">
-        <!-- compact add button with fixed width to match screenshot -->
-        <a href="/products/create" class="btn btn-primary w-44 inline-flex items-center justify-center gap-3 py-2 rounded-md shadow-md" title="Add Product" aria-label="Add Product">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="12" y1="5" x2="12" y2="19"></line>
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-          </svg>
-          Add Product
-        </a>
-      </div>
-    </div>
-
-  <div class="hidden sm:flex items-center gap-4 w-full sm:w-auto">
-      <form method="GET" action="" class="flex items-center gap-3 w-full sm:w-auto">
-        <div class="input-group w-full sm:w-auto">
-                <label class="input">
-                    <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <g
-                            stroke-linejoin="round"
-                            stroke-linecap="round"
-                            stroke-width="2.5"
-                            fill="none"
-                            stroke="currentColor"
-                        >
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <path d="m21 21-4.3-4.3"></path>
-                        </g>
-                    </svg>
-                    <input type="search" required placeholder="Search" />
-                </label>
-        </div>
-
-        <div class="dropdown">
-            <button tabindex="0" class="btn btn-outline btn-md ml-0 sm:ml-2" title="Filter">Filter</button>
-          <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-56">
-            <li><a>All categories</a></li>
-            <li><a>Active</a></li>
-            <li><a>Inactive</a></li>
-          </ul>
-        </div>
+                <x-slot:page_title>
+                   Products
+                </x-slot:page_title>
 
 
-        @can('create', App\Models\Product::class)
-          <a href="/products/create" class="btn btn-primary ml-2 hidden sm:inline-flex items-center gap-3 btn-md" title="Add product" aria-label="Add product">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="12" y1="5" x2="12" y2="19"></line>
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-          </svg>
-          Add Product
-          </a>
-        @endcan
+            <label class="input">
+                <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <g
+                        stroke-linejoin="round"
+                        stroke-linecap="round"
+                        stroke-width="2.5"
+                        fill="none"
+                        stroke="currentColor"
+                    >
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.3-4.3"></path>
+                    </g>
+                </svg>
+                <input type="search" required placeholder="Search" />
+            </label>
 
-        <!-- on very small screens keep a compact Add button -->
-        <div class="tooltip" data-tip="Add product">
-          <a href="/products/create" class="btn btn-primary ml-2 sm:hidden btn-md" title="Add product" aria-label="Add product">+</a>
-        </div>
-      </form>
-    </div>
-  </div>
+            @can('create', App\Models\Product::class)
+            <x-ui.buttons.create href="{{ route('products.create') }}">
+                Create Product
+            </x-ui.buttons.create>
+            @endcan
 
-  <div class="mt-4">
-    <div class="overflow-x-auto">
-      <div class="card bg-base-100 shadow-sm rounded-lg">
-        <div class="p-4">
-          <table class="table w-full table-zebra text-sm sm:text-base">
+        </x-partials.header>
+
+    <div class="overflow-x-auto m-8">
+        <table class="table table-zebra table-lg">
+            <!-- head -->
             <thead>
-              <tr>
-                <th class="py-3 sm:py-4">Product Name</th>
-                <th class="py-3 sm:py-4">Category</th>
-                <th class="py-3 sm:py-4">Status</th>
-                <th class="text-center py-3 sm:py-4">Variants</th>
-                <th class="text-center py-3 sm:py-4">Total Stocks</th>
-                <th class="text-center py-3 sm:py-4">Actions</th>
-              </tr>
+                <tr>
+                    <th></th>
+                    <th>Product Name</th>
+                    <th>Category</th>
+                    <th>Unit</th>
+                    <th>Price</th>
+                    @if (auth()->user()->role === 'admin')
+                    <th>Status</th>
+                    @endif
+                    <th>Actions</th>
+                </tr>
             </thead>
             <tbody>
               @forelse ($products as $product)
-                @php
-                  $product_variants = $variants->where('product_id', $product->id);
-                  $total_stocks = 0;
-                  foreach ($product_variants as $variant) {
-                    $total_stocks += $variant->current_qty;
-                  }
-                @endphp
-                <tr class="align-middle">
-                  <td class="font-medium py-3 sm:py-4">{{ $product->name }}</td>
-                  <td class="py-3 sm:py-4">{{ optional($product->category)->name ?? '-' }}</td>
-                  <td class="py-3 sm:py-4">
+                <tr>
+                    <td></td>
+                    <td>{{ $product->name }}</td>
+                    <td>{{ $product->category->name }}</td>
+                    <td>{{ $product->unit->name }}</td>
+                    <td>{{ $product->price }}</td>
+
+                    @if (auth()->user()->role === 'admin')
+                    <td>
+
                     @if(strtolower($product->status) === 'active')
                       <span class="badge badge-success badge-md">Active</span>
                     @else
                       <span class="badge badge-ghost">{{ $product->status }}</span>
                     @endif
-                  </td>
-                  <td class="text-center py-3 sm:py-4">{{ $product_variants->count() }}</td>
-                  <td class="text-center py-3 sm:py-4">{{ $total_stocks }}</td>
-                  <td class="text-center py-3 sm:py-4">
-                    <div class="inline-flex gap-2 justify-center">
-                      <!-- View action button -->
-                      <x-ui.action-icon type="view" href="#" />
 
-                    @canany(['update', 'delete'], auth()->user() )
-                      <!-- Edit action button -->
-                      <x-ui.action-icon type="edit" href="/products/{{ $product->id }}/edit" />
+                    </td>
+                    @endif
+                    <td>
 
-                      <!-- Delete action button -->
-                      <x-ui.action-icon 
-                        type="delete" 
-                        href="/products/{{ $product->id }}" 
-                        method="POST"
-                        onclick="return confirm('Are you sure you want to delete this product?')" />
 
-                      <!-- Add variant action button -->
-                      <x-ui.action-icon type="add-variant" href="#" />
+                        <x-ui.buttons.view href="{{ route('products.show', $product->id) }}">
+                        </x-ui.buttons.view>
+
+                    @canany(['update', 'delete'], $product)
+
+                        <x-ui.buttons.edit href="{{ route('products.edit', $product->id) }}">
+                        </x-ui.buttons.edit>
+
+                        <x-ui.buttons.delete action="{{ route('products.destroy', $product->id) }}">
+                        </x-ui.buttons.delete>
                     @endcanany
 
-                    </div>
-                  </td>
+                    </td>
                 </tr>
-              @empty
+                  @empty
                 <tr>
                   <td colspan="7" class="text-center text-gray-500 py-6">No products yet.</td>
                 </tr>
-              @endforelse
+                @endforelse
             </tbody>
-          </table>
-        </div>
-      </div>
+        </table>
     </div>
-  </div>
+
 
 </x-layouts.app>

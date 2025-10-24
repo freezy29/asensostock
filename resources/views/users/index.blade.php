@@ -43,7 +43,7 @@
         </x-partials.header>
 
 
-    <div class="hidden lg:block overflow-x-auto m-8">
+    <div class="overflow-x-auto m-8">
         <table class="table table-zebra table-lg">
             <!-- head -->
             <thead>
@@ -69,7 +69,7 @@
                           <span class="badge badge-error badge-md">Inactive</span>
                         @endif
                     </td>
-                    <td>{{ $user->last_login_at ? $user->last_login_at->toDateTimeString() : 'Never' }}</td>
+                    <td>{{ $user->last_login_at ? $user->last_login_at->diffForHumans() : 'Never' }}</td>
 
                     <td>
 

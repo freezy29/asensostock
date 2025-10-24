@@ -8,7 +8,7 @@
             <div class="text-center lg:text-left">
               <h1 class="text-5xl font-bold">Welcome back to <span class="text-primary">AsensoStock!</span></h1>
                 <p class="py-6">
-                    manage your inventaory kineme
+                    manage your inventory
 
                   </p>
             </div>
