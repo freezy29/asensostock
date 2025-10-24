@@ -2,9 +2,7 @@
 
 use App\Http\Controllers\Auth\Login;
 use App\Http\Controllers\Auth\Logout;
-use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\ProductVariantController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,22 +14,9 @@ Route::get('/dashboard', function () {
     ->name('dashboard.index');
 
 Route::middleware('auth')->group(function () {
-    Route::resource('categories', ProductCategoryController::class);
     Route::resource('products', ProductController::class);
-    Route::resource('variants', ProductVariantController::class);
 });
 Route::middleware('admin')->group(function () {
-    //categories
-    Route::get('/categories/create', [ProductCategoryController::class, 'create'])
-        ->name('categories.create');
-    Route::post('/categories', [ProductCategoryController::class, 'store'])
-        ->name('categories.store');
-    Route::get('/category/{category}/edit', [ProductCategoryController::class, 'edit'])
-        ->name('categories.edit');
-    Route::put('/category/{category}', [ProductCategoryController::class, 'update'])
-        ->name('categories.update');
-    Route::delete('/category/{category}', [ProductCategoryController::class, 'destroy'])
-        ->name('categories.destroy');
 
     //products
     Route::get('/products/create', [ProductController::class, 'create'])
@@ -44,18 +29,6 @@ Route::middleware('admin')->group(function () {
         ->name('products.update');
     Route::delete('/products/{product}', [ProductController::class, 'destroy'])
         ->name('products.destroy');
-
-    //product variants
-    Route::get('/variants/create', [ProductVariantController::class, 'create'])
-        ->name('variants.create');
-    Route::post('/variants', [ProductVariantController::class, 'store'])
-        ->name('variants.store');
-    Route::get('/variants/{variant}/edit', [ProductVariantController::class, 'edit'])
-        ->name('variants.edit');
-    Route::put('/variants/{variant}', [ProductVariantController::class, 'update'])
-        ->name('variants.update');
-    Route::delete('/variants/{variant}', [ProductVariantController::class, 'destroy'])
-        ->name('variants.destroy');
 });
 
 //users

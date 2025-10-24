@@ -20,6 +20,7 @@ class ProductSeeder extends Seeder
                 'product_unit_id' => 1, // Sachet
                 'product_packaging_id' => 1, // 10 sachets per pack
                 'price' => 25.00,
+                'reorder_level' => 10,
                 'status' => 'Active',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -30,6 +31,7 @@ class ProductSeeder extends Seeder
                 'product_unit_id' => 1, // Sachet
                 'product_packaging_id' => 2, // 24 sachets per box
                 'price' => 55.00,
+                'reorder_level' => 10,
                 'status' => 'Active',
                 'created_at' => now(),
                 'updated_at' => now(),

@@ -55,4 +55,11 @@ class User extends Authenticatable
     {
         return ($this->role == 'admin');
     }
+
+    public function updateLastLogin()
+    {
+        $this->timestamps = false;
+        $this->last_login_at = now();
+        $this->save();
+    }
 }

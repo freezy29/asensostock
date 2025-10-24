@@ -35,6 +35,7 @@
             </h2>
             <ul class="ml-8">
                 <li><a href="/products">Products</a></li>
+                <li><a href="/transactions">Transactions</a></li>
             </ul>
         </li>
             @can('viewAny', App\Models\User::class)
