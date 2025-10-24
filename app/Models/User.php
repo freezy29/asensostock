@@ -62,4 +62,9 @@ class User extends Authenticatable
         $this->last_login_at = now();
         $this->save();
     }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
 }

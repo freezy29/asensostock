@@ -1,5 +1,5 @@
 <x-layouts.app>
-  <x-slot:title>Products</x-slot:title>
+  <x-slot:title>Transactions</x-slot:title>
 
             <x-partials.header>
 
@@ -28,13 +28,14 @@
                 <input type="search" required placeholder="Search" />
             </label>
 
-            @can('create', App\Models\Product::class)
-            <x-ui.buttons.create href="{{ route('products.create') }}">
-                Add Product
+            @can('create', App\Models\Transaction::class)
+            <x-ui.buttons.create href="{{ route('transactions.create') }}">
+               Add Transaction
             </x-ui.buttons.create>
             @endcan
 
         </x-partials.header>
+
 
     <div class="overflow-x-auto m-8">
         <table class="table table-zebra table-lg">
@@ -42,38 +43,27 @@
             <thead>
                 <tr>
                     <th></th>
-                    <th>Product Name</th>
-                    <th>Category</th>
-                    <th>Unit</th>
-                    <th>Price</th>
-                    <th>Stock</th>
-                    @if (auth()->user()->role === 'admin')
-                    <th>Status</th>
-                    @endif
+                    <th>Product</th>
+                    <th>Type</th>
+                    <th>Quantity</th>
+                    <th>Previous Stock</th>
+                    <th>New Stock</th>
+                    <th>Date</th>
+                    <th>Added By</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-              @forelse ($products as $product)
+              @forelse ($transactions as $transaction)
                 <tr>
                     <td></td>
-                    <td>{{ $product->name }}</td>
-                    <td>{{ $product->category->name }}</td>
-                    <td>{{ $product->unit->name }}</td>
-                    <td>₱{{ $product->price }}</td>
-                    <td>{{ $product->current_stock }}</td>
-
-                    @if (auth()->user()->role === 'admin')
-                    <td>
-
-                    @if(strtolower($product->status) === 'active')
-                      <span class="badge badge-success badge-md">Active</span>
-                    @else
-                      <span class="badge badge-ghost">{{ $product->status }}</span>
-                    @endif
-
-                    </td>
-                    @endif
+                    <td>{{ $transaction->product->name}}</td>
+                    <td>{{ $transaction->type }}</td>
+                    <td>{{ $transaction->quantity }}</td>
+                    <td>{{ $transaction->previous_stock }}</td>
+                    <td>{{ $transaction->new_stock }}</td>
+                    <td>{{ $transaction->created_at }}</td>
+                    <td>{{ $transaction->user->name }}</td>
                     <td>
 
                         <x-ui.buttons.view href="{{ route('products.show', $product->id) }}">
@@ -98,6 +88,5 @@
             </tbody>
         </table>
     </div>
-
 
 </x-layouts.app>
