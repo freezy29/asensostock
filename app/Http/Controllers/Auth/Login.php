@@ -26,8 +26,7 @@ class Login extends Controller
             $request->session()->regenerate();
 
             $user = Auth::user();
-            $user->last_login_at = now();
-            $user->save();
+            $user->updateLastLogin();
 
             // Redirect to intended page or home
             return redirect()->intended('/')->with('success', 'Welcome back!');
