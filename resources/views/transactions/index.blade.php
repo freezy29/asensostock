@@ -70,7 +70,7 @@
                     <td>{{ $transaction->quantity }}</td>
                     <td>{{ $transaction->previous_stock }}</td>
                     <td>{{ $transaction->new_stock }}</td>
-                    <td>{{ $transaction->created_at->toDayDateTimeString() }}</td>
+                    <td>{{ $transaction->created_at->format('M d, Y g:i A') }}</td>
                     <td>{{ $transaction->user->first_name . " " . $transaction->user->last_name }}</td>
                     <td>
 

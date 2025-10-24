@@ -69,7 +69,7 @@
                     @if(strtolower($product->status) === 'active')
                       <span class="badge badge-success badge-md">Active</span>
                     @else
-                      <span class="badge badge-ghost">{{ $product->status }}</span>
+                      <span class="badge badge-error badge-md">Inactive</span>
                     @endif
 
                     </td>

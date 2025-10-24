@@ -24,6 +24,8 @@ class UserSeeder extends Seeder
                 'role' => 'admin',
                 'password' => Hash::make('admin123'),
                 'remember_token' => Str::random(10),
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'first_name' => 'sir',
@@ -33,6 +35,8 @@ class UserSeeder extends Seeder
                 'role' => 'staff',
                 'password' => Hash::make('staff123'),
                 'remember_token' => Str::random(10),
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'first_name' => 'sir',
@@ -42,6 +46,8 @@ class UserSeeder extends Seeder
                 'role' => 'staff',
                 'password' => Hash::make('staff123'),
                 'remember_token' => Str::random(10),
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
         ]);
     }
