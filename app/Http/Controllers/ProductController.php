@@ -64,7 +64,7 @@ class ProductController extends Controller
     {
         $this->authorize('update', $product);
 
-        return view('products.edit', ['product' => $product, 'variants' => $variants]);
+        return view('products.edit', ['product' => $product]);
     }
 
     /**
@@ -79,13 +79,19 @@ class ProductController extends Controller
         $validated = $request->validate([
             'name' => 'required|max:255',
             'product_category_id' => 'required',
+            'product_unit_id' => 'required',
+            'product_packaging_id' => 'required',
+            'price' => 'required|numeric|min:0',
+            'current_stock' => 'required|integer|min:0',
+            'reorder_level' => 'required|integer|min:0',
         ]);
 
-        $validated['status'] =  $request->input('status') ?  'active' : 'inactive';
+        // Handle toggle status - if checked, status is 'active', otherwise 'inactive'
+        $validated['status'] = $request->has('status') && $request->input('status') == 'active' ? 'active' : 'inactive';
 
         $product->update($validated);
 
-        return redirect()->route('products.index')->with('success', 'Product created successfully!');
+        return redirect()->route('products.index')->with('success', 'Product updated successfully!');
     }
 
     /**
