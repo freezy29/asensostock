@@ -15,7 +15,14 @@ class ProductController extends Controller
      */
     public function index()
     {
+        if (auth()->user()->role === 'admin') {
+            $products = Product::with('category')
+                ->get();
+            return view('products.index', ['products' => $products]);
+        }
+
         $products = Product::with('category')
+            ->where('status', '=', 'active')
             ->get();
 
         return view('products.index', ['products' => $products]);
@@ -42,7 +49,6 @@ class ProductController extends Controller
             'name' => 'required|max:255',
             'product_category_id' => 'required',
         ]);
-
 
         Product::create($validated);
 
@@ -86,8 +92,7 @@ class ProductController extends Controller
             'reorder_level' => 'required|integer|min:0',
         ]);
 
-        // Handle toggle status - if checked, status is 'active', otherwise 'inactive'
-        $validated['status'] = $request->has('status') && $request->input('status') == 'active' ? 'active' : 'inactive';
+        $validated['status'] =  $request->input('status');
 
         $product->update($validated);
 

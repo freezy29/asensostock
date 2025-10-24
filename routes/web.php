@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\Login;
 use App\Http\Controllers\Auth\Logout;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,6 +16,7 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
     Route::resource('products', ProductController::class);
+    Route::resource('transactions', TransactionController::class);
 });
 Route::middleware('admin')->group(function () {
 

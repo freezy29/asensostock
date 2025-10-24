@@ -16,7 +16,7 @@
                     <x-ui.buttons.edit href="{{ route('users.edit', $user->id) }}">
                         Edit User
                     </x-ui.buttons.edit>
-                    
+
                     <x-ui.buttons.delete action="{{ route('users.destroy', $user->id) }}">
                         Delete User
                     </x-ui.buttons.delete>
@@ -58,22 +58,22 @@
                                 <div class="text-sm text-base-content/70">ID</div>
                                 <div class="font-medium">{{ $user->id ?? 'N/A' }}</div>
                             </div>
-                            
+
                             <div>
                                 <div class="text-sm text-base-content/70">First Name</div>
                                 <div class="font-medium">{{ $user->first_name ?? 'N/A' }}</div>
                             </div>
-                            
+
                             <div>
                                 <div class="text-sm text-base-content/70">Last Name</div>
                                 <div class="font-medium">{{ $user->last_name ?? 'N/A' }}</div>
                             </div>
-                            
+
                             <div>
                                 <div class="text-sm text-base-content/70">Email Address</div>
                                 <div class="font-medium">{{ $user->email ?? 'N/A' }}</div>
                             </div>
-                            
+
                             <div>
                                 <div class="text-sm text-base-content/70">Phone Number</div>
                                 <div class="font-medium">{{ $user->phone ?? 'N/A' }}</div>
@@ -90,7 +90,7 @@
                                     <span class="badge badge-primary">{{ ucfirst($user->role ?? 'Staff') }}</span>
                                 </div>
                             </div>
-                            
+
                             <div>
                                 <div class="text-sm text-base-content/70">Status</div>
                                 <div class="font-medium">
@@ -101,43 +101,34 @@
                                     @endif
                                 </div>
                             </div>
-                            
+
                             <div>
                                 <div class="text-sm text-base-content/70">Last Login</div>
                                 <div class="font-medium">
                                     @if($user->last_login_at)
-                                        {{ $user->last_login_at->diffForHumans() }}
-                                        <div class="text-xs text-base-content/50 mt-1">
-                                            {{ $user->last_login_at->format('M d, Y g:i A') }}
-                                        </div>
+                                        {{ $user->last_login_at->format('M d, Y g:i A') }}
                                     @else
                                         Never
                                     @endif
                                 </div>
                             </div>
-                            
+
                             <div>
                                 <div class="text-sm text-base-content/70">Created At</div>
                                 <div class="font-medium">
                                     @if($user->created_at)
                                         {{ $user->created_at->format('M d, Y g:i A') }}
-                                        <div class="text-xs text-base-content/50 mt-1">
-                                            {{ $user->created_at->diffForHumans() }}
-                                        </div>
                                     @else
                                         N/A
                                     @endif
                                 </div>
                             </div>
-                            
+
                             <div>
                                 <div class="text-sm text-base-content/70">Last Updated</div>
                                 <div class="font-medium">
                                     @if($user->updated_at)
                                         {{ $user->updated_at->format('M d, Y g:i A') }}
-                                        <div class="text-xs text-base-content/50 mt-1">
-                                            {{ $user->updated_at->diffForHumans() }}
-                                        </div>
                                     @else
                                         N/A
                                     @endif

@@ -30,7 +30,7 @@
      @auth
     <div class="hidden md:block">
         <p class="font-bold text-sm"> {{ auth()->user()->first_name . " " . auth()->user()->last_name }} </p>
-        <p class="text-xs text-end w-full">{{ (auth()->user()->role === 'staff') ? 'Staff' : 'Admin'}}</p>
+        <p class="text-xs text-end w-full">{{ ucfirst(auth()->user()->role) }}</p>
     </div>
     @endauth
         <div class="avatar">

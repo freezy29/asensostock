@@ -1,14 +1,14 @@
 <x-layouts.app>
-  <x-slot:title>Products</x-slot:title>
+  <x-slot:title>Transactions</x-slot:title>
 
             <x-partials.header>
 
                 <x-slot:breadcrumb_list>
-                    <li>Products</li>
+                    <li>Transactions</li>
                 </x-slot:breadcrumb_list>
 
                 <x-slot:page_title>
-                   Products
+                  Transactions
                 </x-slot:page_title>
 
 
@@ -28,13 +28,14 @@
                 <input type="search" required placeholder="Search" />
             </label>
 
-            @can('create', App\Models\Product::class)
-            <x-ui.buttons.create href="{{ route('products.create') }}">
-                Add Product
+            @can('create', App\Models\Transaction::class)
+            <x-ui.buttons.create href="{{ route('transactions.create') }}">
+               Add Transaction
             </x-ui.buttons.create>
             @endcan
 
         </x-partials.header>
+
 
     <div class="overflow-x-auto m-8">
         <table class="table table-zebra table-lg">
@@ -42,49 +43,46 @@
             <thead>
                 <tr>
                     <th></th>
-                    <th>Product Name</th>
-                    <th>Category</th>
-                    <th>Unit</th>
-                    <th>Price</th>
-                    <th>Stock</th>
-                    @if (auth()->user()->role === 'admin')
-                    <th>Status</th>
-                    @endif
+                    <th>Product</th>
+                    <th>Type</th>
+                    <th>Quantity</th>
+                    <th>Previous Stock</th>
+                    <th>New Stock</th>
+                    <th>Date</th>
+                    <th>Added By</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-              @forelse ($products as $product)
+              @forelse ($transactions as $transaction)
                 <tr>
                     <td></td>
-                    <td>{{ $product->name }}</td>
-                    <td>{{ $product->category->name }}</td>
-                    <td>{{ $product->unit->name }}</td>
-                    <td>₱{{ $product->price }}</td>
-                    <td>{{ $product->current_stock }}</td>
-
-                    @if (auth()->user()->role === 'admin')
+                    <td>{{ $transaction->product->name}}</td>
                     <td>
 
-                    @if(strtolower($product->status) === 'active')
-                      <span class="badge badge-success badge-md">Active</span>
+                    @if(strtolower($transaction->type) === 'in')
+                      <span class="badge badge-success badge-md">In</span>
                     @else
-                      <span class="badge badge-error badge-md">Inactive</span>
+                      <span class="badge badge-error">Out</span>
                     @endif
 
                     </td>
-                    @endif
+                    <td>{{ $transaction->quantity }}</td>
+                    <td>{{ $transaction->previous_stock }}</td>
+                    <td>{{ $transaction->new_stock }}</td>
+                    <td>{{ $transaction->created_at->format('M d, Y g:i A') }}</td>
+                    <td>{{ $transaction->user->first_name . " " . $transaction->user->last_name }}</td>
                     <td>
 
-                        <x-ui.buttons.view href="{{ route('products.show', $product->id) }}">
+                        <x-ui.buttons.view href="{{ route('transactions.show', $transaction->id) }}">
                         </x-ui.buttons.view>
 
-                    @canany(['update', 'delete'], $product)
+                    @canany(['update', 'delete'], $transaction)
 
-                        <x-ui.buttons.edit href="{{ route('products.edit', $product->id) }}">
+                        <x-ui.buttons.edit href="{{ route('transactions.edit', $transaction->id) }}">
                         </x-ui.buttons.edit>
 
-                        <x-ui.buttons.delete action="{{ route('products.destroy', $product->id) }}">
+                        <x-ui.buttons.delete action="{{ route('transactions.destroy', $transaction->id) }}">
                         </x-ui.buttons.delete>
                     @endcanany
 
@@ -92,12 +90,11 @@
                 </tr>
                   @empty
                 <tr>
-                  <td colspan="7" class="text-center text-gray-500 py-6">No products yet.</td>
+                  <td colspan="8" class="text-center text-gray-500 py-6">No transactions yet.</td>
                 </tr>
                 @endforelse
             </tbody>
         </table>
     </div>
-
 
 </x-layouts.app>
