@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\Transaction;
-use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
 {
@@ -36,23 +37,38 @@ class TransactionController extends Controller
         }
 
         $validated = $request->validate([
-            'product_id' => 'required',
-            'type' => 'required',
-            'quantity' => 'required|integer|min:0',
+            'product_id' => 'required|exists:products,id',
+            'type' => 'required|in:in,out',
+            'quantity' => 'required|integer|min:1',
         ]);
 
         $validated['user_id'] = auth()->user()->id;
-        $product = User::where('id', $validated['product_id']);
+        $product = Product::find($validated['product_id']);
 
+        // Validate product exists
+        if (!$product) {
+            return back()->withErrors(['product_id' => 'Selected product not found.']);
+        }
+
+        // Store previous stock
+        $validated['previous_stock'] = $product->current_stock;
+
+        // Calculate new stock based on transaction type
         if ($validated['type'] === 'in') {
             $validated['new_stock'] = $product->current_stock + $validated['quantity'];
         } else {
+            // Validate sufficient stock for stock out
+            if ($product->current_stock < $validated['quantity']) {
+                return back()->withErrors(['quantity' => 'Insufficient stock. Available: ' . $product->current_stock]);
+            }
             $validated['new_stock'] = $product->current_stock - $validated['quantity'];
         }
 
-        $validated['previous_stock'] = $product->current_stock;
-        $product->update(['current_stock' => $validated['new_stock']]);
-        Transaction::create($validated);
+        // Use database transaction to ensure data consistency
+        DB::transaction(function () use ($validated, $product) {
+            $product->update(['current_stock' => $validated['new_stock']]);
+            Transaction::create($validated);
+        });
 
         return redirect()->route('transactions.index')->with('success', 'Transaction recorded successfully!');
     }

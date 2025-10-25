@@ -1,5 +1,5 @@
 <x-layouts.app>
-  <x-slot:title></x-slot:title>
+  <x-slot:title>Record Transaction</x-slot:title>
 
     <div class="flex flex-col md:flex-row w-full md:justify-between md:items-end">
         <div>

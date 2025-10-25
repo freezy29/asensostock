@@ -7,6 +7,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Transaction extends Model
 {
+    protected $fillable = [
+        'product_id',
+        'type',
+        'quantity',
+        'previous_stock',
+        'new_stock',
+        'user_id',
+    ];
+
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
