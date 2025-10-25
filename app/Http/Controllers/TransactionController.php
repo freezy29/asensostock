@@ -22,7 +22,7 @@ class TransactionController extends Controller
      */
     public function create()
     {
-        //
+        return view('transactions.create');
     }
 
     /**
@@ -38,7 +38,7 @@ class TransactionController extends Controller
      */
     public function show(string $id)
     {
-        //
+        return view('transactions.show');
     }
 
     /**
