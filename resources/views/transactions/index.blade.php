@@ -30,7 +30,7 @@
 
             @can('create', App\Models\Transaction::class)
             <x-ui.buttons.create href="{{ route('transactions.create') }}">
-               Add Transaction
+               Record Transaction
             </x-ui.buttons.create>
             @endcan
 
@@ -46,8 +46,6 @@
                     <th>Product</th>
                     <th>Type</th>
                     <th>Quantity</th>
-                    <th>Previous Stock</th>
-                    <th>New Stock</th>
                     <th>Date</th>
                     <th>Added By</th>
                     <th>Actions</th>
@@ -68,8 +66,6 @@
 
                     </td>
                     <td>{{ $transaction->quantity }}</td>
-                    <td>{{ $transaction->previous_stock }}</td>
-                    <td>{{ $transaction->new_stock }}</td>
                     <td>{{ $transaction->created_at->format('M d, Y g:i A') }}</td>
                     <td>{{ $transaction->user->first_name . " " . $transaction->user->last_name }}</td>
                     <td>
@@ -90,7 +86,7 @@
                 </tr>
                   @empty
                 <tr>
-                  <td colspan="8" class="text-center text-gray-500 py-6">No transactions yet.</td>
+                  <td colspan="6" class="text-center text-gray-500 py-6">No transactions yet.</td>
                 </tr>
                 @endforelse
             </tbody>

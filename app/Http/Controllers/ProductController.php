@@ -15,12 +15,14 @@ class ProductController extends Controller
      */
     public function index()
     {
+        //give admin all products
         if (auth()->user()->role === 'admin') {
             $products = Product::with('category')
                 ->get();
             return view('products.index', ['products' => $products]);
         }
 
+        //only active products for staff
         $products = Product::with('category')
             ->where('status', '=', 'active')
             ->get();
@@ -48,7 +50,14 @@ class ProductController extends Controller
         $validated = $request->validate([
             'name' => 'required|max:255',
             'product_category_id' => 'required',
+            'product_unit_id' => 'required',
+            'product_packaging_id' => 'required',
+            'price' => 'required|numeric|min:0',
+            'current_stock' => 'required|integer|min:0',
+            'reorder_level' => 'required|integer|min:0',
         ]);
+
+        $validated['status'] = $validated['status'] ?? 'active';
 
         Product::create($validated);
 
@@ -92,7 +101,7 @@ class ProductController extends Controller
             'reorder_level' => 'required|integer|min:0',
         ]);
 
-        $validated['status'] =  $request->input('status');
+        $validated['status'] = $request->input('status');
 
         $product->update($validated);
 

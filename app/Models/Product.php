@@ -15,6 +15,7 @@ class Product extends Model
         'product_unit_id',
         'product_packaging_id',
         'price',
+        'current_stock',
         'status'
     ];
 

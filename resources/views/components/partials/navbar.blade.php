@@ -25,38 +25,12 @@
   </div>
   <div class="navbar-end flex-none gap-2 text-primary-content">
 
-    <div class="dropdown dropdown-end ">
-      <div tabindex="0" role="button" class="md:pl-4 btn btn-ghost btn-circle md:btn-wide">
-     @auth
-    <div class="hidden md:block">
-        <p class="font-bold text-sm"> {{ auth()->user()->first_name . " " . auth()->user()->last_name }} </p>
-        <p class="text-xs text-end w-full">{{ ucfirst(auth()->user()->role) }}</p>
-    </div>
-    @endauth
-        <div class="avatar">
-            <div class="w-10 rounded-full">
-
-              <img
-                alt="Tailwind CSS Navbar component"
-                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-            </div>
-        </div>
+     <button class="btn btn-ghost btn-circle">
+      <div class="indicator">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /> </svg>
+        <span class="badge badge-xs badge-secondary indicator-item"></span>
       </div>
-      <ul
-        tabindex="-1"
-        class="menu menu-lg dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow text-base-content">
-         @auth
-            <h2 class="menu-title md:hidden">{{ auth()->user()->first_name . " " .  auth()->user()->last_name }} ({{ auth()->user()->role }}) </h2>
-         @endauth
-
-        <li><a>Settings</a></li>
-        <form method="POST" action="/logout" class="inline">
-            @csrf
-            <li><button type="submit">Logout</button><li>
-        </form>
-      </ul>
-    </div>
-
+    </button>
 
         <label class="swap swap-rotate">
             <!-- this hidden checkbox controls the state -->
@@ -80,6 +54,39 @@
                     d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
             </svg>
         </label>
+
+    <div class="dropdown dropdown-end">
+      <div tabindex="0" role="button" class="md:pr-4 btn btn-ghost btn-circle md:btn-wide">
+        <div class="avatar">
+            <div class="w-10 rounded-full">
+
+              <img
+                alt="Tailwind CSS Navbar component"
+                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+            </div>
+        </div>
+     @auth
+    <div class="hidden md:block">
+        <p class="font-bold text-sm"> {{ auth()->user()->first_name . " " . auth()->user()->last_name }} </p>
+        <p class="text-xs text-start w-full">{{ ucfirst(auth()->user()->role) }}</p>
+    </div>
+    @endauth
+      </div>
+      <ul
+        tabindex="-1"
+        class="menu menu-lg dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow text-base-content">
+         @auth
+            <h2 class="menu-title md:hidden">{{ auth()->user()->first_name . " " .  auth()->user()->last_name }} ({{ auth()->user()->role }}) </h2>
+         @endauth
+
+            <li><a>Profile</a><li>
+            <li><a>Settings</a><li>
+            <form method="POST" action="/logout" class="inline">
+            @csrf
+            <li><button type="submit">Logout</button><li>
+            </form>
+      </ul>
+    </div>
 
     </div>
 
