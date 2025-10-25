@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Transaction;
+use App\Models\User;
 
 class TransactionController extends Controller
 {
@@ -28,9 +29,32 @@ class TransactionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, Transaction $transaction)
     {
-        //
+        if ($request->user()->cannot('create', $transaction)) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'product_id' => 'required',
+            'type' => 'required',
+            'quantity' => 'required|integer|min:0',
+        ]);
+
+        $validated['user_id'] = auth()->user()->id;
+        $product = User::where('id', $validated['product_id']);
+
+        if ($validated['type'] === 'in') {
+            $validated['new_stock'] = $product->current_stock + $validated['quantity'];
+        } else {
+            $validated['new_stock'] = $product->current_stock - $validated['quantity'];
+        }
+
+        $validated['previous_stock'] = $product->current_stock;
+        $product->update(['current_stock' => $validated['new_stock']]);
+        Transaction::create($validated);
+
+        return redirect()->route('transactions.index')->with('success', 'Transaction recorded successfully!');
     }
 
     /**

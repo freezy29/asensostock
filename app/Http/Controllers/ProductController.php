@@ -52,7 +52,7 @@ class ProductController extends Controller
             'product_category_id' => 'required',
             'product_unit_id' => 'required',
             'product_packaging_id' => 'required',
-            'price' => 'required|integer|min:0',
+            'price' => 'required|numeric|min:0',
             'current_stock' => 'required|integer|min:0',
             'reorder_level' => 'required|integer|min:0',
         ]);
@@ -101,7 +101,7 @@ class ProductController extends Controller
             'reorder_level' => 'required|integer|min:0',
         ]);
 
-        $validated['status'] =  $request->input('status');
+        $validated['status'] = $request->input('status');
 
         $product->update($validated);
 
