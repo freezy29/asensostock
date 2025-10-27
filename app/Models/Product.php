@@ -24,14 +24,9 @@ class Product extends Model
         return $this->belongsTo(ProductCategory::class, 'product_category_id');
     }
 
-    public function unit(): BelongsTo
+    public function unit(): HasMany
     {
-        return $this->belongsTo(ProductUnit::class, 'product_unit_id');
-    }
-
-    public function packaging(): BelongsTo
-    {
-        return $this->belongsTo(ProductPackaging::class);
+        return $this->hasMany(ProductUnit::class, 'product_unit_id');
     }
 
     public function transactions(): HasMany

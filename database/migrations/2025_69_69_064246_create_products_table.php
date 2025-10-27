@@ -15,12 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('name', 150);
             $table->foreignId('product_category_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('product_unit_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('product_packaging_id')->constrained(
-                table: 'product_packaging',
-                indexName: 'id'
-            );
-            $table->decimal('price', total: 10, places: 2);
             $table->integer('current_stock')->default(0);
             $table->integer('reorder_level')->default(10);
             $table->enum('status', ['active', 'inactive'])->default('active');

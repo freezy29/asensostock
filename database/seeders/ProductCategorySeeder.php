@@ -16,12 +16,12 @@ class ProductCategorySeeder extends Seeder
     {
         DB::table('product_categories')->insert([
             [
-                'name' => 'Coffee',
+                'name' => 'Beverages',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'Juice',
+                'name' => 'Snacks',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

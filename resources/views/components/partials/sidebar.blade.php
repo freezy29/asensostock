@@ -1,6 +1,6 @@
 <div class="drawer-side z-40">
 <label for="drawer" aria-label="close sidebar" class="drawer-overlay"></label>
-<aside class="bg-base-200 text-base-content min-h-screen w-70 flex flex-col">
+<aside class="bg-base-200 text-base-content min-h-screen w-80 flex flex-col">
    <div class="navbar sticky bg-primary text-primary-content top-0 z-30 py-0 px-4 items-center flex">
 
         <div class="hidden lg:flex item-center">
@@ -37,9 +37,13 @@
                 <li><a href="/products">Products</a></li>
                 <li><a href="/categories">Categories</a></li>
                 <li><a href="/units">Units</a></li>
-                <li><a href="/transactions">Transactions</a></li>
             </ul>
         </li>
+                <li>
+             <a href="/transactions">
+             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-base-content"></title><path d="M21,9L17,5V8H10V10H17V13M7,11L3,15L7,19V16H14V14H7V11Z" /></svg>
+             Transactions</a></li>
+
             @can('viewAny', App\Models\User::class)
           <li>
             <a href="{{ route('users.index') }}">

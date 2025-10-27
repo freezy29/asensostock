@@ -13,8 +13,12 @@ return new class extends Migration
     {
         Schema::create('product_units', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->string('name', 150);
+            $table->integer('quantity');
+            $table->decimal('price', total: 10, places: 2);
             $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->integer('stock_quantity');
             $table->softDeletes();
             $table->timestamps();
         });
