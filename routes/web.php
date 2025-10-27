@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\Login;
 use App\Http\Controllers\Auth\Logout;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductVariantController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('categories', ProductCategoryController::class)
         ->except(['index', 'show']);
 
+    Route::resource('variants', ProductVariantController::class)
+        ->except(['index', 'show']);
+
     Route::resource('transactions', TransactionController::class)
         ->except(['index', 'show', 'create']);
 
@@ -34,6 +38,9 @@ Route::middleware('auth')->group(function () {
         ->only(['index', 'show']);
 
     Route::resource('categories', ProductCategoryController::class)
+        ->only(['index', 'show']);
+
+    Route::resource('variants', ProductVariantController::class)
         ->only(['index', 'show']);
 
     Route::resource('transactions', TransactionController::class)
