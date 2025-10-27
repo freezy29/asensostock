@@ -1,14 +1,14 @@
 <x-layouts.app>
-  <x-slot:title>Categories</x-slot:title>
+  <x-slot:title>Variants</x-slot:title>
 
             <x-partials.header>
 
                 <x-slot:breadcrumb_list>
-                    <li>Categories</li>
+                    <li>Variants</li>
                 </x-slot:breadcrumb_list>
 
                 <x-slot:page_title>
-                  Categories
+                 Variants
                 </x-slot:page_title>
 
 
@@ -28,9 +28,9 @@
                 <input type="search" required placeholder="Search" />
             </label>
 
-            @can('create', App\Models\ProductCategory::class)
-            <x-ui.buttons.create href="{{ route('categories.create') }}">
-                Add Category
+            @can('create', App\Models\ProductVariant::class)
+            <x-ui.buttons.create href="{{ route('variants.create') }}">
+                Add Variant
             </x-ui.buttons.create>
             @endcan
 
@@ -42,7 +42,12 @@
             <thead>
                 <tr>
                     <th></th>
-                    <th>Category Name</th>
+                    <th>Product Name</th>
+                    <th>Variant Name</th>
+                    <th>Category</th>
+                    <th>Quantity per Unit</th>
+                    <th>Price</th>
+                    <th>Stock Quantity</th>
                     @if (auth()->user()->role === 'admin')
                     <th>Status</th>
                     @endif
@@ -50,15 +55,20 @@
                 </tr>
             </thead>
             <tbody>
-              @forelse ($categories as $category)
+              @forelse ($variants as $variant)
                 <tr>
                     <td></td>
-                    <td>{{ $category->name }}</td>
+                    <td>{{ $variant->product->name }}</td>
+                    <td>{{ $variant->name }}</td>
+                    <td>{{ $variant->product->category->name }}</td>
+                    <td>{{ $variant->quantity }}</td>
+                    <td>₱{{ $variant->price }}</td>
+                    <td>{{ $variant->stock_quantity }}</td>
 
                     @if (auth()->user()->role === 'admin')
                     <td>
 
-                    @if(strtolower($category->status) === 'active')
+                    @if(strtolower($variant->status) === 'active')
                       <span class="badge badge-success badge-md">Active</span>
                     @else
                       <span class="badge badge-error badge-md">Inactive</span>
@@ -68,15 +78,15 @@
                     @endif
                     <td>
 
-                        <x-ui.buttons.view href="{{ route('categories.show', $category->id) }}">
+                        <x-ui.buttons.view href="{{ route('variants.show', $variant->id) }}">
                         </x-ui.buttons.view>
 
-                    @canany(['update', 'delete'], $category)
+                    @canany(['update', 'delete'], $variant)
 
-                        <x-ui.buttons.edit href="{{ route('categories.edit', $category->id) }}">
+                        <x-ui.buttons.edit href="{{ route('variants.edit', $variant->id) }}">
                         </x-ui.buttons.edit>
 
-                        <x-ui.buttons.delete action="{{ route('categories.destroy', $category->id) }}">
+                        <x-ui.buttons.delete action="{{ route('variants.destroy', $variant->id) }}">
                         </x-ui.buttons.delete>
                     @endcanany
 
@@ -84,7 +94,7 @@
                 </tr>
                   @empty
                 <tr>
-                  <td colspan="4" class="text-center text-gray-500 py-6">No categories yet.</td>
+                  <td colspan="9" class="text-center text-gray-500 py-6">No product variants yet.</td>
                 </tr>
                 @endforelse
             </tbody>

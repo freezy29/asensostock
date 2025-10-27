@@ -50,11 +50,6 @@ class ProductController extends Controller
         $validated = $request->validate([
             'name' => 'required|max:255',
             'product_category_id' => 'required',
-            'product_unit_id' => 'required',
-            'product_packaging_id' => 'required',
-            'price' => 'required|numeric|min:0',
-            'current_stock' => 'required|integer|min:0',
-            'reorder_level' => 'required|integer|min:0',
         ]);
 
         $validated['status'] = $validated['status'] ?? 'active';
@@ -94,11 +89,6 @@ class ProductController extends Controller
         $validated = $request->validate([
             'name' => 'required|max:255',
             'product_category_id' => 'required',
-            'product_unit_id' => 'required',
-            'product_packaging_id' => 'required',
-            'price' => 'required|numeric|min:0',
-            'current_stock' => 'required|integer|min:0',
-            'reorder_level' => 'required|integer|min:0',
         ]);
 
         $validated['status'] = $request->input('status');

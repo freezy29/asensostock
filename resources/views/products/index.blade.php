@@ -44,9 +44,6 @@
                     <th></th>
                     <th>Product Name</th>
                     <th>Category</th>
-                    <th>Unit</th>
-                    <th>Price</th>
-                    <th>Stock</th>
                     @if (auth()->user()->role === 'admin')
                     <th>Status</th>
                     @endif
@@ -59,9 +56,6 @@
                     <td></td>
                     <td>{{ $product->name }}</td>
                     <td>{{ $product->category->name }}</td>
-                    <td>{{ $product->unit->name }}</td>
-                    <td>₱{{ $product->price }}</td>
-                    <td>{{ $product->current_stock }}</td>
 
                     @if (auth()->user()->role === 'admin')
                     <td>

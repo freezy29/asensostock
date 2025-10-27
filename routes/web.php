@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Auth\Login;
 use App\Http\Controllers\Auth\Logout;
+use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductVariantController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -15,41 +17,36 @@ Route::get('/dashboard', function () {
 })->middleware('auth')
     ->name('dashboard.index');
 
-Route::middleware('auth')->group(function () {
-    Route::resource('products', ProductController::class);
-    Route::resource('transactions', TransactionController::class);
-});
-Route::middleware('admin')->group(function () {
-
-    //products
-    Route::get('/products/create', [ProductController::class, 'create'])
-        ->name('products.create');
-    Route::post('/products', [ProductController::class, 'store'])
-        ->name('products.store');
-    Route::get('/products/{product}/edit', [ProductController::class, 'edit'])
-        ->name('products.edit');
-    Route::put('/products/{product}', [ProductController::class, 'update'])
-        ->name('products.update');
-    Route::delete('/products/{product}', [ProductController::class, 'destroy'])
-        ->name('products.destroy');
-
-    //transactions
-    Route::get('/transactions/create', [TransactionController::class, 'create'])
-        ->name('transactions.create');
-    Route::post('/transactions', [TransactionController::class, 'store'])
-        ->name('transactions.store');
-    Route::get('/transactions/{transaction}/edit', [TransactionController::class, 'edit'])
-        ->name('transactions.edit');
-    Route::put('/transactions/{transaction}', [TransactionController::class, 'update'])
-        ->name('transactions.update');
-    Route::delete('/transactions/{transaction}', [TransactionController::class, 'destroy'])
-        ->name('transactions.destroy');
-});
-
-//users
 Route::middleware(['auth', 'admin'])->group(function () {
+    Route::resource('products', ProductController::class)
+        ->except(['index', 'show']);
+
+    Route::resource('categories', ProductCategoryController::class)
+        ->except(['index', 'show']);
+
+    Route::resource('variants', ProductVariantController::class)
+        ->except(['index', 'show']);
+
+    Route::resource('transactions', TransactionController::class)
+        ->except(['index', 'show', 'create']);
+
     Route::resource('users', UserController::class);
 });
+
+Route::middleware('auth')->group(function () {
+    Route::resource('products', ProductController::class)
+        ->only(['index', 'show']);
+
+    Route::resource('categories', ProductCategoryController::class)
+        ->only(['index', 'show']);
+
+    Route::resource('variants', ProductVariantController::class)
+        ->only(['index', 'show']);
+
+    Route::resource('transactions', TransactionController::class)
+        ->only(['index', 'show', 'create']);
+});
+
 
 //auth
 Route::view('/login', 'auth.login')
