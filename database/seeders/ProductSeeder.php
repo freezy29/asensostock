@@ -17,7 +17,6 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'Guyabano Drink Mix',
                 'product_category_id' => 1,
-                'reorder_level' => 10,
                 'status' => 'Active',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -25,7 +24,6 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'Mango Drink Mix',
                 'product_category_id' => 2,
-                'reorder_level' => 10,
                 'status' => 'Active',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -33,7 +31,6 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'Coco Crunch Bites',
                 'product_category_id' => 2,
-                'reorder_level' => 10,
                 'status' => 'Active',
                 'created_at' => now(),
                 'updated_at' => now(),
