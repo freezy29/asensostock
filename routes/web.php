@@ -17,7 +17,11 @@ Route::get('/dashboard', function () {
 })->middleware('auth')
     ->name('dashboard.index');
 
-Route::middleware(['auth', 'admin'])->group(function () {
+Route::middleware(['auth', 'role:super_admin,admin'])->group(function () {
+    Route::resource('users', UserController::class);
+});
+
+Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('products', ProductController::class)
         ->except(['index', 'show']);
 
@@ -29,8 +33,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::resource('transactions', TransactionController::class)
         ->except(['index', 'show', 'create']);
-
-    Route::resource('users', UserController::class);
 });
 
 Route::middleware('auth')->group(function () {

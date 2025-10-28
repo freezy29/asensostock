@@ -53,6 +53,9 @@
                     <th>Email</th>
                     <th>Phone Number</th>
                     <th>Status</th>
+                    @if (auth()->user()->role === 'super_admin')
+                    <th>Role</th>
+                    @endif
                     <th>Last Login</th>
                     <th>Actions</th>
                 </tr>
@@ -71,6 +74,11 @@
                           <span class="badge badge-error badge-md">Inactive</span>
                         @endif
                     </td>
+
+                    @if (auth()->user()->role === 'super_admin')
+                    <td>{{ ucfirst($user->role) }}</td>
+                    @endif
+
                     <td>{{ $user->last_login_at ? $user->last_login_at->diffForHumans() : 'Never' }}</td>
 
                     <td>

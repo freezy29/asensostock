@@ -56,6 +56,17 @@ class User extends Authenticatable
         return ($this->role == 'admin');
     }
 
+
+    public function isSuperAdmin()
+    {
+        return $this->role === 'super_admin';
+    }
+
+    public function isStaff()
+    {
+        return $this->role === 'staff';
+    }
+
     public function updateLastLogin()
     {
         $this->timestamps = false;

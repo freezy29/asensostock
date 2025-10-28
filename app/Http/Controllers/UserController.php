@@ -16,9 +16,15 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all()
-            ->where('role', 'staff')
-            ->take(50);
+        if (auth()->user()->role === 'admin') {
+            $users = User::where('role', 'staff')->get();
+
+            return view('users.index', ['users' => $users]);
+        }
+        // for super admin
+        $users = User::where('role', 'staff')
+            ->orWhere('role', 'admin')
+            ->get();
 
         return view('users.index', ['users' => $users]);
     }

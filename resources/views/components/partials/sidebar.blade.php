@@ -43,7 +43,7 @@
              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-base-content"></title><path d="M21,9L17,5V8H10V10H17V13M7,11L3,15L7,19V16H14V14H7V11Z" /></svg>
              Transactions</a></li>
 
-            @can('viewAny', App\Models\User::class)
+            @if (auth()->user()->role !== 'staff')
           <li>
             <a href="{{ route('users.index') }}">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor" class="w-6 h-6 text-base-content">
@@ -52,7 +52,7 @@
                Users
         </a>
         </li>
-            @endcan
+            @endif
     </ul>
 
 </aside>
