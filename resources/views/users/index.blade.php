@@ -11,7 +11,7 @@
 
                 <x-slot:breadcrumb_list>
                     @if(auth()->user() && auth()->user()->role === 'admin')
-                      <li>Staff Management</li>
+                      <li>Staffs</li>
                     @else
                       <li>Users</li>
                     @endif
@@ -21,7 +21,7 @@
                     @if(auth()->user() && auth()->user()->role === 'admin')
                       Staff Management
                     @else
-                      Users
+                      User Management
                     @endif
                 </x-slot:page_title>
 
