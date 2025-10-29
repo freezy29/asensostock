@@ -28,7 +28,7 @@
                 <input type="search" required placeholder="Search" />
             </label>
 
-            @can('create', App\Models\ProductCategory::class)
+            @can('create', App\Models\Category::class)
             <x-ui.buttons.create href="{{ route('categories.create') }}">
                 Add Category
             </x-ui.buttons.create>
@@ -43,7 +43,7 @@
                 <tr>
                     <th></th>
                     <th>Category Name</th>
-                    @if (auth()->user()->role === 'admin')
+                    @if (auth()->user()->role !== 'staff')
                     <th>Status</th>
                     @endif
                     <th>Actions</th>
@@ -55,7 +55,7 @@
                     <td></td>
                     <td>{{ $category->name }}</td>
 
-                    @if (auth()->user()->role === 'admin')
+                    @if (auth()->user()->role !== 'staff')
                     <td>
 
                     @if(strtolower($category->status) === 'active')

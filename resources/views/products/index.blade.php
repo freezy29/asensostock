@@ -44,6 +44,9 @@
                     <th></th>
                     <th>Product Name</th>
                     <th>Category</th>
+                    <th>Unit</th>
+                    <th>Unit Price</th>
+                    <th>Stock Quantity</th>
                     @if (auth()->user()->role === 'admin')
                     <th>Status</th>
                     @endif
@@ -56,8 +59,11 @@
                     <td></td>
                     <td>{{ $product->name }}</td>
                     <td>{{ $product->category->name }}</td>
+                    <td>{{ $product->unit->name }}</td>
+                    <td>₱{{ $product->unit_price }}</td>
+                    <td>{{ $product->stock_quantity }}</td>
 
-                    @if (auth()->user()->role === 'admin')
+                    @if (auth()->user()->role !== 'staff')
                     <td>
 
                     @if(strtolower($product->status) === 'active')

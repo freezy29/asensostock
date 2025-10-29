@@ -1,14 +1,14 @@
 <x-layouts.app>
-  <x-slot:title>Variants</x-slot:title>
+  <x-slot:title>Products</x-slot:title>
 
             <x-partials.header>
 
                 <x-slot:breadcrumb_list>
-                    <li>Variants</li>
+                    <li>Products</li>
                 </x-slot:breadcrumb_list>
 
                 <x-slot:page_title>
-                 Variants
+                   Products
                 </x-slot:page_title>
 
 
@@ -28,9 +28,9 @@
                 <input type="search" required placeholder="Search" />
             </label>
 
-            @can('create', App\Models\ProductVariant::class)
-            <x-ui.buttons.create href="{{ route('variants.create') }}">
-                Add Variant
+            @can('create', App\Models\Product::class)
+            <x-ui.buttons.create href="{{ route('products.create') }}">
+                Add Product
             </x-ui.buttons.create>
             @endcan
 
@@ -43,10 +43,10 @@
                 <tr>
                     <th></th>
                     <th>Product Name</th>
-                    <th>Variant Name</th>
                     <th>Category</th>
-                    <th>Quantity per Unit</th>
-                    <th>Price</th>
+                    <th>Unit</th>
+                    <th>Cost Price</th>
+                    <th>Unit Price</th>
                     <th>Stock Quantity</th>
                     @if (auth()->user()->role === 'admin')
                     <th>Status</th>
@@ -55,20 +55,19 @@
                 </tr>
             </thead>
             <tbody>
-              @forelse ($variants as $variant)
+              @forelse ($products as $product)
                 <tr>
                     <td></td>
-                    <td>{{ $variant->product->name }}</td>
-                    <td>{{ $variant->name }}</td>
-                    <td>{{ $variant->product->category->name }}</td>
-                    <td>{{ $variant->quantity }}</td>
-                    <td>₱{{ $variant->price }}</td>
-                    <td>{{ $variant->stock_quantity }}</td>
+                    <td>{{ $product->name }}</td>
+                    <td>{{ $product->category->name }}</td>
+                    <td>{{ $product->unit->name }}</td>
+                    <td>₱{{ $product->cost_price }}</td>
+                    <td>₱{{ $product->unit_price }}</td>
 
-                    @if (auth()->user()->role === 'admin')
+                    @if (auth()->user()->role !== 'staff')
                     <td>
 
-                    @if(strtolower($variant->status) === 'active')
+                    @if(strtolower($product->status) === 'active')
                       <span class="badge badge-success badge-md">Active</span>
                     @else
                       <span class="badge badge-error badge-md">Inactive</span>
@@ -78,15 +77,15 @@
                     @endif
                     <td>
 
-                        <x-ui.buttons.view href="{{ route('variants.show', $variant->id) }}">
+                        <x-ui.buttons.view href="{{ route('products.show', $product->id) }}">
                         </x-ui.buttons.view>
 
-                    @canany(['update', 'delete'], $variant)
+                    @canany(['update', 'delete'], $product)
 
-                        <x-ui.buttons.edit href="{{ route('variants.edit', $variant->id) }}">
+                        <x-ui.buttons.edit href="{{ route('products.edit', $product->id) }}">
                         </x-ui.buttons.edit>
 
-                        <x-ui.buttons.delete action="{{ route('variants.destroy', $variant->id) }}">
+                        <x-ui.buttons.delete action="{{ route('products.destroy', $product->id) }}">
                         </x-ui.buttons.delete>
                     @endcanany
 
@@ -94,7 +93,7 @@
                 </tr>
                   @empty
                 <tr>
-                  <td colspan="9" class="text-center text-gray-500 py-6">No product variants yet.</td>
+                  <td colspan="7" class="text-center text-gray-500 py-6">No products yet.</td>
                 </tr>
                 @endforelse
             </tbody>

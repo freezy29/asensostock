@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ProductCategory;
+use App\Models\Category;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 
-class ProductCategoryController extends Controller
+class CategoryController extends Controller
 {
     use AuthorizesRequests;
     /**
@@ -15,15 +15,15 @@ class ProductCategoryController extends Controller
     public function index()
     {
         if (auth()->user()->role === 'admin') {
-            $categories = ProductCategory::all();
-            return view('product_categories.index', ['categories' => $categories]);
+            $categories = Category::all();
+            return view('categories.index', ['categories' => $categories]);
         }
 
         //only active products for staff
-        $categories = ProductCategory::where('status', '=', 'active')
+        $categories = Category::where('status', '=', 'active')
             ->get();
 
-        return view('product_categories.index', ['categories' => $categories]);
+        return view('categories.index', ['categories' => $categories]);
     }
 
     /**
@@ -31,13 +31,13 @@ class ProductCategoryController extends Controller
      */
     public function create()
     {
-        return view('product_categories.create');
+        return view('categories.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, ProductCategory $category)
+    public function store(Request $request, Category $category)
     {
         if ($request->user()->cannot('create', $category)) {
             abort(403);
@@ -49,7 +49,7 @@ class ProductCategoryController extends Controller
 
         $validated['status'] = $validated['status'] ?? 'active';
 
-        ProductCategory::create($validated);
+        Category::create($validated);
 
         return redirect()->route('categories.index')->with('success', 'Category added successfully!');
     }
@@ -57,25 +57,25 @@ class ProductCategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ProductCategory $category)
+    public function show(Category $category)
     {
-        return view('product_categories.show', ['Category' => $category]);
+        return view('categories.show', ['Category' => $category]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ProductCategory $category)
+    public function edit(Category $category)
     {
         $this->authorize('update', $category);
 
-        return view('product_categories.edit', ['category' => $category]);
+        return view('categories.edit', ['category' => $category]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ProductCategory $category)
+    public function update(Request $request, Category $category)
     {
         if ($request->user()->cannot('update', $category)) {
             abort(403);
@@ -95,12 +95,12 @@ class ProductCategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ProductCategory $category)
+    public function destroy(Category $category)
     {
         $this->authorize('delete', $category);
 
         $category->delete();
 
-        return redirect()->route('product_categories.index')->with('success', 'Category deleted from the list!');
+        return redirect()->route('categories.index')->with('success', 'Category deleted from the list!');
     }
 }

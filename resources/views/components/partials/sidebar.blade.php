@@ -36,7 +36,7 @@
             <ul class="ml-8">
                 <li><a href="{{ route('categories.index') }}">Categories</a></li>
                 <li><a href="{{ route('products.index') }}">Products</a></li>
-                <li><a href="{{ route('variants.index') }}">Variants</a></li>
+                <li><a href="{{ route('units.index') }}">Units</a></li>
             </ul>
         </li>
                 <li> <a href="/transactions">

@@ -11,8 +11,6 @@ class Transaction extends Model
         'product_id',
         'type',
         'quantity',
-        'previous_stock',
-        'new_stock',
         'user_id',
     ];
 
