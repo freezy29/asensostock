@@ -17,14 +17,14 @@ class UserController extends Controller
     public function index()
     {
         if (auth()->user()->role === 'admin') {
-            $users = User::where('role', 'staff')->get();
+            $users = User::where('role', 'staff')->paginate(8);
 
             return view('users.index', ['users' => $users]);
         }
         // for super admin
         $users = User::where('role', 'staff')
             ->orWhere('role', 'admin')
-            ->get();
+            ->paginate(8);
 
         return view('users.index', ['users' => $users]);
     }

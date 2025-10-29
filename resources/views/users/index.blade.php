@@ -11,7 +11,7 @@
 
                 <x-slot:breadcrumb_list>
                     @if(auth()->user() && auth()->user()->role === 'admin')
-                      <li>Staff Management</li>
+                      <li>Staffs</li>
                     @else
                       <li>Users</li>
                     @endif
@@ -21,9 +21,9 @@
                     @if(auth()->user() && auth()->user()->role === 'admin')
                       Staff Management
                     @else
-                      Users
+                      User Management
                     @endif
-                </x-slot:page_title>
+               </x-slot:page_title>
 
 
             <label class="input">
@@ -66,7 +66,7 @@
             <!-- head -->
             <thead>
                 <tr>
-                    <th></th>
+                    <th>ID</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Phone Number</th>
@@ -81,7 +81,7 @@
             <tbody>
               @foreach ($users as $user)
                 <tr>
-                    <td></td>
+                    <td>{{ $user->id }}</td>
                     <td>{{ $user->first_name . " " .  $user->last_name }}</td>
                     <td>{{ $user->email }}</td>
                     <td>{{ $user->phone ?? 'N/A' }}</td>
@@ -119,6 +119,8 @@
             </tbody>
         </table>
     </div>
+
+        {{ $users->onEachSide(5)->links() }}
 
 
 

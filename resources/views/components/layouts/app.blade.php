@@ -25,7 +25,7 @@
         </div>
 
 
-        <div class="relative max-w-[100vw] px-6 pb-16">
+        <div class="relative max-w-[100vw] px-6 pb-6">
 
         @if (session('success'))
         <div class="toast toast-top toast-center z-100">
@@ -38,7 +38,7 @@
             </div>
         @endif
 
-            <main class="prose prose-sm md:prose-base w-full grow pt-10">
+            <main class="prose prose-sm md:prose-base w-full grow pt-5">
                 {{ $slot }}
             </main>
         </div>
