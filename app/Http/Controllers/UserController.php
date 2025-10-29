@@ -18,19 +18,14 @@ class UserController extends Controller
     public function index()
     {
         if (auth()->user()->role === 'admin') {
-            $users = User::where('role', 'staff')
-                ->orderBy('last_name')
-                ->paginate(10)
-                ->withQueryString();
+            $users = User::where('role', 'staff')->get();
 
             return view('users.index', ['users' => $users]);
         }
         // for super admin
         $users = User::where('role', 'staff')
             ->orWhere('role', 'admin')
-            ->orderBy('last_name')
-            ->paginate(10)
-            ->withQueryString();
+            ->get();
 
         return view('users.index', ['users' => $users]);
     }
@@ -75,7 +70,7 @@ class UserController extends Controller
             $query->where('role', $roleFilter);
         }
 
-        $users = $query->orderBy('last_name')->paginate(10)->withQueryString();
+        $users = $query->get();
 
         if ($request->wantsJson()) {
             return response()->json(['html' => View::make('users.partials.table', compact('users'))->render()]);
