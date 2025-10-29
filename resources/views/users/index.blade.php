@@ -26,29 +26,43 @@
                </x-slot:page_title>
 
 
-            <label class="input">
-                <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <g
-                        stroke-linejoin="round"
-                        stroke-linecap="round"
-                        stroke-width="2.5"
-                        fill="none"
-                        stroke="currentColor"
-                    >
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <path d="m21 21-4.3-4.3"></path>
-                    </g>
-                </svg>
-                <input type="search" required placeholder="Search" />
-            </label>
+
+                <label class="input">
+                    <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <g
+                            stroke-linejoin="round"
+                            stroke-linecap="round"
+                            stroke-width="2.5"
+                            fill="none"
+                            stroke="currentColor"
+                        >
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.3-4.3"></path>
+                        </g>
+                    </svg>
+                    <input type="search" required placeholder="Search" />
+                </label>
 
             <div class="dropdown">
               <div tabindex="0" role="button" class="btn ">Status</div>
               <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                <li><a>All</a></li>
                 <li><a>Active</a></li>
                 <li><a>Inactive</a></li>
               </ul>
             </div>
+
+
+            @if (auth()->user()->role === 'super_admin')
+            <div class="dropdown">
+              <div tabindex="0" role="button" class="btn ">Role</div>
+              <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                <li><a>All</a></li>
+                <li><a>Admin</a></li>
+                <li><a>Staff</a></li>
+              </ul>
+            </div>
+            @endif
 
             <x-ui.buttons.create href="{{ route('users.create') }}">
                 @if(auth()->user() && auth()->user()->role === 'admin')

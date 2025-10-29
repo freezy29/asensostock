@@ -216,7 +216,7 @@
                             <label class="label">
                                 <span class="label-text font-medium">Role</span>
                             </label>
-                            <select name="role" class="select select-bordered w-full max-w-xs">
+                            <select name="role" class="select select-bordered w-full ">
                                 <option value="staff" {{ old('role', 'staff') === 'staff' ? 'selected' : '' }}>Staff</option>
                                 <option value="admin" {{ old('role') === 'admin' ? 'selected' : '' }}>Admin</option>
                             </select>
@@ -257,5 +257,20 @@
             </div>
         </form>
     </div>
+    @if ($errors->any())
+        <div class="alert alert-error mt-6 max-w-2xl mx-auto">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+            </svg>
+            <div>
+                <h3 class="font-bold">Please correct the following errors:</h3>
+                <ul class="list-disc list-inside mt-2">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+    @endif
 
 </x-layouts.app>
