@@ -43,11 +43,14 @@
             <thead>
                 <tr>
                     <th></th>
+                    <th>Transaction ID</th>
+                    <th>Date</th>
                     <th>Product</th>
                     <th>Type</th>
                     <th>Quantity</th>
-                    <th>Date</th>
-                    <th>Added By</th>
+                    <th>Cost Price</th>
+                    <th>Total Amount</th>
+                    <th>Processed By</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -55,6 +58,8 @@
               @forelse ($transactions as $transaction)
                 <tr>
                     <td></td>
+                    <td>{{ $transaction->id }}</td>
+                    <td>{{ $transaction->created_at->format('M d, Y g:i A') }}</td>
                     <td>{{ $transaction->product->name}}</td>
                     <td>
 
@@ -66,7 +71,8 @@
 
                     </td>
                     <td>{{ $transaction->quantity }}</td>
-                    <td>{{ $transaction->created_at->format('M d, Y g:i A') }}</td>
+                    <td>₱{{ $transaction->cost_price }}</td>
+                    <td>₱{{ $transaction->total_amount }}</td>
                     <td>{{ $transaction->user->first_name . " " . $transaction->user->last_name }}</td>
                     <td>
 

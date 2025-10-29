@@ -1,14 +1,14 @@
 <x-layouts.app>
-  <x-slot:title>Products</x-slot:title>
+  <x-slot:title>Units</x-slot:title>
 
             <x-partials.header>
 
                 <x-slot:breadcrumb_list>
-                    <li>Products</li>
+                    <li>Units</li>
                 </x-slot:breadcrumb_list>
 
                 <x-slot:page_title>
-                   Products
+                  Units
                 </x-slot:page_title>
 
 
@@ -28,9 +28,9 @@
                 <input type="search" required placeholder="Search" />
             </label>
 
-            @can('create', App\Models\Product::class)
+            @can('create', App\Models\Unit::class)
             <x-ui.buttons.create href="{{ route('products.create') }}">
-                Add Product
+                Add Unit
             </x-ui.buttons.create>
             @endcan
 
@@ -42,32 +42,25 @@
             <thead>
                 <tr>
                     <th></th>
-                    <th>Product Name</th>
-                    <th>Category</th>
-                    <th>Unit</th>
-                    <th>Cost Price</th>
-                    <th>Unit Price</th>
-                    <th>Stock Quantity</th>
-                    @if (auth()->user()->role === 'admin')
+                    <th>Unit Name</th>
+                    <th>Abbreviation</th>
+                    @if (auth()->user()->role !== 'staff')
                     <th>Status</th>
                     @endif
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-              @forelse ($products as $product)
+              @forelse ($units as $unit)
                 <tr>
                     <td></td>
-                    <td>{{ $product->name }}</td>
-                    <td>{{ $product->category->name }}</td>
-                    <td>{{ $product->unit->name }}</td>
-                    <td>₱{{ $product->cost_price }}</td>
-                    <td>₱{{ $product->unit_price }}</td>
+                    <td>{{ $unit->name }}</td>
+                    <td>{{ $unit->abbreviation }}</td>
 
                     @if (auth()->user()->role !== 'staff')
                     <td>
 
-                    @if(strtolower($product->status) === 'active')
+                    @if(strtolower($unit->status) === 'active')
                       <span class="badge badge-success badge-md">Active</span>
                     @else
                       <span class="badge badge-error badge-md">Inactive</span>
@@ -77,15 +70,15 @@
                     @endif
                     <td>
 
-                        <x-ui.buttons.view href="{{ route('products.show', $product->id) }}">
+                        <x-ui.buttons.view href="{{ route('units.show', $unit->id) }}">
                         </x-ui.buttons.view>
 
-                    @canany(['update', 'delete'], $product)
+                    @canany(['update', 'delete'], $unit)
 
-                        <x-ui.buttons.edit href="{{ route('products.edit', $product->id) }}">
+                        <x-ui.buttons.edit href="{{ route('units.edit', $unit->id) }}">
                         </x-ui.buttons.edit>
 
-                        <x-ui.buttons.delete action="{{ route('products.destroy', $product->id) }}">
+                        <x-ui.buttons.delete action="{{ route('units.destroy', $units->id) }}">
                         </x-ui.buttons.delete>
                     @endcanany
 

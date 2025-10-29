@@ -89,8 +89,11 @@
                 <x-ui.buttons.edit href="{{ route('users.edit', $user->id) }}">
                 </x-ui.buttons.edit>
 
+
+                @can('destroy', App\Models\User::class)
                 <x-ui.buttons.delete action="{{ route('users.destroy', $user->id) }}">
                 </x-ui.buttons.delete>
+                @endcan
 
                     </td>
                 </tr>
