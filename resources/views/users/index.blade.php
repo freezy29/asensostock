@@ -88,8 +88,8 @@
           url.search = params.toString();
           return url.toString();
         }
-        async function fetchAndRender(){
-          const url = buildUrl();
+        async function fetchAndRender(urlOverride){
+          const url = urlOverride || buildUrl();
           $wrap.classList.add('opacity-60');
           try {
             const res = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'text/html,application/json' } });
@@ -101,6 +101,8 @@
               const html = await res.text();
               $wrap.innerHTML = html;
             }
+            // rebind pagination link clicks after update
+            bindPagination();
           } catch (e) {
             console.error(e);
           } finally {
@@ -114,6 +116,18 @@
         if ($q) $q.addEventListener('input', onChange);
         if ($status) $status.addEventListener('change', onChange);
         if ($role) $role.addEventListener('change', onChange);
+
+        function bindPagination(){
+          $wrap.querySelectorAll('a[data-ajax]')?.forEach(function(a){
+            a.addEventListener('click', function(e){
+              e.preventDefault();
+              const href = a.getAttribute('href');
+              if (!href) return;
+              fetchAndRender(href);
+            });
+          });
+        }
+        bindPagination();
       })();
     </script>
 

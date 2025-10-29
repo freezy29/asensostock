@@ -16,7 +16,9 @@
     <tbody>
         @forelse ($users as $user)
         <tr>
-            <td></td>
+            <td>
+                <input type="checkbox"  class="checkbox" />
+            </td>
             <td>{{ $user->first_name . " " .  $user->last_name }}</td>
             <td>{{ $user->email }}</td>
             <td>{{ $user->phone ?? 'N/A' }}</td>
@@ -46,4 +48,20 @@
         @endforelse
     </tbody>
 </table>
+@php($query = request()->all())
+@if ($users instanceof \Illuminate\Contracts\Pagination\Paginator)
+<nav class="flex justify-end mt-4">
+    <div class="join">
+        @php($prevUrl = $users->currentPage() > 1 ? route('users.search', array_merge($query, ['page' => $users->currentPage()-1])) : null)
+        <a @if($prevUrl) href="{{ $prevUrl }}" @else aria-disabled="true" @endif data-ajax class="btn btn-sm join-item @if(!$prevUrl) btn-disabled @endif">«</a>
 
+        @for ($i = 1; $i <= $users->lastPage(); $i++)
+            @php($pageUrl = route('users.search', array_merge($query, ['page' => $i])))
+            <a href="{{ $pageUrl }}" data-ajax class="btn btn-sm join-item @if($i === $users->currentPage()) btn-active @endif">{{ $i }}</a>
+        @endfor
+
+        @php($nextUrl = $users->currentPage() < $users->lastPage() ? route('users.search', array_merge($query, ['page' => $users->currentPage()+1])) : null)
+        <a @if($nextUrl) href="{{ $nextUrl }}" @else aria-disabled="true" @endif data-ajax class="btn btn-sm join-item @if(!$nextUrl) btn-disabled @endif">»</a>
+    </div>
+</nav>
+@endif
