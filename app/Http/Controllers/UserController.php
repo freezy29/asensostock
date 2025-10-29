@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\View;
 
 class UserController extends Controller
 {
@@ -27,6 +28,55 @@ class UserController extends Controller
             ->get();
 
         return view('users.index', ['users' => $users]);
+    }
+
+    /**
+     * Live search and filter for users list.
+     */
+    public function search(Request $request)
+    {
+        $this->authorize('viewAny', User::class);
+
+        $search = trim((string) $request->input('q', ''));
+        $status = $request->input('status'); // 'active' | 'inactive' | null
+        $roleFilter = $request->input('role'); // 'staff' | 'admin' | null
+
+        $query = User::query();
+
+        if (auth()->user()->role === 'admin') {
+            $query->where('role', 'staff');
+        } else {
+            $query->where(function ($q) {
+                $q->where('role', 'staff')
+                  ->orWhere('role', 'admin');
+            });
+        }
+
+        if ($search !== '') {
+            $like = '%' . str_replace(['%', '_'], ['\\%', '\\_'], $search) . '%';
+            $query->where(function ($q) use ($like) {
+                $q->where('first_name', 'like', $like)
+                  ->orWhere('last_name', 'like', $like)
+                  ->orWhere('email', 'like', $like)
+                  ->orWhere('phone', 'like', $like);
+            });
+        }
+
+        if (in_array($status, ['active', 'inactive'], true)) {
+            $query->where('status', $status);
+        }
+
+        if (auth()->user()->role === 'super_admin' && in_array($roleFilter, ['staff', 'admin'], true)) {
+            $query->where('role', $roleFilter);
+        }
+
+        $users = $query->get();
+
+        if ($request->wantsJson()) {
+            return response()->json(['html' => View::make('users.partials.table', compact('users'))->render()]);
+        }
+
+        return View::make('users.partials.table', compact('users'));
     }
 
     /**
