@@ -49,7 +49,7 @@ class TransactionPolicy
      */
     public function update(User $user, Transaction $transaction): bool
     {
-        return $user->role == 'admin';
+        return in_array($user->role, ['admin', 'super_admin']);
     }
 
     /**
@@ -57,7 +57,7 @@ class TransactionPolicy
      */
     public function delete(User $user, Transaction $transaction): bool
     {
-        return $user->role == 'admin';
+        return in_array($user->role, ['admin', 'super_admin']);
     }
 
     /**
@@ -65,7 +65,7 @@ class TransactionPolicy
      */
     public function restore(User $user, Transaction $transaction): bool
     {
-        return $user->role == 'admin';
+        return in_array($user->role, ['admin', 'super_admin']);
     }
 
     /**

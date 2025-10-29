@@ -1,14 +1,14 @@
 <x-layouts.app>
-  <x-slot:title>Categories</x-slot:title>
+  <x-slot:title>Units</x-slot:title>
 
             <x-partials.header>
 
                 <x-slot:breadcrumb_list>
-                    <li>Categories</li>
+                    <li>Units</li>
                 </x-slot:breadcrumb_list>
 
                 <x-slot:page_title>
-                  Categories
+                  Units
                 </x-slot:page_title>
 
 
@@ -28,9 +28,9 @@
                 <input type="search" required placeholder="Search" />
             </label>
 
-            @can('create', App\Models\ProductCategory::class)
-            <x-ui.buttons.create href="{{ route('categories.create') }}">
-                Add Category
+            @can('create', App\Models\Unit::class)
+            <x-ui.buttons.create href="{{ route('products.create') }}">
+                Add Unit
             </x-ui.buttons.create>
             @endcan
 
@@ -42,23 +42,25 @@
             <thead>
                 <tr>
                     <th></th>
-                    <th>Category Name</th>
-                    @if (auth()->user()->role === 'admin')
+                    <th>Unit Name</th>
+                    <th>Abbreviation</th>
+                    @if (auth()->user()->role !== 'staff')
                     <th>Status</th>
                     @endif
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-              @forelse ($categories as $category)
+              @forelse ($units as $unit)
                 <tr>
                     <td></td>
-                    <td>{{ $category->name }}</td>
+                    <td>{{ $unit->name }}</td>
+                    <td>{{ $unit->abbreviation }}</td>
 
-                    @if (auth()->user()->role === 'admin')
+                    @if (auth()->user()->role !== 'staff')
                     <td>
 
-                    @if(strtolower($category->status) === 'active')
+                    @if(strtolower($unit->status) === 'active')
                       <span class="badge badge-success badge-md">Active</span>
                     @else
                       <span class="badge badge-error badge-md">Inactive</span>
@@ -68,15 +70,15 @@
                     @endif
                     <td>
 
-                        <x-ui.buttons.view href="{{ route('categories.show', $category->id) }}">
+                        <x-ui.buttons.view href="{{ route('units.show', $unit->id) }}">
                         </x-ui.buttons.view>
 
-                    @canany(['update', 'delete'], $category)
+                    @canany(['update', 'delete'], $unit)
 
-                        <x-ui.buttons.edit href="{{ route('categories.edit', $category->id) }}">
+                        <x-ui.buttons.edit href="{{ route('units.edit', $unit->id) }}">
                         </x-ui.buttons.edit>
 
-                        <x-ui.buttons.delete action="{{ route('categories.destroy', $category->id) }}">
+                        <x-ui.buttons.delete action="{{ route('units.destroy', $units->id) }}">
                         </x-ui.buttons.delete>
                     @endcanany
 
@@ -84,7 +86,7 @@
                 </tr>
                   @empty
                 <tr>
-                  <td colspan="4" class="text-center text-gray-500 py-6">No categories yet.</td>
+                  <td colspan="7" class="text-center text-gray-500 py-6">No products yet.</td>
                 </tr>
                 @endforelse
             </tbody>

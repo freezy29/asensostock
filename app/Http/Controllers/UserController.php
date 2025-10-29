@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\View;
 
 class UserController extends Controller
 {
@@ -16,11 +17,71 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all()
-            ->where('role', 'staff')
-            ->take(50);
+        if (auth()->user()->role === 'admin') {
+            $users = User::where('role', 'staff')
+                ->orderBy('last_name')
+                ->paginate(10)
+                ->withQueryString();
+
+            return view('users.index', ['users' => $users]);
+        }
+        // for super admin
+        $users = User::where('role', 'staff')
+            ->orWhere('role', 'admin')
+            ->orderBy('last_name')
+            ->paginate(10)
+            ->withQueryString();
 
         return view('users.index', ['users' => $users]);
+    }
+
+    /**
+     * Live search and filter for users list.
+     */
+    public function search(Request $request)
+    {
+        $this->authorize('viewAny', User::class);
+
+        $search = trim((string) $request->input('q', ''));
+        $status = $request->input('status'); // 'active' | 'inactive' | null
+        $roleFilter = $request->input('role'); // 'staff' | 'admin' | null
+
+        $query = User::query();
+
+        if (auth()->user()->role === 'admin') {
+            $query->where('role', 'staff');
+        } else {
+            $query->where(function ($q) {
+                $q->where('role', 'staff')
+                  ->orWhere('role', 'admin');
+            });
+        }
+
+        if ($search !== '') {
+            $like = '%' . str_replace(['%', '_'], ['\\%', '\\_'], $search) . '%';
+            $query->where(function ($q) use ($like) {
+                $q->where('first_name', 'like', $like)
+                  ->orWhere('last_name', 'like', $like)
+                  ->orWhere('email', 'like', $like)
+                  ->orWhere('phone', 'like', $like);
+            });
+        }
+
+        if (in_array($status, ['active', 'inactive'], true)) {
+            $query->where('status', $status);
+        }
+
+        if (auth()->user()->role === 'super_admin' && in_array($roleFilter, ['staff', 'admin'], true)) {
+            $query->where('role', $roleFilter);
+        }
+
+        $users = $query->orderBy('last_name')->paginate(10)->withQueryString();
+
+        if ($request->wantsJson()) {
+            return response()->json(['html' => View::make('users.partials.table', compact('users'))->render()]);
+        }
+
+        return View::make('users.partials.table', compact('users'));
     }
 
     /**
@@ -46,11 +107,17 @@ class UserController extends Controller
             'email' => 'required|email|max:255|unique:users',
             'phone' => 'nullable|integer',
             'password' => 'required|string|confirmed',
+            'role' => 'nullable|in:admin,staff',
         ]);
 
         $validated['password'] = bcrypt($validated['password']);
         $validated['status'] = $validated['status'] ?? 'active';
-        $validated['role'] = $validated['role'] ?? 'staff';
+        // Only super admins can set role; others default to staff
+        if ($request->user()->isSuperAdmin()) {
+            $validated['role'] = $request->input('role', 'staff');
+        } else {
+            $validated['role'] = 'staff';
+        }
         $validated['remember_token'] = Str::random(10);
 
         User::create($validated);
@@ -89,10 +156,22 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email,' . $user->id,
             'phone' => 'nullable',
             'password' => 'nullable|string|confirmed|',
+            'role' => 'nullable|in:admin,staff',
         ]);
 
         // update the user status
         $validated['status'] =  $request->input('status') ?  'active' : 'inactive';
+
+        // Only super admins can change role; others ignored
+        if ($request->user()->isSuperAdmin()) {
+            if ($request->filled('role')) {
+                $validated['role'] = $request->input('role');
+            } else {
+                unset($validated['role']);
+            }
+        } else {
+            unset($validated['role']);
+        }
 
         // optional password
         if ($request->filled('password')) {

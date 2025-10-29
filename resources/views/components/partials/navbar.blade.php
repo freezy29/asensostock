@@ -68,7 +68,7 @@
      @auth
     <div class="hidden md:block">
         <p class="font-bold text-sm"> {{ auth()->user()->first_name . " " . auth()->user()->last_name }} </p>
-        <p class="text-xs text-start w-full">{{ ucfirst(auth()->user()->role) }}</p>
+        <p class="text-xs text-start w-full">{{ (auth()->user()->role === 'super_admin') ? 'Super Admin' :ucfirst(auth()->user()->role) }}</p>
     </div>
     @endauth
       </div>

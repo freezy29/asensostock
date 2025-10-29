@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ProductVariant;
+use App\Models\Unit;
 use Illuminate\Http\Request;
 
-class ProductVariantController extends Controller
+class UnitController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,15 +13,15 @@ class ProductVariantController extends Controller
     public function index()
     {
         if (auth()->user()->role === 'admin') {
-            $variants = ProductVariant::all();
-            return view('product_variants.index', ['variants' => $variants]);
+            $units = Unit::all();
+            return view('units.index', ['units' => $units]);
         }
 
         //only active products for staff
-        $variants = ProductVariant::where('status', '=', 'active')
+        $units = Unit::where('status', '=', 'active')
             ->get();
 
-        return view('product_variants.index', ['variants' => $variants]);
+        return view('units.index', ['units' => $units]);
     }
 
     /**

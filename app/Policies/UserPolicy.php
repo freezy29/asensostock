@@ -9,18 +9,18 @@ class UserPolicy
 {
     public function before(User $user, string $ability): bool|null
     {
-        if ($user->isAdministrator()) {
+        if ($user->isSuperAdmin()) {
             return true;
         }
 
-        return false;
+        return null;
     }
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return $user->role == 'admin';
+        return in_array($user->role, ['admin', 'super_admin']);
     }
 
     /**
@@ -28,7 +28,7 @@ class UserPolicy
      */
     public function view(User $user, User $model): bool
     {
-        return $user->role == 'admin';
+        return in_array($user->role, ['admin', 'super_admin']);
     }
 
     /**
@@ -36,7 +36,7 @@ class UserPolicy
      */
     public function create(User $user): bool
     {
-        return $user->role === 'admin';
+        return in_array($user->role, ['admin', 'super_admin']);
     }
 
     /**
@@ -44,30 +44,30 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
-        return $user->role == 'admin';
+        return in_array($user->role, ['admin', 'super_admin']);
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, User $model): bool
+    public function delete(User $user, ?User $model = null): bool
     {
-        return $user->role == 'admin';
+        return $user->role === 'super_admin';
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, User $model): bool
+    public function restore(User $user, ?User $model = null): bool
     {
-        return $user->role == 'admin';
+        return $user->role === 'super_admin';
     }
 
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, User $model): bool
+    public function forceDelete(User $user, ?User $model = null): bool
     {
-        return $user->role == 'admin';
+        return $user->role === 'super_admin';
     }
 }

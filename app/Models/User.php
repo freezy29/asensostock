@@ -25,6 +25,7 @@ class User extends Authenticatable
         'phone',
         'password',
         'status',
+        'role',
     ];
 
     /**
@@ -54,6 +55,17 @@ class User extends Authenticatable
     public function isAdministrator()
     {
         return ($this->role == 'admin');
+    }
+
+
+    public function isSuperAdmin()
+    {
+        return $this->role === 'super_admin';
+    }
+
+    public function isStaff()
+    {
+        return $this->role === 'staff';
     }
 
     public function updateLastLogin()

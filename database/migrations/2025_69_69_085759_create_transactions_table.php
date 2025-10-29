@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->enum('type', ['in', 'out']);
             $table->integer('quantity');
-            $table->integer('previous_stock');
-            $table->integer('new_stock');
+            $table->decimal('cost_price', total: 10, places: 2);
+            $table->decimal('total_amount', total: 10, places: 2);
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });

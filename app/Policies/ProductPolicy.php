@@ -37,7 +37,7 @@ class ProductPolicy
      */
     public function create(User $user): bool
     {
-        return $user->role == 'admin';
+        return in_array($user->role, ['admin', 'super_admin']);
     }
 
     /**
@@ -45,7 +45,7 @@ class ProductPolicy
      */
     public function update(User $user, Product $product): bool
     {
-        return $user->role == 'admin';
+        return in_array($user->role, ['admin', 'super_admin']);
     }
 
     /**
@@ -53,7 +53,7 @@ class ProductPolicy
      */
     public function delete(User $user, Product $product): bool
     {
-        return $user->role == 'admin';
+        return $user->role === 'super_admin';
     }
 
     /**
@@ -61,7 +61,7 @@ class ProductPolicy
      */
     public function restore(User $user, Product $product): bool
     {
-        return $user->role == 'admin';
+        return $user->role === 'super_admin';
     }
 
     /**
@@ -69,6 +69,6 @@ class ProductPolicy
      */
     public function forceDelete(User $user, Product $product): bool
     {
-        return false;
+        return $user->role === 'super_admin';
     }
 }

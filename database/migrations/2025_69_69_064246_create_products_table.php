@@ -14,9 +14,12 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('name', 150);
-            $table->foreignId('product_category_id')->constrained()->cascadeOnDelete();
-            $table->integer('current_stock')->default(0);
-            $table->integer('reorder_level')->default(10);
+            $table->foreignId('category_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('unit_id')->constrained()->cascadeOnDelete();
+            $table->integer('stock_quantity');
+            $table->decimal('unit_price', total: 10, places: 2);
+            $table->decimal('cost_price', total: 10, places: 2);
+            $table->integer('reorder_level');
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->softDeletes();
             $table->timestamps();
