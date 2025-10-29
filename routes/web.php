@@ -19,7 +19,6 @@ Route::get('/dashboard', function () {
 
 Route::middleware(['auth', 'role:super_admin,admin'])->group(function () {
     Route::resource('users', UserController::class);
-    Route::get('users-search', [UserController::class, 'search'])->name('users.search');
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function () {

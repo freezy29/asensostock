@@ -13,7 +13,7 @@ class UserPolicy
             return true;
         }
 
-        return null;
+        return false;
     }
     /**
      * Determine whether the user can view any models.
@@ -50,7 +50,7 @@ class UserPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, ?User $model = null): bool
+    public function delete(User $user, User $model): bool
     {
         return $user->role === 'super_admin';
     }
@@ -58,7 +58,7 @@ class UserPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, ?User $model = null): bool
+    public function restore(User $user, User $model): bool
     {
         return $user->role === 'super_admin';
     }
@@ -66,7 +66,7 @@ class UserPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, ?User $model = null): bool
+    public function forceDelete(User $user, User $model): bool
     {
         return $user->role === 'super_admin';
     }
