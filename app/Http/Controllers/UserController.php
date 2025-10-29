@@ -52,11 +52,17 @@ class UserController extends Controller
             'email' => 'required|email|max:255|unique:users',
             'phone' => 'nullable|integer',
             'password' => 'required|string|confirmed',
+            'role' => 'nullable|in:admin,staff',
         ]);
 
         $validated['password'] = bcrypt($validated['password']);
         $validated['status'] = $validated['status'] ?? 'active';
-        $validated['role'] = $validated['role'] ?? 'staff';
+        // Only super admins can set role; others default to staff
+        if ($request->user()->isSuperAdmin()) {
+            $validated['role'] = $request->input('role', 'staff');
+        } else {
+            $validated['role'] = 'staff';
+        }
         $validated['remember_token'] = Str::random(10);
 
         User::create($validated);
@@ -95,10 +101,22 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email,' . $user->id,
             'phone' => 'nullable',
             'password' => 'nullable|string|confirmed|',
+            'role' => 'nullable|in:admin,staff',
         ]);
 
         // update the user status
         $validated['status'] =  $request->input('status') ?  'active' : 'inactive';
+
+        // Only super admins can change role; others ignored
+        if ($request->user()->isSuperAdmin()) {
+            if ($request->filled('role')) {
+                $validated['role'] = $request->input('role');
+            } else {
+                unset($validated['role']);
+            }
+        } else {
+            unset($validated['role']);
+        }
 
         // optional password
         if ($request->filled('password')) {

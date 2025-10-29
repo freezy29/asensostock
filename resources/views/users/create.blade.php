@@ -1,15 +1,37 @@
 <x-layouts.app>
-  <x-slot:title>Create User</x-slot:title>
+  <x-slot:title>
+    @if(auth()->user() && auth()->user()->role === 'admin')
+      Add Staff
+    @else
+      Create User
+    @endif
+  </x-slot:title>
 
         <x-partials.header>
 
                 <x-slot:breadcrumb_list>
-                    <li><a href="{{ route('users.index') }}">Users</a></li>
-                    <li>Create User</li>
+                    <li><a href="{{ route('users.index') }}">
+                      @if(auth()->user() && auth()->user()->role === 'admin')
+                        Staff Management
+                      @else
+                        Users
+                      @endif
+                    </a></li>
+                    <li>
+                      @if(auth()->user() && auth()->user()->role === 'admin')
+                        Add Staff
+                      @else
+                        Create User
+                      @endif
+                    </li>
                 </x-slot:breadcrumb_list>
 
                 <x-slot:page_title>
-                  Create User
+                  @if(auth()->user() && auth()->user()->role === 'admin')
+                    Add Staff
+                  @else
+                    Create User
+                  @endif
                 </x-slot:page_title>
 
 
@@ -27,7 +49,13 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                             </svg>
                         </div>
-                        <h2 class="card-title text-xl">User Details</h2>
+                        <h2 class="card-title text-xl">
+                          @if(auth()->user() && auth()->user()->role === 'admin')
+                            Staff Details
+                          @else
+                            User Details
+                          @endif
+                        </h2>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -182,6 +210,24 @@
                             </label>
                         @enderror
 
+                        @if(auth()->user() && auth()->user()->isSuperAdmin())
+                        <!-- Role (Super Admin Only) -->
+                        <div class="form-control md:col-span-2">
+                            <label class="label">
+                                <span class="label-text font-medium">Role</span>
+                            </label>
+                            <select name="role" class="select select-bordered w-full max-w-xs">
+                                <option value="staff" {{ old('role', 'staff') === 'staff' ? 'selected' : '' }}>Staff</option>
+                                <option value="admin" {{ old('role') === 'admin' ? 'selected' : '' }}>Admin</option>
+                            </select>
+                            @error('role')
+                                <label class="label">
+                                    <span class="label-text-alt text-error">{{ $message }}</span>
+                                </label>
+                            @enderror
+                        </div>
+                        @endif
+
                     </div>
                 </div>
             </div>
@@ -198,9 +244,15 @@
                 </a>
                 <button type="submit" class="btn btn-primary btn-lg flex-1 sm:flex-none min-h-12">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15,4A4,4 0 0,0 11,8A4,4 0 0,0 15,12A4,4 0 0,0 19,8A4,4 0 0,0 15,4M15,5.9C16.16,5.9 17.1,6.84 17.1,8C17.1,9.16 16.16,10.1 15,10.1A2.1,2.1 0 0,1 12.9,8A2.1,2.1 0 0,1 15,5.9M4,7V10H1V12H4V15H6V12H9V10H6V7H4M15,13C12.33,13 7,14.33 7,17V20H23V17C23,14.33 17.67,13 15,13M15,14.9C17.97,14.9 21.1,16.36 21.1,17V18.1H8.9V17C8.9,16.36 12,14.9 15,14.9Z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14c-4.418 0-8 2.239-8 5v1h16v-1c0-2.761-3.582-5-8-5z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 8v6M22 11h-6"></path>
                     </svg>
-                    Create
+                    @if(auth()->user() && auth()->user()->role === 'admin')
+                      Add Staff
+                    @else
+                      Create
+                    @endif
                 </button>
             </div>
         </form>

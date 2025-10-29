@@ -182,6 +182,24 @@
                         @enderror
                     </div>
 
+                    @if(auth()->user() && auth()->user()->isSuperAdmin())
+                    <!-- Role (Super Admin Only) -->
+                    <div class="form-control mt-2">
+                        <label class="label">
+                            <span class="label-text font-medium">Role</span>
+                        </label>
+                        <select name="role" class="select select-bordered w-full max-w-xs">
+                            <option value="staff" {{ old('role', $user->role) === 'staff' ? 'selected' : '' }}>Staff</option>
+                            <option value="admin" {{ old('role', $user->role) === 'admin' ? 'selected' : '' }}>Admin</option>
+                        </select>
+                        @error('role')
+                            <label class="label">
+                                <span class="label-text-alt text-error">{{ $message }}</span>
+                            </label>
+                        @enderror
+                    </div>
+                    @endif
+
                         <div class="form-control mt-4">
                             <label class="label">
                                 <span class="label-text font-medium">Account Status</span>

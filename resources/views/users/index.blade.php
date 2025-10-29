@@ -1,14 +1,28 @@
 <x-layouts.app>
-  <x-slot:title>Users</x-slot:title>
+  <x-slot:title>
+    @if(auth()->user() && auth()->user()->role === 'admin')
+      Staff Management
+    @else
+      Users
+    @endif
+  </x-slot:title>
 
             <x-partials.header>
 
                 <x-slot:breadcrumb_list>
-                    <li>Users</li>
+                    @if(auth()->user() && auth()->user()->role === 'admin')
+                      <li>Staff Management</li>
+                    @else
+                      <li>Users</li>
+                    @endif
                 </x-slot:breadcrumb_list>
 
                 <x-slot:page_title>
-                    Users
+                    @if(auth()->user() && auth()->user()->role === 'admin')
+                      Staff Management
+                    @else
+                      Users
+                    @endif
                 </x-slot:page_title>
 
 
@@ -37,7 +51,11 @@
             </div>
 
             <x-ui.buttons.create href="{{ route('users.create') }}">
-                Create User
+                @if(auth()->user() && auth()->user()->role === 'admin')
+                  Add Staff
+                @else
+                  Create User
+                @endif
             </x-ui.buttons.create>
 
         </x-partials.header>
@@ -90,7 +108,7 @@
                 </x-ui.buttons.edit>
 
 
-                @can('destroy', App\Models\User::class)
+                @can('delete', App\Models\User::class)
                 <x-ui.buttons.delete action="{{ route('users.destroy', $user->id) }}">
                 </x-ui.buttons.delete>
                 @endcan

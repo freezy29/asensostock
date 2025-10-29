@@ -60,7 +60,7 @@ class UserPolicy
      */
     public function restore(User $user, User $model): bool
     {
-        return in_array($user->role, ['admin', 'super_admin']);
+        return $user->role === 'super_admin';
     }
 
     /**
