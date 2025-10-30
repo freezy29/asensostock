@@ -7,7 +7,6 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\View;
 
 class UserController extends Controller
 {
@@ -18,70 +17,16 @@ class UserController extends Controller
     public function index()
     {
         if (auth()->user()->role === 'admin') {
-            $users = User::where('role', 'staff')
-                ->orderBy('last_name')
-                ->paginate(10)
-                ->withQueryString();
+            $users = User::where('role', 'staff')->paginate(8);
 
             return view('users.index', ['users' => $users]);
         }
         // for super admin
         $users = User::where('role', 'staff')
             ->orWhere('role', 'admin')
-            ->orderBy('last_name')
-            ->paginate(10)
-            ->withQueryString();
+            ->paginate(8);
 
         return view('users.index', ['users' => $users]);
-    }
-
-    /**
-     * Live search and filter for users list.
-     */
-    public function search(Request $request)
-    {
-        $this->authorize('viewAny', User::class);
-
-        $search = trim((string) $request->input('q', ''));
-        $status = $request->input('status'); // 'active' | 'inactive' | null
-        $roleFilter = $request->input('role'); // 'staff' | 'admin' | null
-
-        $query = User::query();
-
-        if (auth()->user()->role === 'admin') {
-            $query->where('role', 'staff');
-        } else {
-            $query->where(function ($q) {
-                $q->where('role', 'staff')
-                  ->orWhere('role', 'admin');
-            });
-        }
-
-        if ($search !== '') {
-            $like = '%' . str_replace(['%', '_'], ['\\%', '\\_'], $search) . '%';
-            $query->where(function ($q) use ($like) {
-                $q->where('first_name', 'like', $like)
-                  ->orWhere('last_name', 'like', $like)
-                  ->orWhere('email', 'like', $like)
-                  ->orWhere('phone', 'like', $like);
-            });
-        }
-
-        if (in_array($status, ['active', 'inactive'], true)) {
-            $query->where('status', $status);
-        }
-
-        if (auth()->user()->role === 'super_admin' && in_array($roleFilter, ['staff', 'admin'], true)) {
-            $query->where('role', $roleFilter);
-        }
-
-        $users = $query->orderBy('last_name')->paginate(10)->withQueryString();
-
-        if ($request->wantsJson()) {
-            return response()->json(['html' => View::make('users.partials.table', compact('users'))->render()]);
-        }
-
-        return View::make('users.partials.table', compact('users'));
     }
 
     /**
@@ -105,7 +50,7 @@ class UserController extends Controller
             'first_name' => 'required|max:255',
             'last_name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
-            'phone' => 'nullable|integer',
+            'phone' => 'nullable|',
             'password' => 'required|string|confirmed',
             'role' => 'nullable|in:admin,staff',
         ]);

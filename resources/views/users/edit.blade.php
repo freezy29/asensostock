@@ -188,7 +188,7 @@
                         <label class="label">
                             <span class="label-text font-medium">Role</span>
                         </label>
-                        <select name="role" class="select select-bordered w-full max-w-xs">
+                        <select name="role" class="select select-bordered w-full ">
                             <option value="staff" {{ old('role', $user->role) === 'staff' ? 'selected' : '' }}>Staff</option>
                             <option value="admin" {{ old('role', $user->role) === 'admin' ? 'selected' : '' }}>Admin</option>
                         </select>

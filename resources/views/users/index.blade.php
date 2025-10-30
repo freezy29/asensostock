@@ -23,39 +23,46 @@
                     @else
                       User Management
                     @endif
-                </x-slot:page_title>
+               </x-slot:page_title>
 
 
-            <label class="input">
-                <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <g
-                        stroke-linejoin="round"
-                        stroke-linecap="round"
-                        stroke-width="2.5"
-                        fill="none"
-                        stroke="currentColor"
-                    >
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <path d="m21 21-4.3-4.3"></path>
-                    </g>
-                </svg>
-                <input id="users-search" type="search" placeholder="Search name, email, phone" />
-            </label>
 
-            <div class="flex gap-2 items-center">
-              <select id="users-status" class="select select-bordered">
-                <option value="">All Status</option>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-              </select>
-              @if(auth()->user() && auth()->user()->role === 'super_admin')
-              <select id="users-role" class="select select-bordered">
-                <option value="">All Roles</option>
-                <option value="staff">Staff</option>
-                <option value="admin">Admin</option>
-              </select>
-              @endif
+                <label class="input">
+                    <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <g
+                            stroke-linejoin="round"
+                            stroke-linecap="round"
+                            stroke-width="2.5"
+                            fill="none"
+                            stroke="currentColor"
+                        >
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.3-4.3"></path>
+                        </g>
+                    </svg>
+                    <input type="search" required placeholder="Search" />
+                </label>
+
+            <div class="dropdown">
+              <div tabindex="0" role="button" class="btn ">Status</div>
+              <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                <li><a>All</a></li>
+                <li><a>Active</a></li>
+                <li><a>Inactive</a></li>
+              </ul>
             </div>
+
+
+            @if (auth()->user()->role === 'super_admin')
+            <div class="dropdown">
+              <div tabindex="0" role="button" class="btn ">Role</div>
+              <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                <li><a>All</a></li>
+                <li><a>Admin</a></li>
+                <li><a>Staff</a></li>
+              </ul>
+            </div>
+            @endif
 
             <x-ui.buttons.create href="{{ route('users.create') }}">
                 @if(auth()->user() && auth()->user()->role === 'admin')
@@ -68,68 +75,66 @@
         </x-partials.header>
 
 
-    <div id="users-table-wrapper" class="overflow-x-auto m-8">
-        @include('users.partials.table', ['users' => $users])
+    <div class="overflow-x-auto m-8">
+        <table class="table table-zebra ">
+            <!-- head -->
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th>Status</th>
+                    @if (auth()->user()->role === 'super_admin')
+                    <th>Role</th>
+                    @endif
+                    <th>Last Login</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+              @foreach ($users as $user)
+                <tr>
+                    <td>{{ $user->id }}</td>
+                    <td>{{ $user->first_name . " " .  $user->last_name }}</td>
+                    <td>{{ $user->email }}</td>
+                    <td>{{ $user->phone ?? 'N/A' }}</td>
+                    <td>
+                        @if(strtolower($user->status) === 'active')
+                          <span class="badge badge-success badge-md">Active</span>
+                        @else
+                          <span class="badge badge-error badge-md">Inactive</span>
+                        @endif
+                    </td>
+
+                    @if (auth()->user()->role === 'super_admin')
+                    <td>{{ ucfirst($user->role) }}</td>
+                    @endif
+
+                    <td>{{ $user->last_login_at ? $user->last_login_at->diffForHumans() : 'Never' }}</td>
+
+                    <td>
+
+                <x-ui.buttons.view href="{{ route('users.show', $user->id) }}">
+                </x-ui.buttons.view>
+
+                <x-ui.buttons.edit href="{{ route('users.edit', $user->id) }}">
+                </x-ui.buttons.edit>
+
+
+                @can('delete', App\Models\User::class)
+                <x-ui.buttons.delete action="{{ route('users.destroy', $user->id) }}">
+                </x-ui.buttons.delete>
+                @endcan
+
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
     </div>
 
-    <script>
-      (function(){
-        const $q = document.getElementById('users-search');
-        const $status = document.getElementById('users-status');
-        const $role = document.getElementById('users-role');
-        const $wrap = document.getElementById('users-table-wrapper');
-        let t;
-        function buildUrl(){
-          const url = new URL('{{ route('users.search') }}', window.location.origin);
-          const params = new URLSearchParams();
-          if ($q && $q.value.trim() !== '') params.set('q', $q.value.trim());
-          if ($status && $status.value) params.set('status', $status.value);
-          if ($role && $role.value) params.set('role', $role.value);
-          url.search = params.toString();
-          return url.toString();
-        }
-        async function fetchAndRender(urlOverride){
-          const url = urlOverride || buildUrl();
-          $wrap.classList.add('opacity-60');
-          try {
-            const res = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'text/html,application/json' } });
-            const contentType = res.headers.get('content-type') || '';
-            if (contentType.includes('application/json')) {
-              const data = await res.json();
-              $wrap.innerHTML = data.html;
-            } else {
-              const html = await res.text();
-              $wrap.innerHTML = html;
-            }
-            // rebind pagination link clicks after update
-            bindPagination();
-          } catch (e) {
-            console.error(e);
-          } finally {
-            $wrap.classList.remove('opacity-60');
-          }
-        }
-        function onChange(){
-          clearTimeout(t);
-          t = setTimeout(fetchAndRender, 250);
-        }
-        if ($q) $q.addEventListener('input', onChange);
-        if ($status) $status.addEventListener('change', onChange);
-        if ($role) $role.addEventListener('change', onChange);
-
-        function bindPagination(){
-          $wrap.querySelectorAll('a[data-ajax]')?.forEach(function(a){
-            a.addEventListener('click', function(e){
-              e.preventDefault();
-              const href = a.getAttribute('href');
-              if (!href) return;
-              fetchAndRender(href);
-            });
-          });
-        }
-        bindPagination();
-      })();
-    </script>
+        {{ $users->onEachSide(5)->links() }}
 
 
 
