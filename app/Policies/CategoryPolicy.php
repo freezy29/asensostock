@@ -54,7 +54,7 @@ class CategoryPolicy
      */
     public function delete(User $user, Category $category): bool
     {
-        return $user->role === 'super_admin';
+        return in_array($user->role, ['admin', 'super_admin']);
     }
 
     /**
@@ -62,7 +62,7 @@ class CategoryPolicy
      */
     public function restore(User $user, Category $category): bool
     {
-        return $user->role === 'super_admin';
+        return in_array($user->role, ['admin', 'super_admin']);
     }
 
     /**
