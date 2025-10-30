@@ -76,7 +76,7 @@
 
 
     <div class="overflow-x-auto m-8">
-        <table class="table table-zebra table-lg">
+        <table class="table table-zebra ">
             <!-- head -->
             <thead>
                 <tr>
