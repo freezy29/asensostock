@@ -18,7 +18,9 @@
                     </x-ui.buttons.edit>
 
                     <x-ui.buttons.delete action="{{ route('users.destroy', $user->id) }}">
-                        Delete User
+                        <x-slot:onclick>
+                            return confirm('Are you sure you want to delete this user?')
+                        </x-slot:onclick>
                     </x-ui.buttons.delete>
                 </div>
 
@@ -31,9 +33,8 @@
                 <div class="flex items-center gap-6 mb-8">
                     <div class="avatar">
                         <div class="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center">
-                            <svg class="w-12 h-12 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                            </svg>
+                          <img
+                            src="https://ui-avatars.com/api/?name={{ urlencode($user->first_name . " " . $user->last_name) }}&background=random" />
                         </div>
                     </div>
                     <div class="flex-1">
