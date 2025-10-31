@@ -55,7 +55,7 @@
             <tbody>
               @forelse ($transactions as $transaction)
                 <tr>
-                    <td>{{ $transaction->id }}</td>
+                    <th>{{ $transaction->id }}</th>
                     <td>{{ $transaction->created_at->format('M d, Y g:i A') }}</td>
                     <td>{{ $transaction->product->name}}</td>
                     <td>

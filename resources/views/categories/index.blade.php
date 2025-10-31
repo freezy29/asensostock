@@ -50,7 +50,7 @@
             <tbody>
               @forelse ($categories as $category)
                 <tr>
-                    <td>{{ $category->name }}</td>
+                    <th>{{ $category->name }}</th>
                     <td>{{ $category->products->count() }}</td>
 
                     @if (auth()->user()->role !== 'staff')

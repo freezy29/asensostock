@@ -72,7 +72,7 @@
             <tbody>
               @forelse ($users as $user)
                 <tr>
-                    <td>{{ $user->first_name . " " .  $user->last_name }}</td>
+                    <th>{{ $user->first_name . " " .  $user->last_name }}</th>
                     <td>{{ $user->email }}</td>
                     <td>{{ $user->phone ?? 'N/A' }}</td>
                     <td>

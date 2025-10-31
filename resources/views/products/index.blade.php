@@ -39,6 +39,7 @@
     <x-ui.table>
             <thead>
                 <tr>
+                    <th>Product ID</th>
                     <th>Product Name</th>
                     <th>Category</th>
                     <th>Unit</th>
@@ -53,6 +54,7 @@
             <tbody>
               @forelse ($products as $product)
                 <tr>
+                    <th>{{ $product->id }}</th>
                     <td>{{ $product->name }}</td>
                     <td>{{ $product->category->name }}</td>
                     <td>{{ $product->unit->name }}</td>

@@ -50,7 +50,7 @@
             <tbody>
               @forelse ($units as $unit)
                 <tr>
-                    <td>{{ $unit->name }}</td>
+                    <th>{{ $unit->name }}</th>
                     <td>{{ $unit->abbreviation }}</td>
 
                     @if (auth()->user()->role !== 'staff')
