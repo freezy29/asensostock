@@ -40,6 +40,7 @@
             <thead>
                 <tr>
                     <th>Category Name</th>
+                    <th>Number of Products</th>
                     @if (auth()->user()->role !== 'staff')
                     <th>Status</th>
                     @endif
@@ -50,6 +51,7 @@
               @forelse ($categories as $category)
                 <tr>
                     <td>{{ $category->name }}</td>
+                    <td>{{ $category->products->count() }}</td>
 
                     @if (auth()->user()->role !== 'staff')
                     <td>
