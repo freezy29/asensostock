@@ -20,11 +20,15 @@ class UserPolicy
      */
     public function view(User $user, User $model): bool
     {
-        if ($model->role === 'admin' || $model->role === 'super_admin' && $user->role === 'admin') {
+        if ($model->role === 'staff' && $user->role === 'admin') {
+            return true;
+        }
+
+        if (($model->role === 'admin' || $model->role === 'super_admin') && $user->role === 'admin') {
             return false;
         }
 
-        return in_array($user->role, ['admin', 'super_admin']);
+        return $user->role === 'super_admin';
     }
 
     /**
@@ -40,11 +44,15 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
-        if ($model->role === 'admin' || $model->role === 'super_admin' && $user->role === 'admin') {
+        if ($model->role === 'staff' && $user->role === 'admin') {
+            return true;
+        }
+
+        if (($model->role === 'admin' || $model->role === 'super_admin') && $user->role === 'admin') {
             return false;
         }
 
-        return in_array($user->role, ['admin', 'super_admin']);
+        return $user->role === 'super_admin';
     }
 
     /**
@@ -52,11 +60,15 @@ class UserPolicy
      */
     public function delete(User $user, User $model): bool
     {
-        if ($model->role === 'admin' || $model->role === 'super_admin' && $user->role === 'admin') {
+        if ($model->role === 'staff' && $user->role === 'admin') {
+            return true;
+        }
+
+        if (($model->role === 'admin' || $model->role === 'super_admin') && $user->role === 'admin') {
             return false;
         }
 
-        return in_array($user->role, ['admin', 'super_admin']);
+        return $user->role === 'super_admin';
     }
 
     /**
@@ -64,11 +76,15 @@ class UserPolicy
      */
     public function restore(User $user, User $model): bool
     {
-        if ($model->role === 'admin' || $model->role === 'super_admin' && $user->role === 'admin') {
+        if ($model->role === 'staff' && $user->role === 'admin') {
+            return true;
+        }
+
+        if (($model->role === 'admin' || $model->role === 'super_admin') && $user->role === 'admin') {
             return false;
         }
 
-        return in_array($user->role, ['admin', 'super_admin']);
+        return $user->role === 'super_admin';
     }
 
     /**

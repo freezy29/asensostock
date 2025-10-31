@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\Login;
 use App\Http\Controllers\Auth\Logout;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
@@ -42,6 +43,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+    Route::singleton('profile', ProfileController::class);
+
     Route::resource('products', ProductController::class)
         ->only(['index', 'show']);
 
