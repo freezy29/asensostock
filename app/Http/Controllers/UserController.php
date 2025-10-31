@@ -19,7 +19,7 @@ class UserController extends Controller
         if (auth()->user()->role === 'admin') {
             $users = User::where('role', 'staff')->paginate(10);
 
-            return view('users.index', ['users' => $users]);
+            return view('users.staff', ['users' => $users]);
         }
         // for super admin
         $users = User::where('role', 'staff')

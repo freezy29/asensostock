@@ -1,15 +1,17 @@
 <x-layouts.app>
-  <x-slot:title>Dashboard</x-slot:title>
+  <x-slot:title>Reports</x-slot:title>
 
-<div class="flex flex-col md:flex-row w-full md:justify-between md:items-end">
-    <div>
-        <h1 class="text-4xl font-bold mb-2">Dashboard</h1>
-    </div>
+            <x-partials.header>
 
-    <div class="flex gap-2">
-    </div>
-</div>
+                <x-slot:breadcrumb_list>
+                    <li>Reports</li>
+                </x-slot:breadcrumb_list>
 
-<div class="divider"></div>
+                <x-slot:page_title>
+                  Reports
+                </x-slot:page_title>
+
+
+        </x-partials.header>
 
 </x-layouts.app>

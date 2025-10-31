@@ -15,7 +15,7 @@ class CategoryController extends Controller
     public function index()
     {
         if (auth()->user()->role === 'admin') {
-            $categories = Category::all()->paginate(10);
+            $categories = Category::paginate(10);
             return view('categories.index', ['categories' => $categories]);
         }
 

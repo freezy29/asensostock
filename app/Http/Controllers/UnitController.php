@@ -13,7 +13,7 @@ class UnitController extends Controller
     public function index()
     {
         if (auth()->user()->role === 'admin') {
-            $units = Unit::all()->paginate(10);
+            $units = Unit::paginate(10);
             return view('units.index', ['units' => $units]);
         }
 
