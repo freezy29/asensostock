@@ -95,6 +95,10 @@
 
                         @can('delete', $user)
                         <x-ui.buttons.delete action="{{ route('users.destroy', $user->id) }}">
+                            <x-slot:onclick>
+                                return confirm('Are you sure you want to delete this user?')
+                            </x-slot:onclick>
+
                         </x-ui.buttons.delete>
                         @endcan
                     </td>

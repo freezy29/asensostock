@@ -75,6 +75,9 @@
                         </x-ui.buttons.edit>
 
                         <x-ui.buttons.delete action="{{ route('categories.destroy', $category->id) }}">
+                            <x-slot:onclick>
+                                return confirm('Are you sure you want to delete this category?')
+                            </x-slot:onclick>
                         </x-ui.buttons.delete>
                     @endcanany
 
