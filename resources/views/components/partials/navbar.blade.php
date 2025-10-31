@@ -59,7 +59,6 @@
       <div tabindex="0" role="button" class="md:pr-4 btn btn-ghost btn-circle md:btn-wide">
         <div class="avatar">
             <div class="w-10 rounded-full">
-
               <img
                 src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->first_name . " " . auth()->user()->last_name) }}&background=random" />
             </div>
