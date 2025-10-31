@@ -73,6 +73,6 @@ class TransactionPolicy
      */
     public function forceDelete(User $user, Transaction $transaction): bool
     {
-        return false;
+        return $user->role === 'super_admin';
     }
 }
