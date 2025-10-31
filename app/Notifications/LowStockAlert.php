@@ -12,11 +12,6 @@ class LowStockAlert extends Notification
 {
     use Queueable;
 
-    public function toVonage(object $notifiable): VonageMessage
-    {
-        return (new VonageMessage)
-            ->content('Your SMS message content');
-    }
 
     /**
      * Create a new notification instance.

@@ -78,7 +78,7 @@
                         <x-ui.buttons.edit href="{{ route('units.edit', $unit->id) }}">
                         </x-ui.buttons.edit>
 
-                        <x-ui.buttons.delete action="{{ route('units.destroy', $units->id) }}">
+                        <x-ui.buttons.delete action="{{ route('units.destroy', $unit->id) }}">
                         </x-ui.buttons.delete>
                     @endcanany
 

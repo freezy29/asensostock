@@ -11,11 +11,17 @@ use Illuminate\Support\Facades\Route;
 
 //index
 Route::get('/', [ProductController::class, 'index'])->middleware('auth');
+
 //dashboard
 Route::get('/dashboard', function () {
     return view('dashboard.index');
 })->middleware('auth')
     ->name('dashboard.index');
+
+Route::get('/reports', function () {
+    return view('reports.index');
+})->middleware('auth')
+    ->name('reports.index');
 
 Route::middleware(['auth', 'role:super_admin,admin'])->group(function () {
     Route::resource('users', UserController::class);
