@@ -37,12 +37,10 @@
         </x-partials.header>
 
 
-    <div class="overflow-x-auto m-8">
-        <table class="table table-zebra table-lg">
-            <!-- head -->
+
+    <x-ui.table>
             <thead>
                 <tr>
-                    <th></th>
                     <th>Transaction ID</th>
                     <th>Date</th>
                     <th>Product</th>
@@ -57,7 +55,6 @@
             <tbody>
               @forelse ($transactions as $transaction)
                 <tr>
-                    <td></td>
                     <td>{{ $transaction->id }}</td>
                     <td>{{ $transaction->created_at->format('M d, Y g:i A') }}</td>
                     <td>{{ $transaction->product->name}}</td>
@@ -96,7 +93,8 @@
                 </tr>
                 @endforelse
             </tbody>
-        </table>
-    </div>
+    </x-ui.table>
+
+    {{ $transactions->onEachSide(5)->links() }}
 
 </x-layouts.app>

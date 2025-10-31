@@ -75,9 +75,7 @@
         </x-partials.header>
 
 
-    <div class="overflow-x-auto m-8">
-        <table class="table table-zebra ">
-            <!-- head -->
+    <x-ui.table>
             <thead>
                 <tr>
                     <th>ID</th>
@@ -114,28 +112,23 @@
                     <td>{{ $user->last_login_at ? $user->last_login_at->diffForHumans() : 'Never' }}</td>
 
                     <td>
-
                 <x-ui.buttons.view href="{{ route('users.show', $user->id) }}">
                 </x-ui.buttons.view>
 
                 <x-ui.buttons.edit href="{{ route('users.edit', $user->id) }}">
                 </x-ui.buttons.edit>
 
-
-                @can('delete', App\Models\User::class)
+                @can('delete', $user)
                 <x-ui.buttons.delete action="{{ route('users.destroy', $user->id) }}">
                 </x-ui.buttons.delete>
                 @endcan
-
                     </td>
+
                 </tr>
                 @endforeach
             </tbody>
-        </table>
-    </div>
+    </x-ui.table>
 
-        {{ $users->onEachSide(5)->links() }}
-
-
+    {{ $users->onEachSide(5)->links() }}
 
 </x-layouts.app>

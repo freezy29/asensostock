@@ -36,12 +36,9 @@
 
         </x-partials.header>
 
-    <div class="overflow-x-auto m-8">
-        <table class="table table-zebra table-lg">
-            <!-- head -->
+    <x-ui.table>
             <thead>
                 <tr>
-                    <th></th>
                     <th>Category Name</th>
                     @if (auth()->user()->role !== 'staff')
                     <th>Status</th>
@@ -52,7 +49,6 @@
             <tbody>
               @forelse ($categories as $category)
                 <tr>
-                    <td></td>
                     <td>{{ $category->name }}</td>
 
                     @if (auth()->user()->role !== 'staff')
@@ -88,8 +84,8 @@
                 </tr>
                 @endforelse
             </tbody>
-        </table>
-    </div>
+    </x-ui.table>
 
+    {{ $categories->onEachSide(5)->links() }}
 
 </x-layouts.app>

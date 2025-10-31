@@ -36,12 +36,9 @@
 
         </x-partials.header>
 
-    <div class="overflow-x-auto m-8">
-        <table class="table table-zebra table-lg">
-            <!-- head -->
+    <x-ui.table>
             <thead>
                 <tr>
-                    <th></th>
                     <th>Product Name</th>
                     <th>Category</th>
                     <th>Unit</th>
@@ -56,7 +53,6 @@
             <tbody>
               @forelse ($products as $product)
                 <tr>
-                    <td></td>
                     <td>{{ $product->name }}</td>
                     <td>{{ $product->category->name }}</td>
                     <td>{{ $product->unit->name }}</td>
@@ -96,8 +92,8 @@
                 </tr>
                 @endforelse
             </tbody>
-        </table>
-    </div>
+    </x-ui.table>
 
+    {{ $products->onEachSide(5)->links() }}
 
 </x-layouts.app>

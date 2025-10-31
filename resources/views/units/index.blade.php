@@ -36,12 +36,9 @@
 
         </x-partials.header>
 
-    <div class="overflow-x-auto m-8">
-        <table class="table table-zebra table-lg">
-            <!-- head -->
+    <x-ui.table>
             <thead>
                 <tr>
-                    <th></th>
                     <th>Unit Name</th>
                     <th>Abbreviation</th>
                     @if (auth()->user()->role !== 'staff')
@@ -53,7 +50,6 @@
             <tbody>
               @forelse ($units as $unit)
                 <tr>
-                    <td></td>
                     <td>{{ $unit->name }}</td>
                     <td>{{ $unit->abbreviation }}</td>
 
@@ -90,8 +86,8 @@
                 </tr>
                 @endforelse
             </tbody>
-        </table>
-    </div>
+    </x-ui.table>
 
+    {{ $units->onEachSide(5)->links() }}
 
 </x-layouts.app>
