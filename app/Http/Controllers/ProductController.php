@@ -17,15 +17,15 @@ class ProductController extends Controller
     {
         //give admin all products
         if (auth()->user()->role === 'admin') {
-            $products = Product::with('category')
-                ->get();
+            $products = Product::with('category')->paginate(10);
+
             return view('products.index', ['products' => $products]);
         }
 
         //only active products for staff
         $products = Product::with('category')
             ->where('status', '=', 'active')
-            ->get();
+            ->paginate(10);
 
         return view('products.index', ['products' => $products]);
     }

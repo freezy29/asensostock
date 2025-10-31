@@ -36,13 +36,11 @@
 
         </x-partials.header>
 
-    <div class="overflow-x-auto m-8">
-        <table class="table table-zebra table-lg">
-            <!-- head -->
+    <x-ui.table>
             <thead>
                 <tr>
-                    <th></th>
                     <th>Category Name</th>
+                    <th>Number of Products</th>
                     @if (auth()->user()->role !== 'staff')
                     <th>Status</th>
                     @endif
@@ -52,8 +50,8 @@
             <tbody>
               @forelse ($categories as $category)
                 <tr>
-                    <td></td>
-                    <td>{{ $category->name }}</td>
+                    <th>{{ $category->name }}</th>
+                    <td>{{ $category->products->count() }}</td>
 
                     @if (auth()->user()->role !== 'staff')
                     <td>
@@ -77,6 +75,9 @@
                         </x-ui.buttons.edit>
 
                         <x-ui.buttons.delete action="{{ route('categories.destroy', $category->id) }}">
+                            <x-slot:onclick>
+                                return confirm('Are you sure you want to delete this category?')
+                            </x-slot:onclick>
                         </x-ui.buttons.delete>
                     @endcanany
 
@@ -88,8 +89,8 @@
                 </tr>
                 @endforelse
             </tbody>
-        </table>
-    </div>
+    </x-ui.table>
 
+    {{ $categories->onEachSide(5)->links() }}
 
 </x-layouts.app>

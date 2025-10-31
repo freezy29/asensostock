@@ -36,12 +36,10 @@
 
         </x-partials.header>
 
-    <div class="overflow-x-auto m-8">
-        <table class="table table-zebra table-lg">
-            <!-- head -->
+    <x-ui.table>
             <thead>
                 <tr>
-                    <th></th>
+                    <th>Product ID</th>
                     <th>Product Name</th>
                     <th>Category</th>
                     <th>Unit</th>
@@ -56,7 +54,7 @@
             <tbody>
               @forelse ($products as $product)
                 <tr>
-                    <td></td>
+                    <th>{{ $product->id }}</th>
                     <td>{{ $product->name }}</td>
                     <td>{{ $product->category->name }}</td>
                     <td>{{ $product->unit->name }}</td>
@@ -85,6 +83,9 @@
                         </x-ui.buttons.edit>
 
                         <x-ui.buttons.delete action="{{ route('products.destroy', $product->id) }}">
+                            <x-slot:onclick>
+                                return confirm('Are you sure you want to delete this product?')
+                            </x-slot:onclick>
                         </x-ui.buttons.delete>
                     @endcanany
 
@@ -96,8 +97,8 @@
                 </tr>
                 @endforelse
             </tbody>
-        </table>
-    </div>
+    </x-ui.table>
 
+    {{ $products->onEachSide(5)->links() }}
 
 </x-layouts.app>

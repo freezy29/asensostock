@@ -36,12 +36,9 @@
 
         </x-partials.header>
 
-    <div class="overflow-x-auto m-8">
-        <table class="table table-zebra table-lg">
-            <!-- head -->
+    <x-ui.table>
             <thead>
                 <tr>
-                    <th></th>
                     <th>Unit Name</th>
                     <th>Abbreviation</th>
                     @if (auth()->user()->role !== 'staff')
@@ -53,8 +50,7 @@
             <tbody>
               @forelse ($units as $unit)
                 <tr>
-                    <td></td>
-                    <td>{{ $unit->name }}</td>
+                    <th>{{ $unit->name }}</th>
                     <td>{{ $unit->abbreviation }}</td>
 
                     @if (auth()->user()->role !== 'staff')
@@ -78,7 +74,10 @@
                         <x-ui.buttons.edit href="{{ route('units.edit', $unit->id) }}">
                         </x-ui.buttons.edit>
 
-                        <x-ui.buttons.delete action="{{ route('units.destroy', $units->id) }}">
+                        <x-ui.buttons.delete action="{{ route('units.destroy', $unit->id) }}">
+                            <x-slot:onclick>
+                                return confirm('Are you sure you want to delete this unit?')
+                            </x-slot:onclick>
                         </x-ui.buttons.delete>
                     @endcanany
 
@@ -90,8 +89,8 @@
                 </tr>
                 @endforelse
             </tbody>
-        </table>
-    </div>
+    </x-ui.table>
 
+    {{ $units->onEachSide(5)->links() }}
 
 </x-layouts.app>

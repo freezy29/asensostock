@@ -79,7 +79,7 @@
             <h2 class="menu-title md:hidden">{{ auth()->user()->first_name . " " .  auth()->user()->last_name }} ({{ auth()->user()->role }}) </h2>
          @endauth
 
-            <li><a>Profile</a><li>
+            <li><a href="{{ route('profile.show') }}">Profile</a><li>
             <li><a>Settings</a><li>
             <form method="POST" action="/logout" class="inline">
             @csrf

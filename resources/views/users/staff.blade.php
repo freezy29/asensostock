@@ -1,16 +1,16 @@
 <x-layouts.app>
   <x-slot:title>
-      Users
+      Staff Management
   </x-slot:title>
 
             <x-partials.header>
 
                 <x-slot:breadcrumb_list>
-                      <li>Users</li>
+                      <li>Staffs</li>
                 </x-slot:breadcrumb_list>
 
                 <x-slot:page_title>
-                      User Management
+                      Staff Management
                </x-slot:page_title>
 
 
@@ -41,17 +41,9 @@
             </div>
 
 
-            <div class="dropdown">
-              <div tabindex="0" role="button" class="btn ">Role</div>
-              <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                <li><a>All</a></li>
-                <li><a>Admin</a></li>
-                <li><a>Staff</a></li>
-              </ul>
-            </div>
 
             <x-ui.buttons.create href="{{ route('users.create') }}">
-                  Create User
+                  Add Staff
             </x-ui.buttons.create>
 
         </x-partials.header>
@@ -64,7 +56,6 @@
                     <th>Email</th>
                     <th>Phone Number</th>
                     <th>Status</th>
-                    <th>Role</th>
                     <th>Last Login</th>
                     <th>Actions</th>
                 </tr>
@@ -72,7 +63,7 @@
             <tbody>
               @forelse ($users as $user)
                 <tr>
-                    <th>{{ $user->first_name . " " .  $user->last_name }}</th>
+                    <td>{{ $user->first_name . " " .  $user->last_name }}</td>
                     <td>{{ $user->email }}</td>
                     <td>{{ $user->phone ?? 'N/A' }}</td>
                     <td>
@@ -83,7 +74,7 @@
                         @endif
                     </td>
 
-                    <td>{{ ucfirst($user->role) }}</td>
+
                     <td>{{ $user->last_login_at ? $user->last_login_at->diffForHumans() : 'Never' }}</td>
 
                     <td>
@@ -95,10 +86,6 @@
 
                         @can('delete', $user)
                         <x-ui.buttons.delete action="{{ route('users.destroy', $user->id) }}">
-                            <x-slot:onclick>
-                                return confirm('Are you sure you want to delete this user?')
-                            </x-slot:onclick>
-
                         </x-ui.buttons.delete>
                         @endcan
                     </td>
@@ -106,7 +93,7 @@
                 </tr>
                   @empty
                 <tr>
-                  <td colspan="7" class="text-center text-gray-500 py-6">No yet.</td>
+                  <td colspan="6" class="text-center text-gray-500 py-6">No staffs yet.</td>
                 </tr>
                 @endforelse
             </tbody>

@@ -37,12 +37,10 @@
         </x-partials.header>
 
 
-    <div class="overflow-x-auto m-8">
-        <table class="table table-zebra table-lg">
-            <!-- head -->
+
+    <x-ui.table>
             <thead>
                 <tr>
-                    <th></th>
                     <th>Transaction ID</th>
                     <th>Date</th>
                     <th>Product</th>
@@ -57,8 +55,7 @@
             <tbody>
               @forelse ($transactions as $transaction)
                 <tr>
-                    <td></td>
-                    <td>{{ $transaction->id }}</td>
+                    <th>{{ $transaction->id }}</th>
                     <td>{{ $transaction->created_at->format('M d, Y g:i A') }}</td>
                     <td>{{ $transaction->product->name}}</td>
                     <td>
@@ -85,6 +82,9 @@
                         </x-ui.buttons.edit>
 
                         <x-ui.buttons.delete action="{{ route('transactions.destroy', $transaction->id) }}">
+                            <x-slot:onclick>
+                                return confirm('Are you sure you want to delete this transaction?')
+                            </x-slot:onclick>
                         </x-ui.buttons.delete>
                     @endcanany
 
@@ -96,7 +96,8 @@
                 </tr>
                 @endforelse
             </tbody>
-        </table>
-    </div>
+    </x-ui.table>
+
+    {{ $transactions->onEachSide(5)->links() }}
 
 </x-layouts.app>

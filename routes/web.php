@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\Login;
 use App\Http\Controllers\Auth\Logout;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
@@ -11,11 +12,17 @@ use Illuminate\Support\Facades\Route;
 
 //index
 Route::get('/', [ProductController::class, 'index'])->middleware('auth');
+
 //dashboard
 Route::get('/dashboard', function () {
     return view('dashboard.index');
 })->middleware('auth')
     ->name('dashboard.index');
+
+Route::get('/reports', function () {
+    return view('reports.index');
+})->middleware('auth')
+    ->name('reports.index');
 
 Route::middleware(['auth', 'role:super_admin,admin'])->group(function () {
     Route::resource('users', UserController::class);
@@ -36,6 +43,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+    Route::singleton('profile', ProfileController::class);
+
     Route::resource('products', ProductController::class)
         ->only(['index', 'show']);
 
