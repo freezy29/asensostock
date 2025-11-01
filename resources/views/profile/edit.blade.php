@@ -14,92 +14,211 @@
 
             </x-partials.header>
 
-<div class="max-w-3xl">
-    <form method="POST" action="{{ route('profile.update') }}" class="space-y-6">
-        @csrf
-        @method('PUT')
+    <div class="max-w-2xl mx-auto">
+        <form method="POST" action="{{ route('profile.update') }}" class="space-y-6">
+            @csrf
+            @method('PUT')
 
-        <div class="card bg-base-200 border border-base-300">
-            <div class="card-body">
-                <h3 class="card-title">Personal information</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="label"><span class="label-text">First name</span></label>
-                        <label class="input input-bordered flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5 opacity-70"><path d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.5 20.118a7.5 7.5 0 0 1 15 0A17.933 17.933 0 0 1 12 21.75c-2.68 0-5.216-.584-7.5-1.632Z" /></svg>
-                            <input type="text" name="first_name" class="grow" value="{{ old('first_name', $user->first_name) }}" required />
-                        </label>
-                        @error('first_name')
-                        <div class="text-error text-sm mt-1">{{ $message }}</div>
-                        @enderror
+            <div class="card bg-base-100 shadow-xl border border-base-300">
+                <div class="card-body">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="p-2 bg-primary/10 rounded-lg">
+                            <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                            </svg>
+                        </div>
+                        <h2 class="card-title text-xl">Personal Information</h2>
                     </div>
-                    <div>
-                        <label class="label"><span class="label-text">Last name</span></label>
-                        <label class="input input-bordered flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5 opacity-70"><path d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.5 20.118a7.5 7.5 0 0 1 15 0A17.933 17.933 0 0 1 12 21.75c-2.68 0-5.216-.584-7.5-1.632Z" /></svg>
-                            <input type="text" name="last_name" class="grow" value="{{ old('last_name', $user->last_name) }}" required />
-                        </label>
-                        @error('last_name')
-                        <div class="text-error text-sm mt-1">{{ $message }}</div>
-                        @enderror
-                    </div>
-                </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                    <div>
-                        <label class="label"><span class="label-text">Email</span></label>
-                        <label class="input input-bordered flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5 opacity-70"><path d="M1.5 8.25l9 5.25 9-5.25M3.75 6h16.5A1.5 1.5 0 0 1 21.75 7.5v9A1.5 1.5 0 0 1 20.25 18H3.75A1.5 1.5 0 0 1 2.25 16.5v-9A1.5 1.5 0 0 1 3.75 6Z"/></svg>
-                            <input type="email" name="email" class="grow" value="{{ old('email', $user->email) }}" required />
-                        </label>
-                        @error('email')
-                        <div class="text-error text-sm mt-1">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div>
-                        <label class="label"><span class="label-text">Phone</span></label>
-                        <label class="input input-bordered flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5 opacity-70"><path d="M2.25 4.5A2.25 2.25 0 0 1 4.5 2.25h3A2.25 2.25 0 0 1 9.75 4.5v15A2.25 2.25 0 0 1 7.5 21.75h-3A2.25 2.25 0 0 1 2.25 19.5v-15Z"/><path d="M6 18.75h.008v.008H6v-.008Z"/></svg>
-                            <input type="text" name="phone" class="grow" value="{{ old('phone', $user->phone) }}" />
-                        </label>
-                        @error('phone')
-                        <div class="text-error text-sm mt-1">{{ $message }}</div>
-                        @enderror
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-medium">First Name</span>
+                                <span class="label-text-alt text-error">*</span>
+                            </label>
+                            <div class="relative">
+                                <input type="text"
+                                       name="first_name"
+                                       value="{{ old('first_name', $user->first_name) }}"
+                                       class="input input-bordered w-full @error('first_name') input-error @enderror"
+                                       placeholder="Enter first name"
+                                       required />
+                                <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                </svg>
+                            </div>
+                            @error('first_name')
+                                <label class="label">
+                                    <span class="label-text-alt text-error flex items-center gap-1">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        {{ $message }}
+                                    </span>
+                                </label>
+                            @enderror
+                        </div>
+
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-medium">Last Name</span>
+                                <span class="label-text-alt text-error">*</span>
+                            </label>
+                            <div class="relative">
+                                <input type="text"
+                                       name="last_name"
+                                       value="{{ old('last_name', $user->last_name) }}"
+                                       class="input input-bordered w-full @error('last_name') input-error @enderror"
+                                       placeholder="Enter last name"
+                                       required />
+                                <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                </svg>
+                            </div>
+                            @error('last_name')
+                                <label class="label">
+                                    <span class="label-text-alt text-error flex items-center gap-1">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        {{ $message }}
+                                    </span>
+                                </label>
+                            @enderror
+                        </div>
+
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-medium">Email Address</span>
+                                <span class="label-text-alt text-error">*</span>
+                            </label>
+                            <div class="relative">
+                                <input type="email"
+                                       name="email"
+                                       value="{{ old('email', $user->email) }}"
+                                       class="input input-bordered w-full @error('email') input-error @enderror"
+                                       placeholder="user@example.com"
+                                       required />
+                                <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            @error('email')
+                                <label class="label">
+                                    <span class="label-text-alt text-error flex items-center gap-1">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        {{ $message }}
+                                    </span>
+                                </label>
+                            @enderror
+                        </div>
+
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-medium">Phone Number</span>
+                                <span class="label-text-alt text-base-content/60">Optional</span>
+                            </label>
+                            <div class="relative">
+                                <input type="tel"
+                                       name="phone"
+                                       value="{{ old('phone', $user->phone) }}"
+                                       class="input input-bordered w-full @error('phone') input-error @enderror"
+                                       placeholder="+63 912 345 6789" />
+                                <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                                </svg>
+                            </div>
+                            @error('phone')
+                                <label class="label">
+                                    <span class="label-text-alt text-error flex items-center gap-1">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        {{ $message }}
+                                    </span>
+                                </label>
+                            @enderror
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div id="password" class="card bg-base-200 border border-base-300">
-            <div class="card-body">
-                <h3 class="card-title">Change password</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="label"><span class="label-text">New password</span></label>
-                        <label class="input input-bordered flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5 opacity-70"><path fill-rule="evenodd" d="M12 1.5A5.25 5.25 0 0 0 6.75 6.75V9h-.75A2.25 2.25 0 0 0 3.75 11.25v8.25A2.25 2.25 0 0 0 6 21.75h12a2.25 2.25 0 0 0 2.25-2.25v-8.25A2.25 2.25 0 0 0 18.75 9h-.75V6.75A5.25 5.25 0 0 0 12 1.5Zm-3 7.5V6.75a3 3 0 1 1 6 0V9H9Z" clip-rule="evenodd"/></svg>
-                            <input type="password" name="password" class="grow" />
-                        </label>
-                        @error('password')
-                        <div class="text-error text-sm mt-1">{{ $message }}</div>
-                        @enderror
+            <div id="password" class="card bg-base-100 shadow-xl border border-base-300">
+                <div class="card-body">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="p-2 bg-primary/10 rounded-lg">
+                            <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                            </svg>
+                        </div>
+                        <h2 class="card-title text-xl">Change Password</h2>
                     </div>
-                    <div>
-                        <label class="label"><span class="label-text">Confirm new password</span></label>
-                        <label class="input input-bordered flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5 opacity-70"><path fill-rule="evenodd" d="M12 1.5A5.25 5.25 0 0 0 6.75 6.75V9h-.75A2.25 2.25 0 0 0 3.75 11.25v8.25A2.25 2.25 0 0 0 6 21.75h12a2.25 2.25 0 0 0 2.25-2.25v-8.25A2.25 2.25 0 0 0 18.75 9h-.75V6.75A5.25 5.25 0 0 0 12 1.5Zm-3 7.5V6.75a3 3 0 1 1 6 0V9H9Z" clip-rule="evenodd"/></svg>
-                            <input type="password" name="password_confirmation" class="grow" />
-                        </label>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-medium">New Password</span>
+                                <span class="label-text-alt text-base-content/60">Leave blank to keep current</span>
+                            </label>
+                            <div class="relative">
+                                <input type="password"
+                                       name="password"
+                                       class="input input-bordered w-full @error('password') input-error @enderror"
+                                       placeholder="Enter new password" />
+                                <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                </svg>
+                            </div>
+                            @error('password')
+                                <label class="label">
+                                    <span class="label-text-alt text-error flex items-center gap-1">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        {{ $message }}
+                                    </span>
+                                </label>
+                            @enderror
+                        </div>
+
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-medium">Confirm New Password</span>
+                                <span class="label-text-alt text-base-content/60">Leave blank to keep current</span>
+                            </label>
+                            <div class="relative">
+                                <input type="password"
+                                       name="password_confirmation"
+                                       class="input input-bordered w-full"
+                                       placeholder="Confirm new password" />
+                                <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                </svg>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="flex items-center justify-end gap-2">
-            <a href="{{ route('profile.show') }}" class="btn btn-ghost">Cancel</a>
-            <button type="submit" class="btn btn-primary">Save changes</button>
-        </div>
-    </form>
-</div>
+            <div class="flex flex-col sm:flex-row gap-4 justify-end">
+                <a href="{{ route('profile.show') }}"
+                   class="btn btn-outline btn-lg flex-1 sm:flex-none min-h-12">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    Cancel
+                </a>
+                <button type="submit"
+                        class="btn btn-primary btn-lg flex-1 sm:flex-none min-h-12">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
 
 </x-layouts.app>
