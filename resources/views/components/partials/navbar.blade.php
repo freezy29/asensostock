@@ -78,7 +78,6 @@
          @endauth
 
             <li><a href="{{ route('profile.show') }}">Profile</a><li>
-            <li><a>Settings</a><li>
             <form method="POST" action="/logout" class="inline">
             @csrf
             <li><button type="submit">Logout</button><li>
