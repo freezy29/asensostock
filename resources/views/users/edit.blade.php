@@ -5,7 +5,7 @@
 
                 <x-slot:breadcrumb_list>
                     <li><a href="{{ route('users.index') }}">Users</a></li>
-                    <li>Edit User</li>
+                    <li>Edit</li>
                 </x-slot:breadcrumb_list>
 
                 <x-slot:page_title>

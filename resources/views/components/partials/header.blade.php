@@ -6,12 +6,12 @@
                 {{ $breadcrumb_list }}
             </ul>
         </div>
-        <h1 class="text-4xl font-bold mb-2">{{ $page_title }}</h1>
+        <h1 class="text-4xl font-bold ">{{ $page_title }}</h1>
     </div>
 
-    <div class="flex gap-2">
+    <div class="flex gap-2 mt-4 md:mt-0 flex-col md:flex-row">
         {{ $slot }}
     </div>
 </div>
 
-<div class="divider"></div>
+<div class="divider -mt-0.2"></div>

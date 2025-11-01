@@ -10,45 +10,33 @@
                 </x-slot:breadcrumb_list>
 
                 <x-slot:page_title>
-                      User Management
+                      Users
                </x-slot:page_title>
 
+                <form method="GET" action="{{ route('users.index') }}" class="space-y-2">
+                    <div class="flex flex-col md:flex-row gap-2">
+                    <x-ui.search-input/>
 
+                    <div class="flex justify-between gap-2">
+                        <div class="form-control flex-1">
+                            <select name="status" class="select select-bordered w-full min-w-26" onchange="this.form.submit()">
+                                <option value="" {{ request('status') === '' ? 'selected' : '' }}>All Status</option>
+                                <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
+                                <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactive</option>
+                            </select>
+                        </div>
 
-                <label class="input">
-                    <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <g
-                            stroke-linejoin="round"
-                            stroke-linecap="round"
-                            stroke-width="2.5"
-                            fill="none"
-                            stroke="currentColor"
-                        >
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <path d="m21 21-4.3-4.3"></path>
-                        </g>
-                    </svg>
-                    <input type="search" required placeholder="Search" />
-                </label>
+                        <div class="form-control flex-1">
+                            <select name="role" class="select select-bordered w-full min-w-24" onchange="this.form.submit()">
+                                <option value="" {{ request('role') === '' ? 'selected' : '' }}>All Roles</option>
+                                <option value="admin" {{ request('role') === 'admin' ? 'selected' : '' }}>Admin</option>
+                                <option value="staff" {{ request('role') === 'staff' ? 'selected' : '' }}>Staff</option>
+                            </select>
+                        </div>
+                    </div>
 
-            <div class="dropdown">
-              <div tabindex="0" role="button" class="btn ">Status</div>
-              <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                <li><a>All</a></li>
-                <li><a>Active</a></li>
-                <li><a>Inactive</a></li>
-              </ul>
-            </div>
-
-
-            <div class="dropdown">
-              <div tabindex="0" role="button" class="btn ">Role</div>
-              <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                <li><a>All</a></li>
-                <li><a>Admin</a></li>
-                <li><a>Staff</a></li>
-              </ul>
-            </div>
+                    </div>
+                </form>
 
             <x-ui.buttons.create href="{{ route('users.create') }}">
                   Create User

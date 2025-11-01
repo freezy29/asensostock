@@ -72,8 +72,8 @@
                                         class="select select-bordered w-full @error('product_category_id') select-error @enderror"
                                         required>
                                     <option disabled value="">Select a category</option>
-                                    @foreach(\App\Models\ProductCategory::where('status', 'active')->get() as $category)
-                                        <option value="{{ $category->id }}" {{ old('product_category_id', $product->product_category_id) == $category->id ? 'selected' : '' }}>
+                                    @foreach(\App\Models\Category::where('status', 'active')->get() as $category)
+                                        <option value="{{ $category->id }}" {{ old('product_category_id', $product->category_id) == $category->id ? 'selected' : '' }}>
                                             {{ $category->name }}
                                         </option>
                                     @endforeach

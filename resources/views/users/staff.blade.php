@@ -10,35 +10,22 @@
                 </x-slot:breadcrumb_list>
 
                 <x-slot:page_title>
-                      Staff Management
+                      Staffs
                </x-slot:page_title>
 
+                <form method="GET" action="{{ route('users.index') }}" class="space-y-2">
+                    <div class="flex flex-col md:flex-row gap-2">
+                    <x-ui.search-input />
 
-
-                <label class="input">
-                    <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <g
-                            stroke-linejoin="round"
-                            stroke-linecap="round"
-                            stroke-width="2.5"
-                            fill="none"
-                            stroke="currentColor"
-                        >
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <path d="m21 21-4.3-4.3"></path>
-                        </g>
-                    </svg>
-                    <input type="search" required placeholder="Search" />
-                </label>
-
-            <div class="dropdown">
-              <div tabindex="0" role="button" class="btn ">Status</div>
-              <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                <li><a>All</a></li>
-                <li><a>Active</a></li>
-                <li><a>Inactive</a></li>
-              </ul>
-            </div>
+                    <div class="form-control">
+                        <select name="status" class="select select-bordered w-full" onchange="this.form.submit()">
+                            <option value="" {{ request('status') === '' ? 'selected' : '' }}>All Status</option>
+                            <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
+                            <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactive</option>
+                        </select>
+                    </div>
+                    </div>
+                </form>
 
 
 
@@ -86,6 +73,9 @@
 
                         @can('delete', $user)
                         <x-ui.buttons.delete action="{{ route('users.destroy', $user->id) }}">
+                            <x-slot:onclick>
+                                return confirm('Are you sure you want to delete this user?')
+                            </x-slot:onclick>
                         </x-ui.buttons.delete>
                         @endcan
                     </td>

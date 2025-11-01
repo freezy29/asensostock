@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use App\Models\ProductVariant;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 
@@ -17,7 +16,7 @@ class ProductController extends Controller
     {
         //give admin all products
         if (auth()->user()->role === 'admin') {
-            $products = Product::with('category')->paginate(10);
+            $products = Product::with('category')->paginate(8);
 
             return view('products.index', ['products' => $products]);
         }
@@ -25,7 +24,7 @@ class ProductController extends Controller
         //only active products for staff
         $products = Product::with('category')
             ->where('status', '=', 'active')
-            ->paginate(10);
+            ->paginate(8);
 
         return view('products.index', ['products' => $products]);
     }
@@ -49,9 +48,13 @@ class ProductController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|max:255',
-            'product_category_id' => 'required',
+            'product_category_id' => 'required|exists:categories,id',
         ]);
 
+        // Map form field to database column
+        $validated['category_id'] = $validated['product_category_id'];
+        unset($validated['product_category_id']);
+        
         $validated['status'] = $validated['status'] ?? 'active';
 
         Product::create($validated);
@@ -88,9 +91,13 @@ class ProductController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|max:255',
-            'product_category_id' => 'required',
+            'product_category_id' => 'required|exists:categories,id',
         ]);
 
+        // Map form field to database column
+        $validated['category_id'] = $validated['product_category_id'];
+        unset($validated['product_category_id']);
+        
         $validated['status'] = $request->input('status');
 
         $product->update($validated);

@@ -13,13 +13,13 @@ class UnitController extends Controller
     public function index()
     {
         if (auth()->user()->role === 'admin') {
-            $units = Unit::paginate(10);
+            $units = Unit::paginate(8);
             return view('units.index', ['units' => $units]);
         }
 
         //only active products for staff
         $units = Unit::where('status', '=', 'active')
-            ->paginate(10);
+            ->paginate(8);
 
         return view('units.index', ['units' => $units]);
     }

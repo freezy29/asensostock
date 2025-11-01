@@ -50,23 +50,26 @@ class TransactionController extends Controller
             return back()->withErrors(['product_id' => 'Selected product not found.']);
         }
 
-        // Store previous stock
-        $validated['previous_stock'] = $product->current_stock;
-
         // Calculate new stock based on transaction type
+        $newStock = 0;
         if ($validated['type'] === 'in') {
-            $validated['new_stock'] = $product->current_stock + $validated['quantity'];
+            $newStock = $product->stock_quantity + $validated['quantity'];
         } else {
             // Validate sufficient stock for stock out
-            if ($product->current_stock < $validated['quantity']) {
-                return back()->withErrors(['quantity' => 'Insufficient stock. Available: ' . $product->current_stock]);
+            if ($product->stock_quantity < $validated['quantity']) {
+                return back()->withErrors(['quantity' => 'Insufficient stock. Available: ' . $product->stock_quantity]);
             }
-            $validated['new_stock'] = $product->current_stock - $validated['quantity'];
+            $newStock = $product->stock_quantity - $validated['quantity'];
         }
 
+        // Calculate cost_price and total_amount if provided, otherwise use defaults
+        $costPrice = $product->cost_price ?? 0;
+        $validated['cost_price'] = $costPrice;
+        $validated['total_amount'] = $costPrice * $validated['quantity'];
+
         // Use database transaction to ensure data consistency
-        DB::transaction(function () use ($validated, $product) {
-            $product->update(['current_stock' => $validated['new_stock']]);
+        DB::transaction(function () use ($validated, $product, $newStock) {
+            $product->update(['stock_quantity' => $newStock]);
             Transaction::create($validated);
         });
 
