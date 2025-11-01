@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use App\Models\ProductVariant;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 
@@ -49,9 +48,13 @@ class ProductController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|max:255',
-            'product_category_id' => 'required',
+            'product_category_id' => 'required|exists:categories,id',
         ]);
 
+        // Map form field to database column
+        $validated['category_id'] = $validated['product_category_id'];
+        unset($validated['product_category_id']);
+        
         $validated['status'] = $validated['status'] ?? 'active';
 
         Product::create($validated);
@@ -88,9 +91,13 @@ class ProductController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|max:255',
-            'product_category_id' => 'required',
+            'product_category_id' => 'required|exists:categories,id',
         ]);
 
+        // Map form field to database column
+        $validated['category_id'] = $validated['product_category_id'];
+        unset($validated['product_category_id']);
+        
         $validated['status'] = $request->input('status');
 
         $product->update($validated);
