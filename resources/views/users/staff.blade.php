@@ -10,7 +10,7 @@
                 </x-slot:breadcrumb_list>
 
                 <x-slot:page_title>
-                      Staff Management
+                      Staffs
                </x-slot:page_title>
 
 

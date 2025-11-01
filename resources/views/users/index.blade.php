@@ -10,7 +10,7 @@
                 </x-slot:breadcrumb_list>
 
                 <x-slot:page_title>
-                      User Management
+                      Users
                </x-slot:page_title>
 
 
