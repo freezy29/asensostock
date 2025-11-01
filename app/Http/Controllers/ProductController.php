@@ -17,7 +17,7 @@ class ProductController extends Controller
     {
         //give admin all products
         if (auth()->user()->role === 'admin') {
-            $products = Product::with('category')->paginate(10);
+            $products = Product::with('category')->paginate(8);
 
             return view('products.index', ['products' => $products]);
         }
@@ -25,7 +25,7 @@ class ProductController extends Controller
         //only active products for staff
         $products = Product::with('category')
             ->where('status', '=', 'active')
-            ->paginate(10);
+            ->paginate(8);
 
         return view('products.index', ['products' => $products]);
     }

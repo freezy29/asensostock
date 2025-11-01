@@ -15,13 +15,13 @@ class CategoryController extends Controller
     public function index()
     {
         if (auth()->user()->role === 'admin') {
-            $categories = Category::paginate(10);
+            $categories = Category::paginate(8);
             return view('categories.index', ['categories' => $categories]);
         }
 
         //only active products for staff
         $categories = Category::where('status', '=', 'active')
-            ->paginate(10);
+            ->paginate(8);
 
         return view('categories.index', ['categories' => $categories]);
     }
