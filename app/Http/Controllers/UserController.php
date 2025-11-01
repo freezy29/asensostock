@@ -14,17 +14,57 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         if (auth()->user()->role === 'admin') {
-            $users = User::where('role', 'staff')->paginate(8);
+            $query = User::where('role', 'staff');
+
+            // Apply status filter
+            if ($request->filled('status')) {
+                $query->where('status', $request->status);
+            }
+
+            // Apply search filter
+            if ($request->filled('search')) {
+                $search = $request->search;
+                $query->where(function($q) use ($search) {
+                    $q->where('first_name', 'like', "%{$search}%")
+                      ->orWhere('last_name', 'like', "%{$search}%")
+                      ->orWhere('email', 'like', "%{$search}%");
+                });
+            }
+
+            $users = $query->paginate(8)->withQueryString();
 
             return view('users.staff', ['users' => $users]);
         }
         // for super admin
-        $users = User::where('role', 'staff')
-            ->orWhere('role', 'admin')
-            ->paginate(8);
+        $query = User::where(function($q) {
+            $q->where('role', 'staff')
+              ->orWhere('role', 'admin');
+        });
+
+        // Apply role filter
+        if ($request->filled('role')) {
+            $query->where('role', $request->role);
+        }
+
+        // Apply status filter
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Apply search filter
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('first_name', 'like', "%{$search}%")
+                  ->orWhere('last_name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        $users = $query->paginate(8)->withQueryString();
 
         return view('users.index', ['users' => $users]);
     }

@@ -9,7 +9,7 @@
         <h1 class="text-4xl font-bold ">{{ $page_title }}</h1>
     </div>
 
-    <div class="flex gap-2">
+    <div class="flex gap-2 mt-4 md:mt-0 flex-col md:flex-row">
         {{ $slot }}
     </div>
 </div>
