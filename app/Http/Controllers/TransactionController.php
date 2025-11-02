@@ -14,7 +14,7 @@ class TransactionController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Transaction::with(['product', 'user']);
+        $query = Transaction::with(['product.unit', 'user']);
 
         // Apply search filter
         if ($request->filled('search')) {
