@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\Transaction;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
@@ -19,7 +21,7 @@ class TransactionController extends Controller
         // Apply search filter
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->whereHas('product', function($q) use ($search) {
+            $query->whereHas('product', function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%");
             });
         }
@@ -98,24 +100,85 @@ class TransactionController extends Controller
     public function show(Transaction $transaction)
     {
         $transaction->load(['product', 'user']);
-        
+
         return view('transactions.show', ['transaction' => $transaction]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Transaction $transaction)
     {
-        //
+        $this->authorize('update', $transaction);
+
+        $transaction->load(['product.unit', 'user']);
+
+        return view('transactions.edit', ['transaction' => $transaction]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Transaction $transaction)
     {
-        //
+        $this->authorize('update', $transaction);
+
+        $validated = $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'type' => 'required|in:in,out',
+            'quantity' => 'required|integer|min:1',
+            'cost_price' => 'required|numeric|min:0',
+        ]);
+
+        $validated['total_amount'] = $validated['cost_price'] * $validated['quantity'];
+
+        // Get the old transaction values for stock recalculation
+        $oldProduct = Product::find($transaction->product_id);
+        $newProduct = Product::find($validated['product_id']);
+
+        if (!$newProduct) {
+            return back()->withErrors(['product_id' => 'Selected product not found.']);
+        }
+
+        // Use database transaction to ensure data consistency
+        DB::transaction(function () use ($validated, $transaction, $oldProduct, $newProduct) {
+            // Step 1: Revert the old transaction's stock impact on the old product
+            if ($oldProduct) {
+                if ($transaction->type === 'in') {
+                    // Old transaction was stock in, so subtract the old quantity to revert
+                    $oldProduct->stock_quantity -= $transaction->quantity;
+                } else {
+                    // Old transaction was stock out, so add back the old quantity to revert
+                    $oldProduct->stock_quantity += $transaction->quantity;
+                }
+                $oldProduct->save();
+            }
+
+            // Step 2: Apply the new transaction's stock impact
+            // Refresh newProduct to get current stock (which may have been affected if same product)
+            $newProduct->refresh();
+
+            // Check if we need to validate stock availability for stock out
+            if ($validated['type'] === 'out') {
+                if ($newProduct->stock_quantity < $validated['quantity']) {
+                    throw new \Exception('Insufficient stock. Available: ' . $newProduct->stock_quantity);
+                }
+            }
+
+            // Apply new transaction
+            if ($validated['type'] === 'in') {
+                $newProduct->stock_quantity += $validated['quantity'];
+            } else {
+                $newProduct->stock_quantity -= $validated['quantity'];
+            }
+            $newProduct->save();
+
+            // Step 3: Update the transaction record
+            $transaction->update($validated);
+        });
+
+        return redirect()->route('transactions.show', $transaction->id)
+            ->with('success', 'Transaction updated successfully!');
     }
 
     /**
