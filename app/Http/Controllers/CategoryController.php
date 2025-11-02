@@ -48,7 +48,13 @@ class CategoryController extends Controller
             'name' => 'required|max:255',
         ]);
 
-        $validated['status'] = $validated['status'] ?? 'active';
+        // Handle status - for admins/super_admins it comes from select dropdown
+        if (in_array(auth()->user()->role, ['admin', 'super_admin'])) {
+            $validated['status'] = $request->input('status', 'active');
+        } else {
+            // For staff, keep as active (they can't edit status)
+            $validated['status'] = 'active';
+        }
 
         Category::create($validated);
 
@@ -86,7 +92,13 @@ class CategoryController extends Controller
             'name' => 'required|max:255',
         ]);
 
-        $validated['status'] = $request->input('status');
+        // Handle status - for admins/super_admins it comes from select dropdown
+        if (in_array(auth()->user()->role, ['admin', 'super_admin'])) {
+            $validated['status'] = $request->input('status', 'active');
+        } else {
+            // For staff, keep current status (they can't edit status)
+            $validated['status'] = $category->status;
+        }
 
         $category->update($validated);
 
