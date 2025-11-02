@@ -29,7 +29,7 @@
             </label>
 
             @can('create', App\Models\Unit::class)
-            <x-ui.buttons.create href="{{ route('products.create') }}">
+            <x-ui.buttons.create href="{{ route('units.create') }}">
                 Add Unit
             </x-ui.buttons.create>
             @endcan
@@ -41,6 +41,7 @@
                 <tr>
                     <th>Unit Name</th>
                     <th>Abbreviation</th>
+                    <th>Number of Products</th>
                     @if (auth()->user()->role !== 'staff')
                     <th>Status</th>
                     @endif
@@ -52,6 +53,7 @@
                 <tr>
                     <th>{{ $unit->name }}</th>
                     <td>{{ $unit->abbreviation }}</td>
+                    <td>{{ $unit->products_count }}</td>
 
                     @if (auth()->user()->role !== 'staff')
                     <td>
@@ -85,7 +87,7 @@
                 </tr>
                   @empty
                 <tr>
-                  <td colspan="7" class="text-center text-gray-500 py-6">No products yet.</td>
+                  <td colspan="5" class="text-center text-gray-500 py-6">No units yet.</td>
                 </tr>
                 @endforelse
             </tbody>
