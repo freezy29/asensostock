@@ -2,27 +2,27 @@
     <x-slot:title>
       Login
     </x-slot:title>
-
-        <div class="hero">
-          <div class="hero-content flex-col lg:flex-row-reverse">
-            <div class="text-center lg:text-left">
-              <h1 class="text-5xl font-bold">Welcome back to <span class="text-primary">AsensoStock!</span></h1>
-                <p class="py-6">
-                    manage your inventory
-
-                  </p>
-            </div>
-            <div class="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
+           <div class="hero-content flex-col lg:flex-row-reverse max-h-screen max-10xl">
+            <div class="card bg-base-100 w-full shrink-0 shadow-2xl">
               <div class="card-body">
 
                 <form method="POST" action="/login">
                 @csrf
 
                 <fieldset class="fieldset">
-                <legend class="fieldset-legend">Login</legend>
+                <legend class="fieldset-legend"></legend>
 
+                <div class="hero-content text-center">
+                  
+                <div class="max-w-md">
+                    <h1 class="text-5xl font-bold">Welcome Back To <span class="text-primary">AscensoStock!</span></h1>
+                      <p class="italic py-6 font-medium">
+                        Count less, control more — Inventory made simple to the core.
+                      </p>
+                      </div>
+                       </div>  
                 <!-- email -->
-                <label class="input validator floating-label mb-2 @error('email') input-error @enderror">
+                <label class="input validator floating-label mb-2 w-full @error('email') input-error @enderror">
                     <span>Email</span>
                     <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <g
@@ -52,7 +52,7 @@
                 @enderror
 
                 <!-- password -->
-                <label class="input floating-label mb-2 @error('password') input-error @enderror">
+                <label class="input floating-label mb-2 w-full @error('password') input-error @enderror">
                 <span>Password</span>
                   <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <g
@@ -90,12 +90,10 @@
                   <button type="submit" class="btn btn-primary mt-4">Login</button>
                 </fieldset>
                 </form>
-
               </div>
             </div>
           </div>
         </div>
-
 
 
 </x-layouts.guest>
