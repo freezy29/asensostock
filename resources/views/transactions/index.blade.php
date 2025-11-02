@@ -12,7 +12,20 @@
                 </x-slot:page_title>
 
             <form method="GET" action="{{ route('transactions.index') }}" class="space-y-2">
-                <x-ui.search-input placeholder="Search by product name..." />
+                <div class="flex flex-col md:flex-row gap-2">
+                    <x-ui.search-input placeholder="Search by product name..." />
+
+                    <div class="flex justify-between gap-2">
+                        <!-- Type Filter -->
+                        <div class="form-control flex-1">
+                            <select name="type" class="select select-bordered w-full min-w-24" onchange="this.form.submit()">
+                                <option value="" {{ request('type') === '' ? 'selected' : '' }}>All Types</option>
+                                <option value="in" {{ request('type') === 'in' ? 'selected' : '' }}>Stock In</option>
+                                <option value="out" {{ request('type') === 'out' ? 'selected' : '' }}>Stock Out</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
             </form>
 
             @can('create', App\Models\Transaction::class)
@@ -22,8 +35,6 @@
             @endcan
 
         </x-partials.header>
-
-
 
     <x-ui.table>
             <thead>
@@ -44,20 +55,22 @@
                 <tr>
                     <th>{{ $transaction->id }}</th>
                     <td>{{ $transaction->created_at->format('M d, Y g:i A') }}</td>
-                    <td>{{ $transaction->product->name}}</td>
                     <td>
-
-                    @if(strtolower($transaction->type) === 'in')
-                      <span class="badge badge-success badge-md">In</span>
-                    @else
-                      <span class="badge badge-error">Out</span>
-                    @endif
-
+                        <a href="{{ route('products.show', $transaction->product->id) }}" class="link link-primary">
+                            {{ $transaction->product->name }}
+                        </a>
                     </td>
-                    <td>{{ $transaction->quantity }}</td>
+                    <td>
+                        @if(strtolower($transaction->type) === 'in')
+                          <span class="badge badge-success badge-md">In</span>
+                        @else
+                          <span class="badge badge-error badge-md">Out</span>
+                        @endif
+                    </td>
+                    <td>{{ $transaction->quantity }} {{ $transaction->product->unit->abbreviation ?? '' }}</td>
                     <td>₱{{ number_format($transaction->cost_price, 2) }}</td>
                     <td>₱{{ number_format($transaction->total_amount, 2) }}</td>
-                    <td>{{ $transaction->user->first_name . " " . $transaction->user->last_name }}</td>
+                    <td>{{ $transaction->user->first_name }} {{ $transaction->user->last_name }}</td>
                     <td>
 
                         <x-ui.buttons.view href="{{ route('transactions.show', $transaction->id) }}">
@@ -79,7 +92,13 @@
                 </tr>
                   @empty
                 <tr>
-                  <td colspan="9" class="text-center text-gray-500 py-6">No transactions yet.</td>
+                  <td colspan="9" class="text-center text-gray-500 py-6">
+                    @if(request()->has('search') || request()->has('type'))
+                        No transactions found matching your filters.
+                    @else
+                        No transactions yet.
+                    @endif
+                  </td>
                 </tr>
                 @endforelse
             </tbody>

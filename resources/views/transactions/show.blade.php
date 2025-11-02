@@ -33,19 +33,6 @@
             <div class="card-body">
                 <!-- Transaction Header -->
                 <div class="flex items-center gap-6 mb-8">
-                    <div class="avatar placeholder">
-                        <div class="w-20 h-20 rounded-full bg-primary/10">
-                            @if(strtolower($transaction->type) === 'in')
-                                <svg class="w-10 h-10 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                                </svg>
-                            @else
-                                <svg class="w-10 h-10 text-error" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
-                                </svg>
-                            @endif
-                        </div>
-                    </div>
                     <div class="flex-1">
                         <h1 class="text-3xl font-bold text-base-content">Transaction #{{ $transaction->id }}</h1>
                         <p class="text-lg text-base-content/70">{{ $transaction->product->name }}</p>
@@ -159,7 +146,7 @@
                             <div class="stat-title">Before Transaction</div>
                             <div class="stat-value text-xl">
                                 @php
-                                    $beforeStock = $transaction->type === 'in' 
+                                    $beforeStock = $transaction->type === 'in'
                                         ? $transaction->product->stock_quantity - $transaction->quantity
                                         : $transaction->product->stock_quantity + $transaction->quantity;
                                 @endphp

@@ -12,17 +12,33 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        if (auth()->user()->role === 'admin') {
-            $categories = Category::withCount('products')->paginate(8);
-            return view('categories.index', ['categories' => $categories]);
+        if (in_array(auth()->user()->role, ['admin', 'super_admin'])) {
+            $query = Category::withCount('products');
+        } else {
+            //only active categories for staff
+            $query = Category::where('status', '=', 'active')
+                ->withCount('products');
         }
 
-        //only active categories for staff
-        $categories = Category::where('status', '=', 'active')
-            ->withCount('products')
-            ->paginate(8);
+        // Apply search filter
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where('name', 'like', "%{$search}%");
+        }
+
+        // Apply status filter
+        if ($request->filled('status')) {
+            // For staff, only allow filtering by active status
+            if (auth()->user()->role === 'staff' && $request->status !== 'active') {
+                $query->where('status', 'active');
+            } else {
+                $query->where('status', $request->status);
+            }
+        }
+
+        $categories = $query->orderBy('name')->paginate(8)->withQueryString();
 
         return view('categories.index', ['categories' => $categories]);
     }
@@ -48,7 +64,13 @@ class CategoryController extends Controller
             'name' => 'required|max:255',
         ]);
 
-        $validated['status'] = $validated['status'] ?? 'active';
+        // Handle status - for admins/super_admins it comes from select dropdown
+        if (in_array(auth()->user()->role, ['admin', 'super_admin'])) {
+            $validated['status'] = $request->input('status', 'active');
+        } else {
+            // For staff, keep as active (they can't edit status)
+            $validated['status'] = 'active';
+        }
 
         Category::create($validated);
 
@@ -60,7 +82,29 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        return view('categories.show', ['Category' => $category]);
+        // Count all products (for display), but filter when loading
+        if (in_array(auth()->user()->role, ['admin', 'super_admin'])) {
+            $category->loadCount('products');
+            $products = $category->products()
+                ->with(['unit'])
+                ->orderBy('name')
+                ->paginate(10);
+        } else {
+            // Staff can only see active products
+            $category->loadCount(['products' => function($query) {
+                $query->where('status', 'active');
+            }]);
+            $products = $category->products()
+                ->where('status', 'active')
+                ->with(['unit'])
+                ->orderBy('name')
+                ->paginate(10);
+        }
+        
+        return view('categories.show', [
+            'category' => $category,
+            'products' => $products,
+        ]);
     }
 
     /**
@@ -86,7 +130,13 @@ class CategoryController extends Controller
             'name' => 'required|max:255',
         ]);
 
-        $validated['status'] = $request->input('status');
+        // Handle status - for admins/super_admins it comes from select dropdown
+        if (in_array(auth()->user()->role, ['admin', 'super_admin'])) {
+            $validated['status'] = $request->input('status', 'active');
+        } else {
+            // For staff, keep current status (they can't edit status)
+            $validated['status'] = $category->status;
+        }
 
         $category->update($validated);
 

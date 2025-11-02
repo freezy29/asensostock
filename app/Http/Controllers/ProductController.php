@@ -14,8 +14,8 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        //give admin all products
-        if (auth()->user()->role === 'admin') {
+        //give admin and super_admin all products
+        if (in_array(auth()->user()->role, ['admin', 'super_admin'])) {
             $query = Product::with(['category', 'unit']);
         } else {
             //only active products for staff
@@ -34,9 +34,44 @@ class ProductController extends Controller
             });
         }
 
+        // Apply category filter
+        if ($request->filled('category')) {
+            $query->where('category_id', $request->category);
+        }
+
+        // Apply status filter
+        if ($request->filled('status')) {
+            // For staff, only allow filtering by active status (they can't see inactive products)
+            if (auth()->user()->role === 'staff' && $request->status !== 'active') {
+                // Staff filtering by non-active status is not allowed, default to active
+                $query->where('status', 'active');
+            } else {
+                $query->where('status', $request->status);
+            }
+        }
+
+        // Apply stock status filter
+        if ($request->filled('stock_status')) {
+            if ($request->stock_status === 'critical') {
+                $query->whereRaw('stock_quantity <= critical_level');
+            } elseif ($request->stock_status === 'low') {
+                $query->whereRaw('stock_quantity > critical_level AND stock_quantity <= (critical_level * 1.5)');
+            } elseif ($request->stock_status === 'ok') {
+                $query->whereRaw('stock_quantity > (critical_level * 1.5)');
+            }
+        }
+
         $products = $query->paginate(8)->withQueryString();
 
-        return view('products.index', ['products' => $products]);
+        // Get categories for filter dropdown
+        $categories = \App\Models\Category::where('status', 'active')
+            ->orderBy('name')
+            ->get();
+
+        return view('products.index', [
+            'products' => $products,
+            'categories' => $categories,
+        ]);
     }
 
     /**
@@ -132,8 +167,13 @@ class ProductController extends Controller
         $validated['unit_id'] = $validated['product_unit_id'];
         unset($validated['product_category_id'], $validated['product_unit_id']);
         
-        // Handle status checkbox (if checked = active, unchecked = inactive)
-        $validated['status'] = $request->input('status') ? 'active' : 'inactive';
+        // Handle status - for admins/super_admins it comes from select dropdown
+        if (in_array(auth()->user()->role, ['admin', 'super_admin'])) {
+            $validated['status'] = $request->input('status', 'active');
+        } else {
+            // For staff, keep as active (they can't edit status)
+            $validated['status'] = 'active';
+        }
 
         $product->update($validated);
 

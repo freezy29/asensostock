@@ -3,24 +3,46 @@
 namespace App\Http\Controllers;
 
 use App\Models\Unit;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 
 class UnitController extends Controller
 {
+    use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        if (auth()->user()->role === 'admin') {
-            $units = Unit::withCount('products')->paginate(8);
-            return view('units.index', ['units' => $units]);
+        if (in_array(auth()->user()->role, ['admin', 'super_admin'])) {
+            $query = Unit::withCount('products');
+        } else {
+            //only active units for staff
+            $query = Unit::where('status', '=', 'active')
+                ->withCount('products');
         }
 
-        //only active units for staff
-        $units = Unit::where('status', '=', 'active')
-            ->withCount('products')
-            ->paginate(8);
+        // Apply search filter
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('abbreviation', 'like', "%{$search}%");
+            });
+        }
+
+        // Apply status filter
+        if ($request->filled('status')) {
+            // For staff, only allow filtering by active status
+            if (auth()->user()->role === 'staff' && $request->status !== 'active') {
+                $query->where('status', 'active');
+            } else {
+                $query->where('status', $request->status);
+            }
+        }
+
+        $units = $query->orderBy('name')->paginate(8)->withQueryString();
 
         return view('units.index', ['units' => $units]);
     }
@@ -30,7 +52,9 @@ class UnitController extends Controller
      */
     public function create()
     {
-        //
+        $this->authorize('create', Unit::class);
+
+        return view('units.create');
     }
 
     /**
@@ -38,38 +62,100 @@ class UnitController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->authorize('create', Unit::class);
+
+        $validated = $request->validate([
+            'name' => 'required|max:255',
+            'abbreviation' => 'nullable|max:10',
+        ]);
+
+        // Handle status - for admins/super_admins it comes from select dropdown
+        if (in_array(auth()->user()->role, ['admin', 'super_admin'])) {
+            $validated['status'] = $request->input('status', 'active');
+        } else {
+            // For staff, keep as active (they can't edit status)
+            $validated['status'] = 'active';
+        }
+
+        Unit::create($validated);
+
+        return redirect()->route('units.index')->with('success', 'Unit added successfully!');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Unit $unit)
     {
-        //
+        // Count all products (for display), but filter when loading
+        if (in_array(auth()->user()->role, ['admin', 'super_admin'])) {
+            $unit->loadCount('products');
+            $products = $unit->products()
+                ->with(['category'])
+                ->orderBy('name')
+                ->paginate(10);
+        } else {
+            // Staff can only see active products
+            $unit->loadCount(['products' => function($query) {
+                $query->where('status', 'active');
+            }]);
+            $products = $unit->products()
+                ->where('status', 'active')
+                ->with(['category'])
+                ->orderBy('name')
+                ->paginate(10);
+        }
+
+        return view('units.show', [
+            'unit' => $unit,
+            'products' => $products,
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Unit $unit)
     {
-        //
+        $this->authorize('update', $unit);
+
+        return view('units.edit', ['unit' => $unit]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Unit $unit)
     {
-        //
+        $this->authorize('update', $unit);
+
+        $validated = $request->validate([
+            'name' => 'required|max:255',
+            'abbreviation' => 'nullable|max:10',
+        ]);
+
+        // Handle status - for admins/super_admins it comes from select dropdown
+        if (in_array(auth()->user()->role, ['admin', 'super_admin'])) {
+            $validated['status'] = $request->input('status', 'active');
+        } else {
+            // For staff, keep current status (they can't edit status)
+            $validated['status'] = $unit->status;
+        }
+
+        $unit->update($validated);
+
+        return redirect()->route('units.index')->with('success', 'Unit updated successfully!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Unit $unit)
     {
-        //
+        $this->authorize('delete', $unit);
+
+        $unit->delete();
+
+        return redirect()->route('units.index')->with('success', 'Unit deleted from the list!');
     }
 }

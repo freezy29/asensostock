@@ -13,7 +13,44 @@
 
 
             <form method="GET" action="{{ route('products.index') }}" class="space-y-2">
-                <x-ui.search-input />
+                <div class="flex flex-col md:flex-row gap-2">
+                    <x-ui.search-input placeholder="Search products..." />
+
+                    <div class="flex justify-between gap-2">
+                        <!-- Category Filter -->
+                        <div class="form-control flex-1">
+                            <select name="category" class="select select-bordered w-full min-w-26" onchange="this.form.submit()">
+                                <option value="" {{ request('category') === '' ? 'selected' : '' }}>All Categories</option>
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
+                                        {{ $category->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Stock Status Filter -->
+                        <div class="form-control flex-1">
+                            <select name="stock_status" class="select select-bordered w-full min-w-28" onchange="this.form.submit()">
+                                <option value="" {{ request('stock_status') === '' ? 'selected' : '' }}>All Stock Status</option>
+                                <option value="critical" {{ request('stock_status') === 'critical' ? 'selected' : '' }}>Critical</option>
+                                <option value="low" {{ request('stock_status') === 'low' ? 'selected' : '' }}>Low</option>
+                                <option value="ok" {{ request('stock_status') === 'ok' ? 'selected' : '' }}>OK</option>
+                            </select>
+                        </div>
+
+                        <!-- Status Filter -->
+                        <div class="form-control flex-1">
+                            <select name="status" class="select select-bordered w-full min-w-24" onchange="this.form.submit()">
+                                <option value="" {{ request('status') === '' ? 'selected' : '' }}>All Status</option>
+                                <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
+                                @if (in_array(auth()->user()->role, ['admin', 'super_admin']))
+                                <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactive</option>
+                                @endif
+                            </select>
+                        </div>
+                    </div>
+                </div>
             </form>
 
             @can('create', App\Models\Product::class)
@@ -34,7 +71,7 @@
                     <th>Price</th>
                     <th>Stock Quantity</th>
                     <th>Stock Status</th>
-                    @if (auth()->user()->role === 'admin')
+                    @if (in_array(auth()->user()->role, ['admin', 'super_admin']))
                     <th>Status</th>
                     @endif
                     <th>Actions</th>
@@ -47,7 +84,7 @@
                     <td>{{ $product->name }}</td>
                     <td>{{ $product->category->name }}</td>
                     <td>{{ $product->unit->name }}</td>
-                    <td>₱{{ $product->price }}</td>
+                    <td>₱{{ number_format($product->price, 2) }}</td>
                     <td>{{ $product->stock_quantity }}</td>
                     <td>
                         @php
@@ -63,7 +100,7 @@
                         @endif
                     </td>
 
-                    @if (auth()->user()->role !== 'staff')
+                    @if (in_array(auth()->user()->role, ['admin', 'super_admin']))
                     <td>
 
                     @if(strtolower($product->status) === 'active')
