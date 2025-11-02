@@ -12,9 +12,26 @@ class TransactionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $transactions = Transaction::paginate(10);
+        $query = Transaction::with(['product', 'user']);
+
+        // Apply search filter
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('product', function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%");
+            });
+        }
+
+        // Apply type filter if provided
+        if ($request->filled('type')) {
+            $query->where('type', $request->type);
+        }
+
+        $transactions = $query->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->withQueryString();
 
         return view('transactions.index', ['transactions' => $transactions]);
     }
@@ -40,6 +57,7 @@ class TransactionController extends Controller
             'product_id' => 'required|exists:products,id',
             'type' => 'required|in:in,out',
             'quantity' => 'required|integer|min:1',
+            'cost_price' => 'required|numeric|min:0',
         ]);
 
         $validated['user_id'] = auth()->user()->id;
@@ -62,10 +80,8 @@ class TransactionController extends Controller
             $newStock = $product->stock_quantity - $validated['quantity'];
         }
 
-        // Calculate cost_price and total_amount if provided, otherwise use defaults
-        $costPrice = $product->cost_price ?? 0;
-        $validated['cost_price'] = $costPrice;
-        $validated['total_amount'] = $costPrice * $validated['quantity'];
+        // Calculate total_amount
+        $validated['total_amount'] = $validated['cost_price'] * $validated['quantity'];
 
         // Use database transaction to ensure data consistency
         DB::transaction(function () use ($validated, $product, $newStock) {
@@ -79,9 +95,11 @@ class TransactionController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Transaction $transaction)
     {
-        return view('transactions.show');
+        $transaction->load(['product', 'user']);
+        
+        return view('transactions.show', ['transaction' => $transaction]);
     }
 
     /**

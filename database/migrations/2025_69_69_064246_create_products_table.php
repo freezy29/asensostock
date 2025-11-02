@@ -17,8 +17,7 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained()->cascadeOnDelete();
             $table->foreignId('unit_id')->constrained()->cascadeOnDelete();
             $table->integer('stock_quantity');
-            $table->decimal('unit_price', total: 10, places: 2);
-            $table->decimal('cost_price', total: 10, places: 2);
+            $table->decimal('price', total: 10, places: 2);
             $table->integer('critical_level');
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->softDeletes();

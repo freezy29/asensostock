@@ -15,12 +15,13 @@ class CategoryController extends Controller
     public function index()
     {
         if (auth()->user()->role === 'admin') {
-            $categories = Category::paginate(8);
+            $categories = Category::withCount('products')->paginate(8);
             return view('categories.index', ['categories' => $categories]);
         }
 
-        //only active products for staff
+        //only active categories for staff
         $categories = Category::where('status', '=', 'active')
+            ->withCount('products')
             ->paginate(8);
 
         return view('categories.index', ['categories' => $categories]);
@@ -89,7 +90,7 @@ class CategoryController extends Controller
 
         $category->update($validated);
 
-        return redirect()->route('product_categories.index')->with('success', 'Category updated successfully!');
+        return redirect()->route('categories.index')->with('success', 'Category updated successfully!');
     }
 
     /**

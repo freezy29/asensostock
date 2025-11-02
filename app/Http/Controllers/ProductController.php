@@ -12,19 +12,29 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //give admin all products
         if (auth()->user()->role === 'admin') {
-            $products = Product::with('category')->paginate(8);
-
-            return view('products.index', ['products' => $products]);
+            $query = Product::with(['category', 'unit']);
+        } else {
+            //only active products for staff
+            $query = Product::with(['category', 'unit'])
+                ->where('status', '=', 'active');
         }
 
-        //only active products for staff
-        $products = Product::with('category')
-            ->where('status', '=', 'active')
-            ->paginate(8);
+        // Apply search filter
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhereHas('category', function($categoryQuery) use ($search) {
+                      $categoryQuery->where('name', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        $products = $query->paginate(8)->withQueryString();
 
         return view('products.index', ['products' => $products]);
     }
@@ -49,11 +59,16 @@ class ProductController extends Controller
         $validated = $request->validate([
             'name' => 'required|max:255',
             'product_category_id' => 'required|exists:categories,id',
+            'product_unit_id' => 'required|exists:units,id',
+            'stock_quantity' => 'required|integer|min:0',
+            'price' => 'required|numeric|min:0',
+            'critical_level' => 'required|integer|min:0',
         ]);
 
-        // Map form field to database column
+        // Map form fields to database columns
         $validated['category_id'] = $validated['product_category_id'];
-        unset($validated['product_category_id']);
+        $validated['unit_id'] = $validated['product_unit_id'];
+        unset($validated['product_category_id'], $validated['product_unit_id']);
         
         $validated['status'] = $validated['status'] ?? 'active';
 
@@ -67,7 +82,21 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return view('products.show');
+        $product->load(['category', 'unit', 'transactions' => function($query) {
+            $query->orderBy('created_at', 'desc')->limit(10);
+        }]);
+        
+        // Calculate additional metrics
+        $totalIn = $product->transactions()->where('type', 'in')->sum('quantity');
+        $totalOut = $product->transactions()->where('type', 'out')->sum('quantity');
+        $totalCostValue = $product->transactions()->where('type', 'in')->sum('total_amount');
+        
+        return view('products.show', [
+            'product' => $product,
+            'totalIn' => $totalIn,
+            'totalOut' => $totalOut,
+            'totalCostValue' => $totalCostValue,
+        ]);
     }
 
     /**
@@ -92,13 +121,19 @@ class ProductController extends Controller
         $validated = $request->validate([
             'name' => 'required|max:255',
             'product_category_id' => 'required|exists:categories,id',
+            'product_unit_id' => 'required|exists:units,id',
+            'stock_quantity' => 'required|integer|min:0',
+            'price' => 'required|numeric|min:0',
+            'critical_level' => 'required|integer|min:0',
         ]);
 
-        // Map form field to database column
+        // Map form fields to database columns
         $validated['category_id'] = $validated['product_category_id'];
-        unset($validated['product_category_id']);
+        $validated['unit_id'] = $validated['product_unit_id'];
+        unset($validated['product_category_id'], $validated['product_unit_id']);
         
-        $validated['status'] = $request->input('status');
+        // Handle status checkbox (if checked = active, unchecked = inactive)
+        $validated['status'] = $request->input('status') ? 'active' : 'inactive';
 
         $product->update($validated);
 

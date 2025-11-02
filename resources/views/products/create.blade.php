@@ -93,10 +93,192 @@
                             @enderror
                         </div>
 
-
+                        <!-- Unit -->
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-medium">Unit</span>
+                                <span class="label-text-alt text-error">*</span>
+                            </label>
+                            <div class="relative">
+                                <select name="product_unit_id"
+                                        class="select select-bordered w-full @error('product_unit_id') select-error @enderror"
+                                        required>
+                                    <option disabled selected value="">Select a unit</option>
+                                    @foreach(\App\Models\Unit::where('status', 'active')->get() as $unit)
+                                        <option value="{{ $unit->id }}" {{ old('product_unit_id') == $unit->id ? 'selected' : '' }}>
+                                            {{ $unit->name }} ({{ $unit->abbreviation }})
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                            @error('product_unit_id')
+                                <label class="label">
+                                    <span class="label-text-alt text-error flex items-center gap-1">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        {{ $message }}
+                                    </span>
+                                </label>
+                            @enderror
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Stock & Pricing Information Section -->
+            <div class="card bg-base-100 shadow-xl border border-base-300">
+                <div class="card-body">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="p-2 bg-primary/10 rounded-lg">
+                            <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                        </div>
+                        <h2 class="card-title text-xl">Stock & Pricing Information</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Stock Quantity -->
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-medium">Stock Quantity</span>
+                                <span class="label-text-alt text-error">*</span>
+                            </label>
+                            <div class="relative">
+                                <input type="number"
+                                       name="stock_quantity"
+                                       value="{{ old('stock_quantity', 0) }}"
+                                       class="input input-bordered w-full @error('stock_quantity') input-error @enderror"
+                                       placeholder="0"
+                                       min="0"
+                                       required />
+                                <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m0 0l8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                                </svg>
+                            </div>
+                            @error('stock_quantity')
+                                <label class="label">
+                                    <span class="label-text-alt text-error flex items-center gap-1">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        {{ $message }}
+                                    </span>
+                                </label>
+                            @enderror
+                        </div>
+
+                        <!-- Critical Level -->
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-medium">Critical Level</span>
+                                <span class="label-text-alt text-error">*</span>
+                            </label>
+                            <div class="relative">
+                                <input type="number"
+                                       name="critical_level"
+                                       value="{{ old('critical_level', 10) }}"
+                                       class="input input-bordered w-full @error('critical_level') input-error @enderror"
+                                       placeholder="10"
+                                       min="0"
+                                       required />
+                                <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                                </svg>
+                            </div>
+                            @error('critical_level')
+                                <label class="label">
+                                    <span class="label-text-alt text-error flex items-center gap-1">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        {{ $message }}
+                                    </span>
+                                </label>
+                            @enderror
+                        </div>
+
+                        <!-- Price -->
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-medium">Price</span>
+                                <span class="label-text-alt text-error">*</span>
+                            </label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-base-content/60">₱</span>
+                                <input type="number"
+                                       name="price"
+                                       value="{{ old('price') }}"
+                                       class="input input-bordered w-full pl-8 @error('price') input-error @enderror"
+                                       placeholder="0.00"
+                                       step="0.01"
+                                       min="0"
+                                       required />
+                                <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            @error('price')
+                                <label class="label">
+                                    <span class="label-text-alt text-error flex items-center gap-1">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        {{ $message }}
+                                    </span>
+                                </label>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status Section -->
+            @if (auth()->user()->role === 'admin')
+            <div class="card bg-base-100 shadow-xl border border-base-300">
+                <div class="card-body">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="p-2 bg-primary/10 rounded-lg">
+                            <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h2 class="card-title text-xl">Status</h2>
+                    </div>
+
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-medium">Product Status</span>
+                        </label>
+                        <div class="flex items-center gap-4">
+                            <input type="hidden" name="status" value="inactive" />
+                            <input type="checkbox"
+                                   name="status"
+                                   value="active"
+                                   class="toggle toggle-primary @error('status') toggle-error @enderror"
+                                   {{ old('status', 'active') == 'active' ? 'checked' : '' }} />
+                            <span class="text-sm text-base-content/70">
+                                {{ old('status', 'active') == 'active' ? 'Active' : 'Inactive' }}
+                            </span>
+                        </div>
+                        @error('status')
+                            <label class="label">
+                                <span class="label-text-alt text-error flex items-center gap-1">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    {{ $message }}
+                                </span>
+                            </label>
+                        @enderror
+                    </div>
+                </div>
+            </div>
+            @endif
 
             <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row gap-3 justify-end">

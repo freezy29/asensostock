@@ -19,9 +19,9 @@
                     </a></li>
                     <li>
                       @if(auth()->user() && auth()->user()->role === 'admin')
-                        Add Staff
+                        Add
                       @else
-                        Create User
+                        Create
                       @endif
                     </li>
                 </x-slot:breadcrumb_list>

@@ -12,21 +12,9 @@
                 </x-slot:page_title>
 
 
-            <label class="input">
-                <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <g
-                        stroke-linejoin="round"
-                        stroke-linecap="round"
-                        stroke-width="2.5"
-                        fill="none"
-                        stroke="currentColor"
-                    >
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <path d="m21 21-4.3-4.3"></path>
-                    </g>
-                </svg>
-                <input type="search" required placeholder="Search" />
-            </label>
+            <form method="GET" action="{{ route('products.index') }}" class="space-y-2">
+                <x-ui.search-input />
+            </form>
 
             @can('create', App\Models\Product::class)
             <x-ui.buttons.create href="{{ route('products.create') }}">
@@ -43,8 +31,9 @@
                     <th>Product Name</th>
                     <th>Category</th>
                     <th>Unit</th>
-                    <th>Unit Price</th>
+                    <th>Price</th>
                     <th>Stock Quantity</th>
+                    <th>Stock Status</th>
                     @if (auth()->user()->role === 'admin')
                     <th>Status</th>
                     @endif
@@ -58,8 +47,21 @@
                     <td>{{ $product->name }}</td>
                     <td>{{ $product->category->name }}</td>
                     <td>{{ $product->unit->name }}</td>
-                    <td>₱{{ $product->unit_price }}</td>
+                    <td>₱{{ $product->price }}</td>
                     <td>{{ $product->stock_quantity }}</td>
+                    <td>
+                        @php
+                            $isCritical = $product->stock_quantity <= $product->critical_level;
+                            $isLow = $product->stock_quantity <= ($product->critical_level * 1.5);
+                        @endphp
+                        @if($isCritical)
+                            <span class="badge badge-error badge-md">Critical</span>
+                        @elseif($isLow)
+                            <span class="badge badge-warning badge-md">Low</span>
+                        @else
+                            <span class="badge badge-success badge-md">OK</span>
+                        @endif
+                    </td>
 
                     @if (auth()->user()->role !== 'staff')
                     <td>
@@ -93,7 +95,7 @@
                 </tr>
                   @empty
                 <tr>
-                  <td colspan="7" class="text-center text-gray-500 py-6">No products yet.</td>
+                  <td colspan="8" class="text-center text-gray-500 py-6">No products yet.</td>
                 </tr>
                 @endforelse
             </tbody>
