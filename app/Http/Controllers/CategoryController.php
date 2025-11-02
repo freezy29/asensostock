@@ -66,7 +66,29 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        return view('categories.show', ['Category' => $category]);
+        // Count all products (for display), but filter when loading
+        if (in_array(auth()->user()->role, ['admin', 'super_admin'])) {
+            $category->loadCount('products');
+            $products = $category->products()
+                ->with(['unit'])
+                ->orderBy('name')
+                ->paginate(10);
+        } else {
+            // Staff can only see active products
+            $category->loadCount(['products' => function($query) {
+                $query->where('status', 'active');
+            }]);
+            $products = $category->products()
+                ->where('status', 'active')
+                ->with(['unit'])
+                ->orderBy('name')
+                ->paginate(10);
+        }
+        
+        return view('categories.show', [
+            'category' => $category,
+            'products' => $products,
+        ]);
     }
 
     /**
