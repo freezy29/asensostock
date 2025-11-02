@@ -14,8 +14,8 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        //give admin all products
-        if (auth()->user()->role === 'admin') {
+        //give admin and super_admin all products
+        if (in_array(auth()->user()->role, ['admin', 'super_admin'])) {
             $query = Product::with(['category', 'unit']);
         } else {
             //only active products for staff
@@ -34,9 +34,44 @@ class ProductController extends Controller
             });
         }
 
+        // Apply category filter
+        if ($request->filled('category')) {
+            $query->where('category_id', $request->category);
+        }
+
+        // Apply status filter
+        if ($request->filled('status')) {
+            // For staff, only allow filtering by active status (they can't see inactive products)
+            if (auth()->user()->role === 'staff' && $request->status !== 'active') {
+                // Staff filtering by non-active status is not allowed, default to active
+                $query->where('status', 'active');
+            } else {
+                $query->where('status', $request->status);
+            }
+        }
+
+        // Apply stock status filter
+        if ($request->filled('stock_status')) {
+            if ($request->stock_status === 'critical') {
+                $query->whereRaw('stock_quantity <= critical_level');
+            } elseif ($request->stock_status === 'low') {
+                $query->whereRaw('stock_quantity > critical_level AND stock_quantity <= (critical_level * 1.5)');
+            } elseif ($request->stock_status === 'ok') {
+                $query->whereRaw('stock_quantity > (critical_level * 1.5)');
+            }
+        }
+
         $products = $query->paginate(8)->withQueryString();
 
-        return view('products.index', ['products' => $products]);
+        // Get categories for filter dropdown
+        $categories = \App\Models\Category::where('status', 'active')
+            ->orderBy('name')
+            ->get();
+
+        return view('products.index', [
+            'products' => $products,
+            'categories' => $categories,
+        ]);
     }
 
     /**
