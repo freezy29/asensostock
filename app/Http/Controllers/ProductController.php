@@ -167,8 +167,13 @@ class ProductController extends Controller
         $validated['unit_id'] = $validated['product_unit_id'];
         unset($validated['product_category_id'], $validated['product_unit_id']);
         
-        // Handle status checkbox (if checked = active, unchecked = inactive)
-        $validated['status'] = $request->input('status') ? 'active' : 'inactive';
+        // Handle status - for admins/super_admins it comes from select dropdown
+        if (in_array(auth()->user()->role, ['admin', 'super_admin'])) {
+            $validated['status'] = $request->input('status', 'active');
+        } else {
+            // For staff, keep as active (they can't edit status)
+            $validated['status'] = 'active';
+        }
 
         $product->update($validated);
 

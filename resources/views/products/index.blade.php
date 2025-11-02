@@ -31,7 +31,7 @@
 
                         <!-- Stock Status Filter -->
                         <div class="form-control flex-1">
-                            <select name="stock_status" class="select select-bordered w-full min-w-24" onchange="this.form.submit()">
+                            <select name="stock_status" class="select select-bordered w-full min-w-28" onchange="this.form.submit()">
                                 <option value="" {{ request('stock_status') === '' ? 'selected' : '' }}>All Stock Status</option>
                                 <option value="critical" {{ request('stock_status') === 'critical' ? 'selected' : '' }}>Critical</option>
                                 <option value="low" {{ request('stock_status') === 'low' ? 'selected' : '' }}>Low</option>

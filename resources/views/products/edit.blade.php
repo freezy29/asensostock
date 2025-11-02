@@ -19,7 +19,7 @@
             @csrf
             @method('PUT')
 
-            <!-- Product Information Section -->
+            <!-- Single Product Form Card -->
             <div class="card bg-base-100 shadow-xl border border-base-300">
                 <div class="card-body">
                     <div class="flex items-center gap-3 mb-6">
@@ -28,7 +28,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                             </svg>
                         </div>
-                        <h2 class="card-title text-xl">Product Information</h2>
+                        <h2 class="card-title text-xl">Edit Product</h2>
                     </div>
 
                     <div class="space-y-6">
@@ -42,10 +42,10 @@
                                 <input type="text"
                                        name="name"
                                        value="{{ old('name', $product->name) }}"
-                                       class="input input-bordered w-full @error('name') input-error @enderror"
+                                       class="input input-bordered w-full pr-10 @error('name') input-error @enderror"
                                        placeholder="Enter product name"
                                        required />
-                                <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                                 </svg>
                             </div>
@@ -127,22 +127,8 @@
                             @enderror
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- Stock & Pricing Information Section -->
-            <div class="card bg-base-100 shadow-xl border border-base-300">
-                <div class="card-body">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="p-2 bg-primary/10 rounded-lg">
-                            <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                            </svg>
-                        </div>
-                        <h2 class="card-title text-xl">Stock & Pricing Information</h2>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <!-- Stock Quantity -->
                         <div class="form-control">
                             <label class="label">
@@ -153,11 +139,11 @@
                                 <input type="number"
                                        name="stock_quantity"
                                        value="{{ old('stock_quantity', $product->stock_quantity) }}"
-                                       class="input input-bordered w-full @error('stock_quantity') input-error @enderror"
+                                       class="input input-bordered w-full pr-10 @error('stock_quantity') input-error @enderror"
                                        placeholder="0"
                                        min="0"
                                        required />
-                                <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m0 0l8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                                 </svg>
                             </div>
@@ -183,11 +169,11 @@
                                 <input type="number"
                                        name="critical_level"
                                        value="{{ old('critical_level', $product->critical_level) }}"
-                                       class="input input-bordered w-full @error('critical_level') input-error @enderror"
+                                       class="input input-bordered w-full pr-10 @error('critical_level') input-error @enderror"
                                        placeholder="10"
                                        min="0"
                                        required />
-                                <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
                                 </svg>
                             </div>
@@ -210,7 +196,7 @@
                                 <span class="label-text-alt text-error">*</span>
                             </label>
                             <div class="relative">
-                                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-base-content/60">₱</span>
+                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-base-content font-medium z-10 pointer-events-none">₱</span>
                                 <input type="number"
                                        name="price"
                                        value="{{ old('price', $product->price) }}"
@@ -219,9 +205,6 @@
                                        step="0.01"
                                        min="0"
                                        required />
-                                <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
                             </div>
                             @error('price')
                                 <label class="label">
@@ -235,36 +218,24 @@
                             @enderror
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- Status Section -->
-            @if (auth()->user()->role === 'admin')
-            <div class="card bg-base-100 shadow-xl border border-base-300">
-                <div class="card-body">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="p-2 bg-primary/10 rounded-lg">
-                            <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                        </div>
-                        <h2 class="card-title text-xl">Status</h2>
-                    </div>
-
+                    <!-- Status Field -->
+                    @if (in_array(auth()->user()->role, ['admin', 'super_admin']))
                     <div class="form-control">
                         <label class="label">
-                            <span class="label-text font-medium">Product Status</span>
+                            <span class="label-text font-medium">Status</span>
+                            <span class="label-text-alt text-error">*</span>
                         </label>
-                        <div class="flex items-center gap-4">
-                            <input type="hidden" name="status" value="inactive" />
-                            <input type="checkbox"
-                                   name="status"
-                                   value="active"
-                                   class="toggle toggle-primary @error('status') toggle-error @enderror"
-                                   {{ old('status', $product->status) == 'active' ? 'checked' : '' }} />
-                            <span class="text-sm text-base-content/70">
-                                {{ old('status', $product->status) == 'active' ? 'Active' : 'Inactive' }}
-                            </span>
+                        <div class="relative">
+                            <select name="status"
+                                    class="select select-bordered w-full @error('status') select-error @enderror"
+                                    required>
+                                <option value="active" {{ old('status', $product->status) == 'active' ? 'selected' : '' }}>Active</option>
+                                <option value="inactive" {{ old('status', $product->status) == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                            </select>
+                            <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
                         </div>
                         @error('status')
                             <label class="label">
@@ -277,9 +248,9 @@
                             </label>
                         @enderror
                     </div>
+                    @endif
                 </div>
             </div>
-            @endif
 
             <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row gap-3 justify-end">
