@@ -15,7 +15,7 @@
 
                 <form method="GET" action="{{ route('users.index') }}" class="space-y-2">
                     <div class="flex flex-col md:flex-row gap-2">
-                    <x-ui.search-input/>
+                    <x-ui.search-input placeholder="Search users..." />
 
                     <div class="flex justify-between gap-2">
                         <div class="form-control flex-1">
@@ -94,7 +94,7 @@
                 </tr>
                   @empty
                 <tr>
-                  <td colspan="7" class="text-center text-gray-500 py-6">Empty.</td>
+                  <td colspan="7" class="text-center text-gray-500 py-6">No yet.</td>
                 </tr>
                 @endforelse
             </tbody>

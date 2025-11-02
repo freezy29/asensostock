@@ -12,21 +12,66 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //give admin all products
-        if (auth()->user()->role === 'admin') {
-            $products = Product::with('category')->paginate(8);
-
-            return view('products.index', ['products' => $products]);
+        //give admin and super_admin all products
+        if (in_array(auth()->user()->role, ['admin', 'super_admin'])) {
+            $query = Product::with(['category', 'unit']);
+        } else {
+            //only active products for staff
+            $query = Product::with(['category', 'unit'])
+                ->where('status', '=', 'active');
         }
 
-        //only active products for staff
-        $products = Product::with('category')
-            ->where('status', '=', 'active')
-            ->paginate(8);
+        // Apply search filter
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhereHas('category', function($categoryQuery) use ($search) {
+                      $categoryQuery->where('name', 'like', "%{$search}%");
+                  });
+            });
+        }
 
-        return view('products.index', ['products' => $products]);
+        // Apply category filter
+        if ($request->filled('category')) {
+            $query->where('category_id', $request->category);
+        }
+
+        // Apply status filter
+        if ($request->filled('status')) {
+            // For staff, only allow filtering by active status (they can't see inactive products)
+            if (auth()->user()->role === 'staff' && $request->status !== 'active') {
+                // Staff filtering by non-active status is not allowed, default to active
+                $query->where('status', 'active');
+            } else {
+                $query->where('status', $request->status);
+            }
+        }
+
+        // Apply stock status filter
+        if ($request->filled('stock_status')) {
+            if ($request->stock_status === 'critical') {
+                $query->whereRaw('stock_quantity <= critical_level');
+            } elseif ($request->stock_status === 'low') {
+                $query->whereRaw('stock_quantity > critical_level AND stock_quantity <= (critical_level * 1.5)');
+            } elseif ($request->stock_status === 'ok') {
+                $query->whereRaw('stock_quantity > (critical_level * 1.5)');
+            }
+        }
+
+        $products = $query->paginate(8)->withQueryString();
+
+        // Get categories for filter dropdown
+        $categories = \App\Models\Category::where('status', 'active')
+            ->orderBy('name')
+            ->get();
+
+        return view('products.index', [
+            'products' => $products,
+            'categories' => $categories,
+        ]);
     }
 
     /**
@@ -49,11 +94,16 @@ class ProductController extends Controller
         $validated = $request->validate([
             'name' => 'required|max:255',
             'product_category_id' => 'required|exists:categories,id',
+            'product_unit_id' => 'required|exists:units,id',
+            'stock_quantity' => 'required|integer|min:0',
+            'price' => 'required|numeric|min:0',
+            'critical_level' => 'required|integer|min:0',
         ]);
 
-        // Map form field to database column
+        // Map form fields to database columns
         $validated['category_id'] = $validated['product_category_id'];
-        unset($validated['product_category_id']);
+        $validated['unit_id'] = $validated['product_unit_id'];
+        unset($validated['product_category_id'], $validated['product_unit_id']);
         
         $validated['status'] = $validated['status'] ?? 'active';
 
@@ -67,7 +117,21 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return view('products.show');
+        $product->load(['category', 'unit', 'transactions' => function($query) {
+            $query->orderBy('created_at', 'desc')->limit(10);
+        }]);
+        
+        // Calculate additional metrics
+        $totalIn = $product->transactions()->where('type', 'in')->sum('quantity');
+        $totalOut = $product->transactions()->where('type', 'out')->sum('quantity');
+        $totalCostValue = $product->transactions()->where('type', 'in')->sum('total_amount');
+        
+        return view('products.show', [
+            'product' => $product,
+            'totalIn' => $totalIn,
+            'totalOut' => $totalOut,
+            'totalCostValue' => $totalCostValue,
+        ]);
     }
 
     /**
@@ -92,13 +156,24 @@ class ProductController extends Controller
         $validated = $request->validate([
             'name' => 'required|max:255',
             'product_category_id' => 'required|exists:categories,id',
+            'product_unit_id' => 'required|exists:units,id',
+            'stock_quantity' => 'required|integer|min:0',
+            'price' => 'required|numeric|min:0',
+            'critical_level' => 'required|integer|min:0',
         ]);
 
-        // Map form field to database column
+        // Map form fields to database columns
         $validated['category_id'] = $validated['product_category_id'];
-        unset($validated['product_category_id']);
+        $validated['unit_id'] = $validated['product_unit_id'];
+        unset($validated['product_category_id'], $validated['product_unit_id']);
         
-        $validated['status'] = $request->input('status');
+        // Handle status - for admins/super_admins it comes from select dropdown
+        if (in_array(auth()->user()->role, ['admin', 'super_admin'])) {
+            $validated['status'] = $request->input('status', 'active');
+        } else {
+            // For staff, keep as active (they can't edit status)
+            $validated['status'] = 'active';
+        }
 
         $product->update($validated);
 

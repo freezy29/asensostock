@@ -19,8 +19,7 @@ class ProductSeeder extends Seeder
                 'category_id' => 1, // Example: Beverages
                 'unit_id' => 1,     // Piece
                 'stock_quantity' => 120,
-                'unit_price' => 6.50,
-                'cost_price' => 4.00,
+                'price' => 6.50,
                 'critical_level' => 50,
                 'status' => 'active',
                 'created_at' => now(),
@@ -31,8 +30,7 @@ class ProductSeeder extends Seeder
                 'category_id' => 2, // Example: Household
                 'unit_id' => 1,     // Piece
                 'stock_quantity' => 80,
-                'unit_price' => 8.00,
-                'cost_price' => 5.25,
+                'price' => 8.00,
                 'critical_level' => 30,
                 'status' => 'active',
                 'created_at' => now(),
@@ -43,8 +41,7 @@ class ProductSeeder extends Seeder
                 'category_id' => 3, // Example: Snacks
                 'unit_id' => 3,     // Pack
                 'stock_quantity' => 40,
-                'unit_price' => 42.00,
-                'cost_price' => 32.00,
+                'price' => 42.00,
                 'critical_level' => 20,
                 'status' => 'active',
                 'created_at' => now(),
@@ -55,8 +52,7 @@ class ProductSeeder extends Seeder
                 'category_id' => 1, // Beverages
                 'unit_id' => 6,     // Liter
                 'stock_quantity' => 60,
-                'unit_price' => 65.00,
-                'cost_price' => 55.00,
+                'price' => 65.00,
                 'critical_level' => 15,
                 'status' => 'active',
                 'created_at' => now(),
@@ -67,8 +63,7 @@ class ProductSeeder extends Seeder
                 'category_id' => 3, // Snacks
                 'unit_id' => 1,     // Piece
                 'stock_quantity' => 100,
-                'unit_price' => 14.00,
-                'cost_price' => 10.00,
+                'price' => 14.00,
                 'critical_level' => 40,
                 'status' => 'active',
                 'created_at' => now(),
