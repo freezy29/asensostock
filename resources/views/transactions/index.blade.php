@@ -11,22 +11,9 @@
                   Transactions
                 </x-slot:page_title>
 
-
-            <label class="input">
-                <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <g
-                        stroke-linejoin="round"
-                        stroke-linecap="round"
-                        stroke-width="2.5"
-                        fill="none"
-                        stroke="currentColor"
-                    >
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <path d="m21 21-4.3-4.3"></path>
-                    </g>
-                </svg>
-                <input type="search" required placeholder="Search" />
-            </label>
+            <form method="GET" action="{{ route('transactions.index') }}" class="space-y-2">
+                <x-ui.search-input placeholder="Search by product name..." />
+            </form>
 
             @can('create', App\Models\Transaction::class)
             <x-ui.buttons.create href="{{ route('transactions.create') }}">
@@ -68,8 +55,8 @@
 
                     </td>
                     <td>{{ $transaction->quantity }}</td>
-                    <td>₱{{ $transaction->cost_price }}</td>
-                    <td>₱{{ $transaction->total_amount }}</td>
+                    <td>₱{{ number_format($transaction->cost_price, 2) }}</td>
+                    <td>₱{{ number_format($transaction->total_amount, 2) }}</td>
                     <td>{{ $transaction->user->first_name . " " . $transaction->user->last_name }}</td>
                     <td>
 
@@ -92,7 +79,7 @@
                 </tr>
                   @empty
                 <tr>
-                  <td colspan="6" class="text-center text-gray-500 py-6">No transactions yet.</td>
+                  <td colspan="9" class="text-center text-gray-500 py-6">No transactions yet.</td>
                 </tr>
                 @endforelse
             </tbody>

@@ -13,8 +13,7 @@ class Product extends Model
         'category_id',
         'unit_id',
         'stock_quantity',
-        'unit_price',
-        'cost_price',
+        'price',
         'critical_level',
         'status'
     ];
