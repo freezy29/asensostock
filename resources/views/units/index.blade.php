@@ -12,21 +12,24 @@
                 </x-slot:page_title>
 
 
-            <label class="input">
-                <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <g
-                        stroke-linejoin="round"
-                        stroke-linecap="round"
-                        stroke-width="2.5"
-                        fill="none"
-                        stroke="currentColor"
-                    >
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <path d="m21 21-4.3-4.3"></path>
-                    </g>
-                </svg>
-                <input type="search" required placeholder="Search" />
-            </label>
+            <form method="GET" action="{{ route('units.index') }}" class="space-y-2">
+                <div class="flex flex-col md:flex-row gap-2">
+                    <x-ui.search-input placeholder="Search units..." />
+
+                    <div class="flex justify-between gap-2">
+                        <!-- Status Filter -->
+                        <div class="form-control flex-1">
+                            <select name="status" class="select select-bordered w-full min-w-24" onchange="this.form.submit()">
+                                <option value="" {{ request('status') === '' ? 'selected' : '' }}>All Status</option>
+                                <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
+                                @if (in_array(auth()->user()->role, ['admin', 'super_admin']))
+                                <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactive</option>
+                                @endif
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </form>
 
             @can('create', App\Models\Unit::class)
             <x-ui.buttons.create href="{{ route('units.create') }}">
@@ -42,7 +45,7 @@
                     <th>Unit Name</th>
                     <th>Abbreviation</th>
                     <th>Number of Products</th>
-                    @if (auth()->user()->role !== 'staff')
+                    @if (in_array(auth()->user()->role, ['admin', 'super_admin']))
                     <th>Status</th>
                     @endif
                     <th>Actions</th>
@@ -52,18 +55,16 @@
               @forelse ($units as $unit)
                 <tr>
                     <th>{{ $unit->name }}</th>
-                    <td>{{ $unit->abbreviation }}</td>
+                    <td>{{ $unit->abbreviation ?? 'N/A' }}</td>
                     <td>{{ $unit->products_count }}</td>
 
-                    @if (auth()->user()->role !== 'staff')
+                    @if (in_array(auth()->user()->role, ['admin', 'super_admin']))
                     <td>
-
-                    @if(strtolower($unit->status) === 'active')
-                      <span class="badge badge-success badge-md">Active</span>
-                    @else
-                      <span class="badge badge-error badge-md">Inactive</span>
-                    @endif
-
+                        @if(strtolower($unit->status) === 'active')
+                          <span class="badge badge-success badge-md">Active</span>
+                        @else
+                          <span class="badge badge-error badge-md">Inactive</span>
+                        @endif
                     </td>
                     @endif
                     <td>
@@ -87,7 +88,13 @@
                 </tr>
                   @empty
                 <tr>
-                  <td colspan="5" class="text-center text-gray-500 py-6">No units yet.</td>
+                  <td colspan="{{ in_array(auth()->user()->role, ['admin', 'super_admin']) ? '5' : '4' }}" class="text-center text-gray-500 py-6">
+                    @if(request()->has('search') || request()->has('status'))
+                        No units found matching your filters.
+                    @else
+                        No units yet.
+                    @endif
+                  </td>
                 </tr>
                 @endforelse
             </tbody>

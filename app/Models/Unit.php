@@ -7,6 +7,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Unit extends Model
 {
+    protected $fillable = [
+        'name',
+        'abbreviation',
+        'status',
+    ];
+
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);
