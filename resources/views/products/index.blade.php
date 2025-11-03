@@ -16,7 +16,7 @@
                 <div class="flex flex-col md:flex-row gap-2">
                     <x-ui.search-input placeholder="Search products..." />
 
-                    <div class="flex justify-between gap-2">
+                    <div class="flex flex-col md:flex-row gap-2 ">
                         <!-- Category Filter -->
                         <div class="form-control flex-1">
                             <select name="category" class="select select-bordered w-full min-w-26" onchange="this.form.submit()">
