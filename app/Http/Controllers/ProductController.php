@@ -41,6 +41,11 @@ class ProductController extends Controller
             $query->where('category_id', $request->category);
         }
 
+        // Apply unit filter
+        if ($request->filled('unit')) {
+            $query->where('unit_id', $request->unit);
+        }
+
         // Apply status filter
         if ($request->filled('status')) {
             // For staff, only allow filtering by active status (they can't see inactive products)
@@ -70,9 +75,17 @@ class ProductController extends Controller
             ->orderBy('name')
             ->get();
 
+        // Get units for filter dropdown (active units only for staff)
+        if (in_array(auth()->user()->role, ['admin', 'super_admin'])) {
+            $units = \App\Models\Unit::orderBy('name')->get();
+        } else {
+            $units = \App\Models\Unit::where('status', 'active')->orderBy('name')->get();
+        }
+
         return view('products.index', [
             'products' => $products,
             'categories' => $categories,
+            'units' => $units,
         ]);
     }
 

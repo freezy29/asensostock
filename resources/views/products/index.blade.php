@@ -29,6 +29,18 @@
                             </select>
                         </div>
 
+                        <!-- Unit Filter -->
+                        <div class="form-control flex-1">
+                            <select name="unit" class="select select-bordered w-full min-w-26" onchange="this.form.submit()">
+                                <option value="" {{ request('unit') === '' ? 'selected' : '' }}>All Units</option>
+                                @foreach($units as $unit)
+                                    <option value="{{ $unit->id }}" {{ request('unit') == $unit->id ? 'selected' : '' }}>
+                                        {{ $unit->name }}@if($unit->abbreviation) ({{ $unit->abbreviation }})@endif
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
                         <!-- Stock Status Filter -->
                         <div class="form-control flex-1">
                             <select name="stock_status" class="select select-bordered w-full min-w-28" onchange="this.form.submit()">
