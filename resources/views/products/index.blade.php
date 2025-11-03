@@ -123,7 +123,14 @@
 
                         <x-ui.buttons.delete action="{{ route('products.destroy', $product->id) }}">
                             <x-slot:onclick>
-                                return confirm('Are you sure you want to delete this product?')
+                                @php
+                                    $transactionsCount = $product->transactions()->count();
+                                @endphp
+                                @if($transactionsCount > 0)
+                                    return confirm('Are you sure you want to delete this product? This product has {{ $transactionsCount }} transaction(s). Products with transactions cannot be deleted. Consider deactivating it instead.')
+                                @else
+                                    return confirm('Are you sure you want to delete this product?')
+                                @endif
                             </x-slot:onclick>
                         </x-ui.buttons.delete>
                     @endcanany
