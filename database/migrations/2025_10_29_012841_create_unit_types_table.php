@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name', 150);
             $table->string('abbreviation')->nullable();
+            $table->foreignId('base_unit_id')->nullable()->constrained('units')->nullOnDelete();
+            $table->decimal('quantity_per_base_unit', 10, 4)->nullable()->default(1);
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->softDeletes();
             $table->timestamps();

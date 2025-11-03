@@ -66,7 +66,11 @@ class UnitController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|max:255',
-            'abbreviation' => 'nullable|max:10',
+            'abbreviation' => 'required|max:10|unique:units,abbreviation|regex:/^[a-z0-9]+$/',
+        ], [
+            'abbreviation.required' => 'The abbreviation field is required.',
+            'abbreviation.unique' => 'This abbreviation is already in use. Please choose a different one.',
+            'abbreviation.regex' => 'Abbreviation must contain only lowercase letters and numbers with no spaces.',
         ]);
 
         // Handle status - for admins/super_admins it comes from select dropdown
@@ -133,7 +137,11 @@ class UnitController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|max:255',
-            'abbreviation' => 'nullable|max:10',
+            'abbreviation' => 'required|max:10|unique:units,abbreviation,' . $unit->id . '|regex:/^[a-z0-9]+$/',
+        ], [
+            'abbreviation.required' => 'The abbreviation field is required.',
+            'abbreviation.unique' => 'This abbreviation is already in use. Please choose a different one.',
+            'abbreviation.regex' => 'Abbreviation must contain only lowercase letters and numbers with no spaces.',
         ]);
 
         // Handle status - for admins/super_admins it comes from select dropdown

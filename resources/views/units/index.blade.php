@@ -55,7 +55,7 @@
               @forelse ($units as $unit)
                 <tr>
                     <th>{{ $unit->name }}</th>
-                    <td>{{ $unit->abbreviation ?? 'N/A' }}</td>
+                    <td>{{ $unit->abbreviation }}</td>
                     <td>{{ $unit->products_count }}</td>
 
                     @if (in_array(auth()->user()->role, ['admin', 'super_admin']))

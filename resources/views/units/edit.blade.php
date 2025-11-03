@@ -74,19 +74,23 @@
                         <div class="form-control">
                             <label class="label">
                                 <span class="label-text font-medium">Abbreviation</span>
-                                <span class="label-text-alt text-base-content/60">(Optional)</span>
+                                <span class="label-text-alt text-error">*</span>
                             </label>
                             <div class="relative">
                                 <input type="text"
                                        name="abbreviation"
                                        value="{{ old('abbreviation', $unit->abbreviation) }}"
                                        class="input input-bordered w-full pr-10 @error('abbreviation') input-error @enderror"
-                                       placeholder="Enter abbreviation (e.g., pc, kg, L)"
-                                       maxlength="10" />
+                                       placeholder="Enter abbreviation (e.g., pc, kg, ml)"
+                                       maxlength="10"
+                                       required />
                                 <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-base-content/40 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"></path>
                                 </svg>
                             </div>
+                            <label class="label">
+                                <span class="label-text-alt text-base-content/60">Lowercase letters and numbers only, no spaces (e.g., pc, kg, ml)</span>
+                            </label>
                             @error('abbreviation')
                                 <label class="label">
                                     <span class="label-text-alt text-error flex items-center gap-1">

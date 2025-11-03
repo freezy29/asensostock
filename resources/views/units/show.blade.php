@@ -74,7 +74,7 @@
                     <div class="space-y-4">
                         <div>
                             <div class="text-sm text-base-content/70 mb-1">Abbreviation</div>
-                            <div class="font-medium">{{ $unit->abbreviation ?? 'N/A' }}</div>
+                            <div class="font-medium">{{ $unit->abbreviation }}</div>
                         </div>
 
                         <div>

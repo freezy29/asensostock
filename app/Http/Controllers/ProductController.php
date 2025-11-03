@@ -104,7 +104,7 @@ class ProductController extends Controller
         $validated['category_id'] = $validated['product_category_id'];
         $validated['unit_id'] = $validated['product_unit_id'];
         unset($validated['product_category_id'], $validated['product_unit_id']);
-        
+
         $validated['status'] = $validated['status'] ?? 'active';
 
         Product::create($validated);

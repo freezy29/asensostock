@@ -2,10 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Category;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
 
 class CategorySeeder extends Seeder
 {
@@ -14,22 +12,21 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('categories')->insert([
-            [
-                'name' => 'Beverages',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'Household',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'Snacks',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-        ]);
+        $categories = [
+            ['name' => 'Beverages', 'status' => 'active'],
+            ['name' => 'Snacks', 'status' => 'active'],
+            ['name' => 'Household Items', 'status' => 'active'],
+            ['name' => 'Personal Care', 'status' => 'active'],
+            ['name' => 'Food & Condiments', 'status' => 'active'],
+            ['name' => 'Dairy Products', 'status' => 'active'],
+            ['name' => 'Frozen Goods', 'status' => 'active'],
+            ['name' => 'Cleaning Supplies', 'status' => 'active'],
+            ['name' => 'Canned Goods', 'status' => 'active'],
+            ['name' => 'Bakery Items', 'status' => 'active'],
+        ];
+
+        foreach ($categories as $category) {
+            Category::create($category);
+        }
     }
 }
