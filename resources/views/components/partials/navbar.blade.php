@@ -1,4 +1,19 @@
 <nav class="navbar w-full py-0 bg-primary text-primary-content px-4">
+  @php
+    $lowStockBase = \App\Models\Product::query();
+    if (!in_array(auth()->user()->role, ['admin', 'super_admin'])) {
+        $lowStockBase->where('status', 'active');
+    }
+    $lowStockQuery = (clone $lowStockBase)
+        ->whereRaw('stock_quantity <= (critical_level * 1.5)')
+        ->orderBy('updated_at', 'desc');
+    $lowStockCount = (clone $lowStockQuery)->count();
+    $criticalCount = (clone $lowStockBase)
+        ->whereRaw('stock_quantity <= critical_level')
+        ->count();
+    $viewAllStatus = 'alerts';
+    $lowStockItems = (clone $lowStockQuery)->take(6)->get();
+  @endphp
   <div class="navbar-start flex flex-1 item-center gap-2">
     <div class="lg:hidden">
         <label for="drawer" aria-label="open sidebar" class="btn btn-square btn-ghost">
@@ -25,12 +40,56 @@
   </div>
   <div class="navbar-end flex-none gap-2 text-primary-content">
 
-     <button class="btn btn-ghost btn-circle">
-      <div class="indicator">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /> </svg>
-        <span class="badge badge-xs badge-secondary indicator-item"></span>
-      </div>
-    </button>
+     <div class="dropdown dropdown-end ">
+       <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
+         <div class="indicator">
+           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+           </svg>
+           @if($lowStockCount > 0)
+             <span class="badge badge-xs badge-success indicator-item">{{ $lowStockCount > 9 ? '9+' : $lowStockCount }}</span>
+           @endif
+         </div>
+       </div>
+       <div tabindex="-1" class="dropdown-content z-50 mt-3 w-72 sm:w-80 md:w-96 max-w-[90vw] max-h-[60vh] overflow-auto rounded-box bg-base-100 text-base-content shadow-xl">
+         <div class="p-4 border-b border-base-300">
+           <p class="font-semibold">{{ $lowStockCount }} stock {{ $lowStockCount === 1 ? 'alert' : 'alerts' }}</p>
+         </div>
+         <ul class="p-0">
+           @forelse($lowStockItems as $item)
+             @php
+               $isCritical = $item->stock_quantity <= $item->critical_level;
+               $dotClass = $isCritical ? 'bg-error' : 'bg-warning';
+             @endphp
+             <li class="px-0">
+               <a href="{{ route('products.show', $item->id) }}" class="px-3 sm:px-4 py-3 block hover:bg-base-200">
+                 <div class="flex items-start gap-3">
+                   <span class="mt-1 inline-block h-3 w-3 rounded-full {{ $dotClass }}"></span>
+                   <div class="min-w-0">
+                     <p class="text-sm leading-snug">
+                       <span class="font-medium">{{ $item->name }}</span>
+                       @if($isCritical)
+                         is critical
+                       @else
+                         is low
+                       @endif
+                     </p>
+                     <p class="text-xs opacity-70">Qty: {{ $item->stock_quantity }} • Critical: {{ $item->critical_level }} • {{ optional($item->updated_at)->diffForHumans() }}</p>
+                   </div>
+                 </div>
+               </a>
+             </li>
+           @empty
+             <li class="px-4 py-4 text-sm opacity-70">No low stock alerts</li>
+           @endforelse
+         </ul>
+         @if($lowStockCount > 0)
+         <div class="p-3 text-right border-t border-base-300">
+           <a href="{{ route('products.index', ['stock_status' => $viewAllStatus]) }}" class="btn btn-ghost btn-sm">View all</a>
+         </div>
+         @endif
+       </div>
+     </div>
 
         <label class="swap swap-rotate">
             <!-- this hidden checkbox controls the state -->
