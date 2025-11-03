@@ -63,6 +63,9 @@ class ProductController extends Controller
                 $query->whereRaw('stock_quantity <= critical_level');
             } elseif ($request->stock_status === 'low') {
                 $query->whereRaw('stock_quantity > critical_level AND stock_quantity <= (critical_level * 1.5)');
+            } elseif ($request->stock_status === 'alerts') {
+                // Include both critical and low stock
+                $query->whereRaw('stock_quantity <= (critical_level * 1.5)');
             } elseif ($request->stock_status === 'ok') {
                 $query->whereRaw('stock_quantity > (critical_level * 1.5)');
             }
