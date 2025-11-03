@@ -2,8 +2,8 @@
     <x-slot:title>
       Login
     </x-slot:title>
-           <div class="hero-content flex-col lg:flex-row-reverse max-h-screen max-10xl">
-            <div class="card bg-base-100 w-full shrink-0 shadow-2xl">
+           <div class="hero-content flex-col lg:flex-row-reverse w-full max-w-2xl md:max-w-3xl lg:max-w-none">
+            <div class="card bg-base-100 w-full max-w-md md:max-w-lg shrink-0 shadow-2xl mx-auto">
               <div class="card-body">
 
                 <form method="POST" action="/login">
@@ -12,15 +12,15 @@
                 <fieldset class="fieldset">
                 <legend class="fieldset-legend"></legend>
 
-                <div class="hero-content text-center">
-                  
-                <div class="max-w-md">
-                    <h1 class="text-5xl font-bold">Welcome Back To <span class="text-primary">AscensoStock!</span></h1>
+                <div class="hero-content text-center p-0">
+
+                <div class="max-w-md mx-auto">
+                    <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight">Welcome Back To <span class="text-primary">AscensoStock!</span></h1>
                       <p class="italic py-6 font-medium">
                         Count less, control more — Inventory made simple to the core.
                       </p>
                       </div>
-                       </div>  
+                       </div>
                 <!-- email -->
                 <label class="input validator floating-label mb-2 w-full @error('email') input-error @enderror">
                     <span>Email</span>
@@ -93,7 +93,6 @@
               </div>
             </div>
           </div>
-        </div>
 
 
 </x-layouts.guest>
