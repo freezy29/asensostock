@@ -13,7 +13,7 @@
 
             <form method="GET" action="{{ route('transactions.index') }}" class="space-y-2">
                 <div class="flex flex-col md:flex-row gap-2">
-                    <x-ui.search-input placeholder="Search by product name..." />
+                    <x-ui.search-input placeholder="Search transactions..." />
 
                     <div class="flex justify-between gap-2">
                         <!-- Type Filter -->

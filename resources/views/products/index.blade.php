@@ -52,15 +52,15 @@
                         </div>
 
                         <!-- Status Filter -->
+                        @if (in_array(auth()->user()->role, ['admin', 'super_admin']))
                         <div class="form-control flex-1">
                             <select name="status" class="select select-bordered w-full min-w-24" onchange="this.form.submit()">
                                 <option value="" {{ request('status') === '' ? 'selected' : '' }}>All Status</option>
                                 <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
-                                @if (in_array(auth()->user()->role, ['admin', 'super_admin']))
                                 <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactive</option>
-                                @endif
                             </select>
                         </div>
+                        @endif
                     </div>
                 </div>
             </form>
