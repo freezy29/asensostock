@@ -20,7 +20,11 @@
 
                     <x-ui.buttons.delete action="{{ route('units.destroy', $unit->id) }}">
                         <x-slot:onclick>
-                            return confirm('Are you sure you want to delete this unit?')
+                            @if($unit->products_count > 0)
+                                return confirm('Are you sure you want to delete this unit? This unit is currently being used by {{ $unit->products_count }} product(s). Deleting it will cause errors. Please change those products to use a different unit first.')
+                            @else
+                                return confirm('Are you sure you want to delete this unit?')
+                            @endif
                         </x-slot:onclick>
                     </x-ui.buttons.delete>
                 </div>

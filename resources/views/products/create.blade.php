@@ -106,7 +106,7 @@
                                     <option disabled selected value="">Select a unit</option>
                                     @foreach(\App\Models\Unit::where('status', 'active')->get() as $unit)
                                         <option value="{{ $unit->id }}" {{ old('product_unit_id') == $unit->id ? 'selected' : '' }}>
-                                            {{ $unit->name }} ({{ $unit->abbreviation }})
+                                            {{ $unit->name }}@if($unit->abbreviation) ({{ $unit->abbreviation }})@endif
                                         </option>
                                     @endforeach
                                 </select>

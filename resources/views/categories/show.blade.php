@@ -120,7 +120,7 @@
                                             {{ $product->name }}
                                         </a>
                                     </td>
-                                    <td>{{ $product->unit->abbreviation }}</td>
+                                    <td>{{ $product->unit->abbreviation ?? 'N/A' }}</td>
                                     <td>₱{{ number_format($product->price, 2) }}</td>
                                     <td>{{ $product->stock_quantity }}</td>
                                     <td>
