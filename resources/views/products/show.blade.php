@@ -55,7 +55,7 @@
                             @elseif($isLow)
                                 <span class="badge badge-warning">Low</span>
                             @else
-                                <span class="badge badge-success">OK</span>
+                                <span class="badge badge-success">In Stock</span>
                             @endif
                         </div>
                     </div>

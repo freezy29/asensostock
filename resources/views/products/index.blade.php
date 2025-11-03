@@ -35,7 +35,7 @@
                                 <option value="" {{ request('stock_status') === '' ? 'selected' : '' }}>All Stock Status</option>
                                 <option value="critical" {{ request('stock_status') === 'critical' ? 'selected' : '' }}>Critical</option>
                                 <option value="low" {{ request('stock_status') === 'low' ? 'selected' : '' }}>Low</option>
-                                <option value="ok" {{ request('stock_status') === 'ok' ? 'selected' : '' }}>OK</option>
+                                <option value="ok" {{ request('stock_status') === 'ok' ? 'selected' : '' }}>In Stock</option>
                             </select>
                         </div>
 
@@ -96,7 +96,7 @@
                         @elseif($isLow)
                             <span class="badge badge-warning badge-md">Low</span>
                         @else
-                            <span class="badge badge-success badge-md">OK</span>
+                            <span class="badge badge-success badge-md">In Stock</span>
                         @endif
                     </td>
 

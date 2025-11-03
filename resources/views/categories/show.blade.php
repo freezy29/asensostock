@@ -133,7 +133,7 @@
                                         @elseif($isLow)
                                             <span class="badge badge-warning badge-sm">Low</span>
                                         @else
-                                            <span class="badge badge-success badge-sm">OK</span>
+                                            <span class="badge badge-success badge-sm">In Stock</span>
                                         @endif
                                     </td>
                                     @if(in_array(auth()->user()->role, ['admin', 'super_admin']))
