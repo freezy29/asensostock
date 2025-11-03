@@ -51,7 +51,7 @@
                                     <option disabled value="">Select a product</option>
                                     @foreach(\App\Models\Product::where('status', 'active')->orderBy('name')->get() as $product)
                                         <option value="{{ $product->id }}" {{ old('product_id', $transaction->product_id) == $product->id ? 'selected' : '' }}>
-                                            {{ $product->name }} (Stock: {{ $product->stock_quantity }} {{ $product->unit->abbreviation }})
+                                            {{ $product->name }} (Stock: {{ $product->stock_quantity }}@if($product->unit->abbreviation) {{ $product->unit->abbreviation }}@endif)
                                         </option>
                                     @endforeach
                                 </select>

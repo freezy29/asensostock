@@ -13,7 +13,7 @@
 
             <form method="GET" action="{{ route('transactions.index') }}" class="space-y-2">
                 <div class="flex flex-col md:flex-row gap-2">
-                    <x-ui.search-input placeholder="Search by product name..." />
+                    <x-ui.search-input placeholder="Search transactions..." />
 
                     <div class="flex justify-between gap-2">
                         <!-- Type Filter -->
@@ -61,11 +61,11 @@
                         </a>
                     </td>
                     <td>
-                        @if(strtolower($transaction->type) === 'in')
-                          <span class="badge badge-success badge-md">In</span>
-                        @else
+                    @if(strtolower($transaction->type) === 'in')
+                      <span class="badge badge-success badge-md">In</span>
+                    @else
                           <span class="badge badge-error badge-md">Out</span>
-                        @endif
+                    @endif
                     </td>
                     <td>{{ $transaction->quantity }} {{ $transaction->product->unit->abbreviation ?? '' }}</td>
                     <td>₱{{ number_format($transaction->cost_price, 2) }}</td>

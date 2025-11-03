@@ -66,7 +66,11 @@ class UnitController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|max:255',
-            'abbreviation' => 'nullable|max:10',
+            'abbreviation' => 'required|max:10|unique:units,abbreviation|regex:/^[a-z0-9]+$/',
+        ], [
+            'abbreviation.required' => 'The abbreviation field is required.',
+            'abbreviation.unique' => 'This abbreviation is already in use. Please choose a different one.',
+            'abbreviation.regex' => 'Abbreviation must contain only lowercase letters and numbers with no spaces.',
         ]);
 
         // Handle status - for admins/super_admins it comes from select dropdown
@@ -119,6 +123,8 @@ class UnitController extends Controller
     {
         $this->authorize('update', $unit);
 
+        $unit->loadCount('products');
+
         return view('units.edit', ['unit' => $unit]);
     }
 
@@ -131,12 +137,28 @@ class UnitController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|max:255',
-            'abbreviation' => 'nullable|max:10',
+            'abbreviation' => 'required|max:10|unique:units,abbreviation,' . $unit->id . '|regex:/^[a-z0-9]+$/',
+        ], [
+            'abbreviation.required' => 'The abbreviation field is required.',
+            'abbreviation.unique' => 'This abbreviation is already in use. Please choose a different one.',
+            'abbreviation.regex' => 'Abbreviation must contain only lowercase letters and numbers with no spaces.',
         ]);
 
         // Handle status - for admins/super_admins it comes from select dropdown
         if (in_array(auth()->user()->role, ['admin', 'super_admin'])) {
-            $validated['status'] = $request->input('status', 'active');
+            $newStatus = $request->input('status', 'active');
+            
+            // Prevent deactivating units that have active products
+            if ($newStatus === 'inactive' && $unit->status === 'active') {
+                $activeProductsCount = $unit->products()->where('status', 'active')->count();
+                if ($activeProductsCount > 0) {
+                    return back()->withErrors([
+                        'status' => "Cannot deactivate this unit. It is currently being used by {$activeProductsCount} active product(s). Please change the products to use a different unit first."
+                    ])->withInput();
+                }
+            }
+            
+            $validated['status'] = $newStatus;
         } else {
             // For staff, keep current status (they can't edit status)
             $validated['status'] = $unit->status;
@@ -154,8 +176,15 @@ class UnitController extends Controller
     {
         $this->authorize('delete', $unit);
 
+        // Prevent deletion of units that have products using them
+        $productsCount = $unit->products()->count();
+        if ($productsCount > 0) {
+            return redirect()->route('units.index')
+                ->with('error', "Cannot delete this unit. It is currently being used by {$productsCount} product(s). Please change those products to use a different unit first.");
+        }
+
         $unit->delete();
 
-        return redirect()->route('units.index')->with('success', 'Unit deleted from the list!');
+        return redirect()->route('units.index')->with('success', 'Unit deleted successfully!');
     }
 }

@@ -58,11 +58,11 @@
 
                     @if (in_array(auth()->user()->role, ['admin', 'super_admin']))
                     <td>
-                        @if(strtolower($category->status) === 'active')
-                          <span class="badge badge-success badge-md">Active</span>
-                        @else
-                          <span class="badge badge-error badge-md">Inactive</span>
-                        @endif
+                    @if(strtolower($category->status) === 'active')
+                      <span class="badge badge-success badge-md">Active</span>
+                    @else
+                      <span class="badge badge-error badge-md">Inactive</span>
+                    @endif
                     </td>
                     @endif
                     <td>

@@ -20,7 +20,11 @@
 
                     <x-ui.buttons.delete action="{{ route('units.destroy', $unit->id) }}">
                         <x-slot:onclick>
-                            return confirm('Are you sure you want to delete this unit?')
+                            @if($unit->products_count > 0)
+                                return confirm('Are you sure you want to delete this unit? This unit is currently being used by {{ $unit->products_count }} product(s). Deleting it will cause errors. Please change those products to use a different unit first.')
+                            @else
+                                return confirm('Are you sure you want to delete this unit?')
+                            @endif
                         </x-slot:onclick>
                     </x-ui.buttons.delete>
                 </div>
@@ -70,7 +74,7 @@
                     <div class="space-y-4">
                         <div>
                             <div class="text-sm text-base-content/70 mb-1">Abbreviation</div>
-                            <div class="font-medium">{{ $unit->abbreviation ?? 'N/A' }}</div>
+                            <div class="font-medium">{{ $unit->abbreviation }}</div>
                         </div>
 
                         <div>
@@ -141,7 +145,7 @@
                                         @elseif($isLow)
                                             <span class="badge badge-warning badge-sm">Low</span>
                                         @else
-                                            <span class="badge badge-success badge-sm">OK</span>
+                                            <span class="badge badge-success badge-sm">In Stock</span>
                                         @endif
                                     </td>
                                     @if(in_array(auth()->user()->role, ['admin', 'super_admin']))

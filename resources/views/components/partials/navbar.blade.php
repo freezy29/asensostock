@@ -72,16 +72,31 @@
       </div>
       <ul
         tabindex="-1"
-        class="menu menu-lg dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow text-base-content">
+        class="menu menu-lg dropdown-content bg-base-100 text-base-content rounded-box z-50 mt-3 w-56 p-2 shadow-lg">
          @auth
-            <h2 class="menu-title md:hidden">{{ auth()->user()->first_name . " " .  auth()->user()->last_name }} ({{ auth()->user()->role }}) </h2>
+            <li class="md:hidden">
+              <div class="flex items-center gap-3 px-2 py-2">
+                <div class="avatar">
+                  <div class="w-8 rounded-full">
+                    <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->first_name . " " . auth()->user()->last_name) }}&background=random" />
+                  </div>
+                </div>
+                <div class="min-w-0">
+                  <p class="font-semibold text-sm leading-tight truncate">{{ auth()->user()->first_name . " " .  auth()->user()->last_name }}</p>
+                  <p class="text-xs opacity-70">{{ (auth()->user()->role === 'super_admin') ? 'Super Admin' : ucfirst(auth()->user()->role) }}</p>
+                </div>
+              </div>
+            </li>
          @endauth
 
-            <li><a href="{{ route('profile.show') }}">Profile</a><li>
-            <form method="POST" action="/logout" class="inline">
-            @csrf
-            <li><button type="submit">Logout</button><li>
-            </form>
+            <li><a href="{{ route('profile.show') }}">Profile</a></li>
+            <div class="divider -my-1"></div>
+            <li>
+              <form method="POST" action="/logout" class="inline">
+                @csrf
+                <button type="submit" class="text-error hover:bg-error/10">Logout</button>
+              </form>
+            </li>
       </ul>
     </div>
 

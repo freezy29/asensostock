@@ -107,7 +107,7 @@
                                     <option disabled value="">Select a unit</option>
                                     @foreach(\App\Models\Unit::where('status', 'active')->get() as $unit)
                                         <option value="{{ $unit->id }}" {{ old('product_unit_id', $product->unit_id) == $unit->id ? 'selected' : '' }}>
-                                            {{ $unit->name }} ({{ $unit->abbreviation }})
+                                            {{ $unit->name }}@if($unit->abbreviation) ({{ $unit->abbreviation }})@endif
                                         </option>
                                     @endforeach
                                 </select>
@@ -127,6 +127,18 @@
                             @enderror
                         </div>
                     </div>
+
+                    @php
+                        $transactionsCount = $product->transactions()->count();
+                    @endphp
+                    @if($transactionsCount > 0)
+                    <div class="alert alert-warning mb-6">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                        </svg>
+                        <span><strong>Note:</strong> Changing the stock quantity will automatically create a stock adjustment transaction to maintain the audit trail.</span>
+                    </div>
+                    @endif
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <!-- Stock Quantity -->
@@ -177,6 +189,16 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
                                 </svg>
                             </div>
+                            @if(old('critical_level', $product->critical_level) > old('stock_quantity', $product->stock_quantity))
+                            <label class="label">
+                                <span class="label-text-alt text-warning flex items-center gap-1">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    Critical level is higher than current stock. This will trigger stock warnings immediately.
+                                </span>
+                            </label>
+                            @endif
                             @error('critical_level')
                                 <label class="label">
                                     <span class="label-text-alt text-error flex items-center gap-1">
@@ -203,7 +225,7 @@
                                        class="input input-bordered w-full pl-8 @error('price') input-error @enderror"
                                        placeholder="0.00"
                                        step="0.01"
-                                       min="0"
+                                       min="0.01"
                                        required />
                             </div>
                             @error('price')

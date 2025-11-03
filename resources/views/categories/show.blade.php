@@ -120,7 +120,7 @@
                                             {{ $product->name }}
                                         </a>
                                     </td>
-                                    <td>{{ $product->unit->abbreviation }}</td>
+                                    <td>{{ $product->unit->abbreviation ?? 'N/A' }}</td>
                                     <td>₱{{ number_format($product->price, 2) }}</td>
                                     <td>{{ $product->stock_quantity }}</td>
                                     <td>
@@ -133,7 +133,7 @@
                                         @elseif($isLow)
                                             <span class="badge badge-warning badge-sm">Low</span>
                                         @else
-                                            <span class="badge badge-success badge-sm">OK</span>
+                                            <span class="badge badge-success badge-sm">In Stock</span>
                                         @endif
                                     </td>
                                     @if(in_array(auth()->user()->role, ['admin', 'super_admin']))

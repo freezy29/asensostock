@@ -16,7 +16,7 @@
                 <div class="flex flex-col md:flex-row gap-2">
                     <x-ui.search-input placeholder="Search products..." />
 
-                    <div class="flex justify-between gap-2">
+                    <div class="flex flex-col md:flex-row gap-2 ">
                         <!-- Category Filter -->
                         <div class="form-control flex-1">
                             <select name="category" class="select select-bordered w-full min-w-26" onchange="this.form.submit()">
@@ -29,26 +29,38 @@
                             </select>
                         </div>
 
+                        <!-- Unit Filter -->
+                        <div class="form-control flex-1">
+                            <select name="unit" class="select select-bordered w-full min-w-26" onchange="this.form.submit()">
+                                <option value="" {{ request('unit') === '' ? 'selected' : '' }}>All Units</option>
+                                @foreach($units as $unit)
+                                    <option value="{{ $unit->id }}" {{ request('unit') == $unit->id ? 'selected' : '' }}>
+                                        {{ $unit->name }}@if($unit->abbreviation) ({{ $unit->abbreviation }})@endif
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
                         <!-- Stock Status Filter -->
                         <div class="form-control flex-1">
                             <select name="stock_status" class="select select-bordered w-full min-w-28" onchange="this.form.submit()">
                                 <option value="" {{ request('stock_status') === '' ? 'selected' : '' }}>All Stock Status</option>
                                 <option value="critical" {{ request('stock_status') === 'critical' ? 'selected' : '' }}>Critical</option>
                                 <option value="low" {{ request('stock_status') === 'low' ? 'selected' : '' }}>Low</option>
-                                <option value="ok" {{ request('stock_status') === 'ok' ? 'selected' : '' }}>OK</option>
+                                <option value="ok" {{ request('stock_status') === 'ok' ? 'selected' : '' }}>In Stock</option>
                             </select>
                         </div>
 
                         <!-- Status Filter -->
+                        @if (in_array(auth()->user()->role, ['admin', 'super_admin']))
                         <div class="form-control flex-1">
                             <select name="status" class="select select-bordered w-full min-w-24" onchange="this.form.submit()">
                                 <option value="" {{ request('status') === '' ? 'selected' : '' }}>All Status</option>
                                 <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
-                                @if (in_array(auth()->user()->role, ['admin', 'super_admin']))
                                 <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactive</option>
-                                @endif
                             </select>
                         </div>
+                        @endif
                     </div>
                 </div>
             </form>
@@ -96,7 +108,7 @@
                         @elseif($isLow)
                             <span class="badge badge-warning badge-md">Low</span>
                         @else
-                            <span class="badge badge-success badge-md">OK</span>
+                            <span class="badge badge-success badge-md">In Stock</span>
                         @endif
                     </td>
 
@@ -123,7 +135,14 @@
 
                         <x-ui.buttons.delete action="{{ route('products.destroy', $product->id) }}">
                             <x-slot:onclick>
-                                return confirm('Are you sure you want to delete this product?')
+                                @php
+                                    $transactionsCount = $product->transactions()->count();
+                                @endphp
+                                @if($transactionsCount > 0)
+                                    return confirm('Are you sure you want to delete this product? This product has {{ $transactionsCount }} transaction(s). Products with transactions cannot be deleted. Consider deactivating it instead.')
+                                @else
+                                    return confirm('Are you sure you want to delete this product?')
+                                @endif
                             </x-slot:onclick>
                         </x-ui.buttons.delete>
                     @endcanany

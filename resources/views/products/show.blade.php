@@ -20,7 +20,11 @@
 
                     <x-ui.buttons.delete action="{{ route('products.destroy', $product->id) }}">
                         <x-slot:onclick>
-                            return confirm('Are you sure you want to delete this product?')
+                            @if($product->transactions()->count() > 0)
+                                return confirm('Are you sure you want to delete this product? This product has {{ $product->transactions()->count() }} transaction(s). Products with transactions cannot be deleted. Consider deactivating it instead.')
+                            @else
+                                return confirm('Are you sure you want to delete this product?')
+                            @endif
                         </x-slot:onclick>
                     </x-ui.buttons.delete>
                 </div>
@@ -51,7 +55,7 @@
                             @elseif($isLow)
                                 <span class="badge badge-warning">Low</span>
                             @else
-                                <span class="badge badge-success">OK</span>
+                                <span class="badge badge-success">In Stock</span>
                             @endif
                         </div>
                     </div>
@@ -72,24 +76,24 @@
 
                         <div>
                             <div class="text-sm text-base-content/70 mb-1">Unit</div>
-                            <div class="font-medium">{{ $product->unit->name }} ({{ $product->unit->abbreviation }})</div>
+                            <div class="font-medium">{{ $product->unit->name }}@if($product->unit->abbreviation) ({{ $product->unit->abbreviation }})@endif</div>
                         </div>
 
                         <div>
                             <div class="text-sm text-base-content/70 mb-1">Stock Quantity</div>
-                            <div class="font-medium text-lg">{{ $product->stock_quantity }} {{ $product->unit->abbreviation }}</div>
+                            <div class="font-medium text-lg">{{ $product->stock_quantity }}@if($product->unit->abbreviation) {{ $product->unit->abbreviation }}@endif</div>
                         </div>
                     </div>
 
                     <div class="space-y-4">
                         <div>
                             <div class="text-sm text-base-content/70 mb-1">Price</div>
-                            <div class="font-medium text-lg">₱{{ number_format($product->price, 2) }} per {{ $product->unit->abbreviation }}</div>
+                            <div class="font-medium text-lg">₱{{ number_format($product->price, 2) }}@if($product->unit->abbreviation) per {{ $product->unit->abbreviation }}@endif</div>
                         </div>
 
                         <div>
                             <div class="text-sm text-base-content/70 mb-1">Critical Level</div>
-                            <div class="font-medium">{{ $product->critical_level }} {{ $product->unit->abbreviation }}</div>
+                            <div class="font-medium">{{ $product->critical_level }}@if($product->unit->abbreviation) {{ $product->unit->abbreviation }}@endif</div>
                         </div>
 
                         <div>

@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Unit;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class UnitSeeder extends Seeder
 {
@@ -13,17 +12,26 @@ class UnitSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('units')->insert([
-            ['name' => 'Piece', 'abbreviation' => 'pc', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Box', 'abbreviation' => 'box', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Pack', 'abbreviation' => 'pack', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Kilogram', 'abbreviation' => 'kg', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Gram', 'abbreviation' => 'g', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Liter', 'abbreviation' => 'L', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Milliliter', 'abbreviation' => 'mL', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Dozen', 'abbreviation' => 'doz', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Meter', 'abbreviation' => 'm', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Roll', 'abbreviation' => 'roll', 'created_at' => now(), 'updated_at' => now()],
-        ]);
+        $units = [
+            ['name' => 'Piece', 'abbreviation' => 'pc', 'status' => 'active'],
+            ['name' => 'Box', 'abbreviation' => 'box', 'status' => 'active'],
+            ['name' => 'Pack', 'abbreviation' => 'pack', 'status' => 'active'],
+            ['name' => 'Kilogram', 'abbreviation' => 'kg', 'status' => 'active'],
+            ['name' => 'Gram', 'abbreviation' => 'g', 'status' => 'active'],
+            ['name' => 'Liter', 'abbreviation' => 'l', 'status' => 'active'],
+            ['name' => 'Milliliter', 'abbreviation' => 'ml', 'status' => 'active'],
+            ['name' => 'Dozen', 'abbreviation' => 'doz', 'status' => 'active'],
+            ['name' => 'Meter', 'abbreviation' => 'm', 'status' => 'active'],
+            ['name' => 'Roll', 'abbreviation' => 'roll', 'status' => 'active'],
+            ['name' => 'Bottle', 'abbreviation' => 'btl', 'status' => 'active'],
+            ['name' => 'Can', 'abbreviation' => 'can', 'status' => 'active'],
+            ['name' => 'Sachet', 'abbreviation' => 'sachet', 'status' => 'active'],
+            ['name' => 'Sack', 'abbreviation' => 'sack', 'status' => 'active'],
+            ['name' => 'Bar', 'abbreviation' => 'bar', 'status' => 'active'],
+        ];
+
+        foreach ($units as $unit) {
+            Unit::create($unit);
+        }
     }
 }

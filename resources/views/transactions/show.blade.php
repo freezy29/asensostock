@@ -75,12 +75,12 @@
 
                             <div>
                                 <div class="text-sm text-base-content/70">Quantity</div>
-                                <div class="font-medium">{{ $transaction->quantity }} {{ $transaction->product->unit->abbreviation }}</div>
+                                <div class="font-medium">{{ $transaction->quantity }}@if($transaction->product->unit->abbreviation) {{ $transaction->product->unit->abbreviation }}@endif</div>
                             </div>
 
                             <div>
                                 <div class="text-sm text-base-content/70">Cost Price</div>
-                                <div class="font-medium">₱{{ number_format($transaction->cost_price, 2) }} per {{ $transaction->product->unit->abbreviation }}</div>
+                                <div class="font-medium">₱{{ number_format($transaction->cost_price, 2) }}@if($transaction->product->unit->abbreviation) per {{ $transaction->product->unit->abbreviation }}@endif</div>
                             </div>
 
                             <div>
@@ -113,7 +113,7 @@
 
                             <div>
                                 <div class="text-sm text-base-content/70">Current Stock</div>
-                                <div class="font-medium">{{ $transaction->product->stock_quantity }} {{ $transaction->product->unit->abbreviation }}</div>
+                                <div class="font-medium">{{ $transaction->product->stock_quantity }}@if($transaction->product->unit->abbreviation) {{ $transaction->product->unit->abbreviation }}@endif</div>
                             </div>
 
                             <div>
@@ -152,7 +152,7 @@
                                 @endphp
                                 {{ $beforeStock }}
                             </div>
-                            <div class="stat-desc">{{ $transaction->product->unit->abbreviation }}</div>
+                            <div class="stat-desc">@if($transaction->product->unit->abbreviation){{ $transaction->product->unit->abbreviation }}@endif</div>
                         </div>
 
                         <div class="flex-shrink-0">
@@ -170,7 +170,7 @@
                         <div class="stat bg-base-100 rounded-lg p-4 flex-1">
                             <div class="stat-title">After Transaction</div>
                             <div class="stat-value text-xl">{{ $transaction->product->stock_quantity }}</div>
-                            <div class="stat-desc">{{ $transaction->product->unit->abbreviation }}</div>
+                            <div class="stat-desc">@if($transaction->product->unit->abbreviation){{ $transaction->product->unit->abbreviation }}@endif</div>
                         </div>
                     </div>
                 </div>
