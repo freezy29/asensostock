@@ -77,9 +77,6 @@
                                         </option>
                                     @endforeach
                                 </select>
-                                <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                </svg>
                             </div>
                             @error('product_category_id')
                                 <label class="label">
@@ -110,9 +107,6 @@
                                         </option>
                                     @endforeach
                                 </select>
-                                <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                </svg>
                             </div>
                             @error('product_unit_id')
                                 <label class="label">
@@ -222,14 +216,14 @@
             <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row gap-3 justify-end">
                 <a href="{{ route('products.index') }}"
-                   class="btn btn-outline btn-sm md:btn-md">
+                   class="btn btn-outline btn-sm md:btn-md min-h-10">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                     Cancel
                 </a>
                 <button type="submit"
-                        class="btn btn-primary btn-sm md:btn-md">
+                        class="btn btn-primary btn-sm md:btn-md min-h-10">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                     </svg>

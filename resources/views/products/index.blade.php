@@ -13,13 +13,13 @@
 
 
             <form method="GET" action="{{ route('products.index') }}" class="space-y-2">
-                <div class="flex flex-col md:flex-row gap-2">
+                <div class="flex flex-col md:flex-row gap-2 justify-center">
                     <x-ui.search-input placeholder="Search products..." />
 
                     <div class="flex flex-col md:flex-row gap-2 ">
                         <!-- Category Filter -->
                         <div class="form-control flex-1">
-                            <select name="category" class="select select-bordered w-full min-w-26" onchange="this.form.submit()">
+                            <select name="category" class="select select-bordered w-full min-w-32" onchange="this.form.submit()">
                                 <option value="" {{ request('category') === '' ? 'selected' : '' }}>All Categories</option>
                                 @foreach($categories as $category)
                                     <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
@@ -31,7 +31,7 @@
 
                         <!-- Unit Filter -->
                         <div class="form-control flex-1">
-                            <select name="unit" class="select select-bordered w-full min-w-26" onchange="this.form.submit()">
+                            <select name="unit" class="select select-bordered w-full min-w-16" onchange="this.form.submit()">
                                 <option value="" {{ request('unit') === '' ? 'selected' : '' }}>All Units</option>
                                 @foreach($units as $unit)
                                     <option value="{{ $unit->id }}" {{ request('unit') == $unit->id ? 'selected' : '' }}>
@@ -43,7 +43,7 @@
 
                         <!-- Stock Status Filter -->
                         <div class="form-control flex-1">
-                            <select name="stock_status" class="select select-bordered w-full min-w-28" onchange="this.form.submit()">
+                            <select name="stock_status" class="select select-bordered w-full min-w-34" onchange="this.form.submit()">
                                 <option value="" {{ request('stock_status') === '' ? 'selected' : '' }}>All Stock Status</option>
                                 <option value="critical" {{ request('stock_status') === 'critical' ? 'selected' : '' }}>Critical</option>
                                 <option value="low" {{ request('stock_status') === 'low' ? 'selected' : '' }}>Low</option>
@@ -54,7 +54,7 @@
                         <!-- Status Filter -->
                         @if (in_array(auth()->user()->role, ['admin', 'super_admin']))
                         <div class="form-control flex-1">
-                            <select name="status" class="select select-bordered w-full min-w-24" onchange="this.form.submit()">
+                            <select name="status" class="select select-bordered w-full min-w-26" onchange="this.form.submit()">
                                 <option value="" {{ request('status') === '' ? 'selected' : '' }}>All Status</option>
                                 <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
                                 <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactive</option>
@@ -66,7 +66,7 @@
             </form>
 
             @can('create', App\Models\Product::class)
-            <x-ui.buttons.create href="{{ route('products.create') }}">
+            <x-ui.buttons.create href="{{ route('products.create') }}" class="flex-1">
                 Add Product
             </x-ui.buttons.create>
             @endcan

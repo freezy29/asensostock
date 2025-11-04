@@ -24,7 +24,7 @@
             name="{{ $name }}"
             value="{{ $value ?? request($name) }}"
             placeholder="{{ $placeholder }}"
-            class="min-w-0 flex-1"
+            class="min-w-14 flex-1"
             {{ $attributes->except(['name', 'placeholder', 'value', 'buttonText', 'class']) }}
         />
     </label>

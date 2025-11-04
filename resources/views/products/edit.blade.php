@@ -78,9 +78,6 @@
                                         </option>
                                     @endforeach
                                 </select>
-                                <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                </svg>
                             </div>
                             @error('product_category_id')
                                 <label class="label">
@@ -111,9 +108,6 @@
                                         </option>
                                     @endforeach
                                 </select>
-                                <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                </svg>
                             </div>
                             @error('product_unit_id')
                                 <label class="label">
@@ -190,7 +184,7 @@
                                 </svg>
                             </div>
                             @if(old('critical_level', $product->critical_level) > old('stock_quantity', $product->stock_quantity))
-                            <label class="label">
+                            <label class="label text-wrap">
                                 <span class="label-text-alt text-warning flex items-center gap-1">
                                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
@@ -255,9 +249,6 @@
                                 <option value="active" {{ old('status', $product->status) == 'active' ? 'selected' : '' }}>Active</option>
                                 <option value="inactive" {{ old('status', $product->status) == 'inactive' ? 'selected' : '' }}>Inactive</option>
                             </select>
-                            <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
                         </div>
                         @error('status')
                             <label class="label">
@@ -277,14 +268,14 @@
             <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row gap-3 justify-end">
                 <a href="{{ route('products.index') }}"
-                   class="btn btn-outline btn-sm md:btn-md">
+                   class="btn btn-outline btn-sm md:btn-md min-h-10">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                     Cancel
                 </a>
                 <button type="submit"
-                        class="btn btn-primary btn-sm md:btn-md">
+                        class="btn btn-primary btn-sm md:btn-md min-h-10">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                     </svg>
