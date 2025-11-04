@@ -11,7 +11,10 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 //index
-Route::get('/', [ProductController::class, 'index'])->middleware('auth');
+Route::get('/', function () {
+    return view('dashboard.index');
+})->middleware('auth')
+    ->name('dashboard.index');
 
 //dashboard
 Route::get('/dashboard', function () {

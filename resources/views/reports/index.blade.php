@@ -91,6 +91,12 @@
 
     <!-- Stock Reports Section -->
     <div id="stock" class="tab-content" style="display: block;">
+        <div class="print-only mb-6">
+            <h1 class="text-3xl font-bold mb-2">Stock Reports</h1>
+            <div class="text-sm text-base-content/70 mb-4">
+                Period: {{ $startDate->format('M d, Y') }} - {{ $endDate->format('M d, Y') }}
+            </div>
+        </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <!-- Total Products Card -->
             <div class="card bg-base-100 shadow-md border border-base-300">
@@ -219,6 +225,12 @@
 
     <!-- Transaction Reports Section -->
     <div id="transactions" class="tab-content" style="display: none;">
+        <div class="print-only mb-6">
+            <h1 class="text-3xl font-bold mb-2">Transaction Reports</h1>
+            <div class="text-sm text-base-content/70 mb-4">
+                Period: {{ $startDate->format('M d, Y') }} - {{ $endDate->format('M d, Y') }}
+            </div>
+        </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <!-- Total Transactions Card -->
             <div class="card bg-base-100 shadow-md border border-base-300">
@@ -378,6 +390,12 @@
     <!-- Financial Reports Section -->
     @if($canViewFinancial)
     <div id="financial" class="tab-content" style="display: none;">
+        <div class="print-only mb-6">
+            <h1 class="text-3xl font-bold mb-2">Financial Reports</h1>
+            <div class="text-sm text-base-content/70 mb-4">
+                Period: {{ $startDate->format('M d, Y') }} - {{ $endDate->format('M d, Y') }}
+            </div>
+        </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <!-- Total Cost Value Card -->
             <div class="card bg-base-100 shadow-md border border-base-300">
@@ -487,6 +505,12 @@
 
     <!-- Analytics Section -->
     <div id="analytics" class="tab-content" style="display: none;">
+        <div class="print-only mb-6">
+            <h1 class="text-3xl font-bold mb-2">Analytics</h1>
+            <div class="text-sm text-base-content/70 mb-4">
+                Period: {{ $startDate->format('M d, Y') }} - {{ $endDate->format('M d, Y') }}
+            </div>
+        </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <!-- Stock Status Chart -->
             <div class="card bg-base-100 shadow-md border border-base-300">
@@ -764,9 +788,42 @@
     <style>
         @media print {
             .print\\:hidden { display: none !important; }
-            .tabs, .tab-content { display: block !important; }
-            .tab-content { page-break-after: always; }
-            .tab-content:last-child { page-break-after: auto; }
+            .print-only { display: block !important; }
+            .tabs { display: none !important; }
+            .tab-content { 
+                display: block !important; 
+                page-break-inside: avoid;
+                margin-bottom: 2rem;
+            }
+            .tab-content:not(:last-child) { 
+                page-break-after: always; 
+            }
+            .tab-content:last-child { 
+                page-break-after: auto; 
+            }
+            h1 {
+                page-break-after: avoid;
+            }
+            .card {
+                page-break-inside: avoid;
+                margin-bottom: 1rem;
+            }
+            table {
+                page-break-inside: auto;
+            }
+            tr {
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+            thead {
+                display: table-header-group;
+            }
+            tfoot {
+                display: table-footer-group;
+            }
+        }
+        @media screen {
+            .print-only { display: none !important; }
         }
     </style>
 
