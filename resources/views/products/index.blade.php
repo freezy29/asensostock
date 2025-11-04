@@ -11,15 +11,27 @@
                    Products
                 </x-slot:page_title>
 
-
-            <form method="GET" action="{{ route('products.index') }}" class="space-y-2">
-                <div class="flex flex-col md:flex-row gap-2 justify-center">
+                <form method="GET" action="{{ route('products.index') }}" class="flex flex-col md:flex-row gap-2">
                     <x-ui.search-input placeholder="Search products..." />
 
-                    <div class="flex flex-col md:flex-row gap-2 ">
+                    <!-- Filters Toggle Button (Mobile only) -->
+                    <button type="button"
+                            onclick="document.getElementById('filters-container').classList.toggle('hidden'); this.querySelector('.filter-icon').classList.toggle('rotate-180');"
+                            class="btn btn-outline md:hidden flex items-center gap-2">
+                        <svg class="w-4 h-4 filter-icon transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                        Filters
+                        @if(request('category') || request('unit') || request('stock_status') || request('status'))
+                            <span class="badge badge-primary badge-sm">{{ (request('category') ? 1 : 0) + (request('unit') ? 1 : 0) + (request('stock_status') ? 1 : 0) + (request('status') ? 1 : 0) }}</span>
+                        @endif
+                    </button>
+
+                    <!-- Filters Container (Collapsible on Mobile, Inline on Desktop) -->
+                    <div id="filters-container" class="hidden md:flex flex-col md:flex-row gap-2">
                         <!-- Category Filter -->
-                        <div class="form-control flex-1">
-                            <select name="category" class="select select-bordered w-full min-w-32" onchange="this.form.submit()">
+                        <div class="form-control">
+                            <select name="category" class="select select-bordered w-full md:min-w-32" onchange="this.form.submit()">
                                 <option value="" {{ request('category') === '' ? 'selected' : '' }}>All Categories</option>
                                 @foreach($categories as $category)
                                     <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
@@ -30,8 +42,8 @@
                         </div>
 
                         <!-- Unit Filter -->
-                        <div class="form-control flex-1">
-                            <select name="unit" class="select select-bordered w-full min-w-16" onchange="this.form.submit()">
+                        <div class="form-control">
+                            <select name="unit" class="select select-bordered w-full md:min-w-24" onchange="this.form.submit()">
                                 <option value="" {{ request('unit') === '' ? 'selected' : '' }}>All Units</option>
                                 @foreach($units as $unit)
                                     <option value="{{ $unit->id }}" {{ request('unit') == $unit->id ? 'selected' : '' }}>
@@ -42,8 +54,8 @@
                         </div>
 
                         <!-- Stock Status Filter -->
-                        <div class="form-control flex-1">
-                            <select name="stock_status" class="select select-bordered w-full min-w-34" onchange="this.form.submit()">
+                        <div class="form-control">
+                            <select name="stock_status" class="select select-bordered w-full md:min-w-32" onchange="this.form.submit()">
                                 <option value="" {{ request('stock_status') === '' ? 'selected' : '' }}>All Stock Status</option>
                                 <option value="critical" {{ request('stock_status') === 'critical' ? 'selected' : '' }}>Critical</option>
                                 <option value="low" {{ request('stock_status') === 'low' ? 'selected' : '' }}>Low</option>
@@ -53,8 +65,8 @@
 
                         <!-- Status Filter -->
                         @if (in_array(auth()->user()->role, ['admin', 'super_admin']))
-                        <div class="form-control flex-1">
-                            <select name="status" class="select select-bordered w-full min-w-26" onchange="this.form.submit()">
+                        <div class="form-control">
+                            <select name="status" class="select select-bordered w-full md:min-w-24" onchange="this.form.submit()">
                                 <option value="" {{ request('status') === '' ? 'selected' : '' }}>All Status</option>
                                 <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
                                 <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactive</option>
@@ -62,14 +74,13 @@
                         </div>
                         @endif
                     </div>
-                </div>
-            </form>
+                </form>
 
-            @can('create', App\Models\Product::class)
-            <x-ui.buttons.create href="{{ route('products.create') }}" class="flex-1">
-                Add Product
-            </x-ui.buttons.create>
-            @endcan
+                @can('create', App\Models\Product::class)
+                <x-ui.buttons.create href="{{ route('products.create') }}">
+                    Add Product
+                </x-ui.buttons.create>
+                @endcan
 
         </x-partials.header>
 
