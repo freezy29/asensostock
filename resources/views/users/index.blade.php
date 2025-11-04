@@ -94,7 +94,7 @@
                 </tr>
                   @empty
                 <tr>
-                  <td colspan="7" class="text-center text-gray-500 py-6">No yet.</td>
+                  <td colspan="7" class="text-center text-gray-500 py-6">Empty.</td>
                 </tr>
                 @endforelse
             </tbody>
