@@ -19,9 +19,8 @@ Route::get('/dashboard', function () {
 })->middleware('auth')
     ->name('dashboard.index');
 
-Route::get('/reports', function () {
-    return view('reports.index');
-})->middleware('auth')
+Route::get('/reports', [App\Http\Controllers\ReportsController::class, 'index'])
+    ->middleware('auth')
     ->name('reports.index');
 
 Route::middleware(['auth', 'role:super_admin,admin'])->group(function () {
