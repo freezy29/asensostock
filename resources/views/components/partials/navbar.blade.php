@@ -1,9 +1,7 @@
 <nav class="navbar w-full py-0 bg-primary text-primary-content px-4">
   @php
-    $lowStockBase = \App\Models\Product::query();
-    if (!in_array(auth()->user()->role, ['admin', 'super_admin'])) {
-        $lowStockBase->where('status', 'active');
-    }
+    // Only show alerts for active products (inactive products shouldn't trigger alerts)
+    $lowStockBase = \App\Models\Product::where('status', 'active');
     $lowStockQuery = (clone $lowStockBase)
         ->whereRaw('stock_quantity <= (critical_level * 1.5)')
         ->orderBy('updated_at', 'desc');
@@ -85,7 +83,7 @@
          </ul>
          @if($lowStockCount > 0)
          <div class="p-3 text-right border-t border-base-300">
-           <a href="{{ route('products.index', ['stock_status' => $viewAllStatus]) }}" class="btn btn-ghost btn-sm">View all</a>
+           <a href="{{ route('products.index', ['stock_status' => $viewAllStatus, 'status' => 'active']) }}" class="btn btn-ghost btn-sm">View all</a>
          </div>
          @endif
        </div>

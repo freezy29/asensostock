@@ -14,7 +14,7 @@
     <body class="min-h-screen flex flex-col bg-base-100 font-sans">
        <label class="swap swap-rotate item-center fixed top-8 right-10 z-50">
   <!-- this hidden checkbox controls the state -->
-  <input type="checkbox" class="theme-controller" value="dark" />
+  <input type="checkbox" class="theme-controller" value="dark" id="theme-toggle"  />
 
   <!-- sun icon -->
   <svg
