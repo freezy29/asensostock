@@ -148,12 +148,12 @@
 
             <li><a href="{{ route('profile.show') }}">Profile</a></li>
             <div class="divider -my-1"></div>
-            <li>
               <form method="POST" action="/logout" class="inline">
                 @csrf
+            <li>
                 <button type="submit" class="text-error hover:bg-error/10">Logout</button>
-              </form>
             </li>
+              </form>
       </ul>
     </div>
 
