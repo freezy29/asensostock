@@ -47,9 +47,6 @@
                                         </option>
                                     @endforeach
                                 </select>
-                                <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                </svg>
                             </div>
                             @error('product_id')
                                 <label class="label">
@@ -77,9 +74,6 @@
                                     <option value="in" {{ old('type') == 'in' ? 'selected' : '' }}>Stock In</option>
                                     <option value="out" {{ old('type') == 'out' ? 'selected' : '' }}>Stock Out</option>
                                 </select>
-                                <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                </svg>
                             </div>
                             @error('type')
                                 <label class="label">

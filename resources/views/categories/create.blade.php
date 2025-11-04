@@ -67,14 +67,14 @@
             <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row gap-3 justify-end">
                 <a href="{{ route('categories.index') }}"
-                   class="btn btn-outline btn-sm md:btn-md">
+                   class="btn btn-outline btn-sm md:btn-md min-h-10">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                     Cancel
                 </a>
                 <button type="submit"
-                        class="btn btn-primary btn-sm md:btn-md">
+                        class="btn btn-primary btn-sm md:btn-md min-h-10">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                     </svg>
