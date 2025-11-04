@@ -78,7 +78,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"></path>
                                 </svg>
                             </div>
-                            <label class="label">
+                            <label class="label text-wrap">
                                 <span class="label-text-alt text-base-content/60">Lowercase letters and numbers only, no spaces (e.g., pc, kg, ml)</span>
                             </label>
                             @error('abbreviation')
@@ -100,14 +100,14 @@
             <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row gap-3 justify-end">
                 <a href="{{ route('units.index') }}"
-                   class="btn btn-outline btn-sm md:btn-md">
+                   class="btn btn-outline btn-sm md:btn-md min-h-10">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                     Cancel
                 </a>
                 <button type="submit"
-                        class="btn btn-primary btn-sm md:btn-md">
+                        class="btn btn-primary btn-sm md:btn-md min-h-10">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                     </svg>
