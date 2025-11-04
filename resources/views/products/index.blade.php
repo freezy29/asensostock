@@ -84,7 +84,89 @@
 
         </x-partials.header>
 
-    <x-ui.table>
+    <!-- Mobile Card View -->
+    <div class="md:hidden space-y-4 m-4">
+        @forelse ($products as $product)
+            <div class="card bg-base-100 shadow-md border border-base-300 overflow-visible">
+                <div class="card-body overflow-visible">
+                    <div class="flex justify-between items-start mb-2 gap-2">
+                        <div class="flex-1 min-w-0">
+                            <h3 class="card-title text-lg break-words">{{ $product->name }}</h3>
+                            <p class="text-sm text-base-content/60">ID: {{ $product->id }}</p>
+                        </div>
+                        @php
+                            $isCritical = $product->stock_quantity <= $product->critical_level;
+                            $isLow = $product->stock_quantity <= ($product->critical_level * 1.5);
+                        @endphp
+                        <div class="flex-shrink-0">
+                            @if($isCritical)
+                                <span class="badge badge-error badge-md whitespace-nowrap">Critical</span>
+                            @elseif($isLow)
+                                <span class="badge badge-warning badge-md whitespace-nowrap">Low</span>
+                            @else
+                                <span class="badge badge-success badge-md whitespace-nowrap">In Stock</span>
+                            @endif
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-base-content/70">Category:</span>
+                            <span class="font-medium">{{ $product->category->name }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-base-content/70">Unit:</span>
+                            <span class="font-medium">{{ $product->unit->name }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-base-content/70">Price:</span>
+                            <span class="font-medium">₱{{ number_format($product->price, 2) }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-base-content/70">Stock:</span>
+                            <span class="font-medium">{{ $product->stock_quantity }}</span>
+                        </div>
+                        @if (in_array(auth()->user()->role, ['admin', 'super_admin']))
+                        <div class="flex justify-between">
+                            <span class="text-base-content/70">Status:</span>
+                            @if(strtolower($product->status) === 'active')
+                                <span class="badge badge-success badge-sm">Active</span>
+                            @else
+                                <span class="badge badge-error badge-sm">Inactive</span>
+                            @endif
+                        </div>
+                        @endif
+                    </div>
+
+                    <div class="card-actions justify-end mt-4">
+                        <x-ui.buttons.view href="{{ route('products.show', $product->id) }}">
+                        </x-ui.buttons.view>
+                        @canany(['update', 'delete'], $product)
+                            <x-ui.buttons.edit href="{{ route('products.edit', $product->id) }}">
+                            </x-ui.buttons.edit>
+                            <x-ui.buttons.delete action="{{ route('products.destroy', $product->id) }}">
+                                <x-slot:onclick>
+                                    @php
+                                        $transactionsCount = $product->transactions()->count();
+                                    @endphp
+                                    @if($transactionsCount > 0)
+                                        return confirm('Are you sure you want to delete this product? This product has {{ $transactionsCount }} transaction(s). Products with transactions cannot be deleted. Consider deactivating it instead.')
+                                    @else
+                                        return confirm('Are you sure you want to delete this product?')
+                                    @endif
+                                </x-slot:onclick>
+                            </x-ui.buttons.delete>
+                        @endcanany
+                    </div>
+                </div>
+            </div>
+        @empty
+            <div class="text-center text-gray-500 py-6">No products yet.</div>
+        @endforelse
+    </div>
+
+    <!-- Desktop Table View -->
+    <x-ui.table class="hidden md:block">
             <thead>
                 <tr>
                     <th>Product ID</th>

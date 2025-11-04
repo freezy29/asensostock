@@ -44,8 +44,60 @@
 
         </x-partials.header>
 
+    <!-- Mobile Card View -->
+    <div class="md:hidden space-y-4 m-4">
+        @forelse ($users as $user)
+            <div class="card bg-base-100 shadow-md border border-base-300">
+                <div class="card-body">
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <h3 class="card-title text-lg">{{ $user->first_name . " " .  $user->last_name }}</h3>
+                            <p class="text-sm text-base-content/60">{{ $user->email }}</p>
+                        </div>
+                        @if(strtolower($user->status) === 'active')
+                            <span class="badge badge-success badge-md">Active</span>
+                        @else
+                            <span class="badge badge-error badge-md">Inactive</span>
+                        @endif
+                    </div>
+                    
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-base-content/70">Phone:</span>
+                            <span class="font-medium">{{ $user->phone ?? 'N/A' }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-base-content/70">Role:</span>
+                            <span class="font-medium">{{ ucfirst($user->role) }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-base-content/70">Last Login:</span>
+                            <span class="font-medium">{{ $user->last_login_at ? $user->last_login_at->diffForHumans() : 'Never' }}</span>
+                        </div>
+                    </div>
 
-        <x-ui.table>
+                    <div class="card-actions justify-end mt-4">
+                        <x-ui.buttons.view href="{{ route('users.show', $user->id) }}">
+                        </x-ui.buttons.view>
+                        <x-ui.buttons.edit href="{{ route('users.edit', $user->id) }}">
+                        </x-ui.buttons.edit>
+                        @can('delete', $user)
+                        <x-ui.buttons.delete action="{{ route('users.destroy', $user->id) }}">
+                            <x-slot:onclick>
+                                return confirm('Are you sure you want to delete this user?')
+                            </x-slot:onclick>
+                        </x-ui.buttons.delete>
+                        @endcan
+                    </div>
+                </div>
+            </div>
+        @empty
+            <div class="text-center text-gray-500 py-6">Empty.</div>
+        @endforelse
+    </div>
+
+    <!-- Desktop Table View -->
+        <x-ui.table class="hidden md:block">
             <thead>
                 <tr>
                     <th>Name</th>

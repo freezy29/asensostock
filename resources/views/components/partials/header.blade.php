@@ -1,6 +1,6 @@
-<div class="flex flex-col md:flex-row w-full md:justify-between md:items-end flex-wrap">
+<div class="flex flex-col md:flex-row w-full md:justify-between md:items-end">
     <div>
-        <div class="breadcrumbs text-md">
+        <div class="breadcrumbs text-md text-wrap">
           <ul>
                 <li><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
                 {{ $breadcrumb_list }}

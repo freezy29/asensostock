@@ -39,7 +39,59 @@
 
         </x-partials.header>
 
-    <x-ui.table>
+    <!-- Mobile Card View -->
+    <div class="md:hidden space-y-4 m-4">
+        @forelse ($categories as $category)
+            <div class="card bg-base-100 shadow-md border border-base-300">
+                <div class="card-body">
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <h3 class="card-title text-lg">{{ $category->name }}</h3>
+                        </div>
+                        @if (in_array(auth()->user()->role, ['admin', 'super_admin']))
+                            @if(strtolower($category->status) === 'active')
+                                <span class="badge badge-success badge-md">Active</span>
+                            @else
+                                <span class="badge badge-error badge-md">Inactive</span>
+                            @endif
+                        @endif
+                    </div>
+                    
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-base-content/70">Products:</span>
+                            <span class="font-medium">{{ $category->products_count }}</span>
+                        </div>
+                    </div>
+
+                    <div class="card-actions justify-end mt-4">
+                        <x-ui.buttons.view href="{{ route('categories.show', $category->id) }}">
+                        </x-ui.buttons.view>
+                        @canany(['update', 'delete'], $category)
+                            <x-ui.buttons.edit href="{{ route('categories.edit', $category->id) }}">
+                            </x-ui.buttons.edit>
+                            <x-ui.buttons.delete action="{{ route('categories.destroy', $category->id) }}">
+                                <x-slot:onclick>
+                                    return confirm('Are you sure you want to delete this category?')
+                                </x-slot:onclick>
+                            </x-ui.buttons.delete>
+                        @endcanany
+                    </div>
+                </div>
+            </div>
+        @empty
+            <div class="text-center text-gray-500 py-6">
+                @if(request()->has('search') || request()->has('status'))
+                    No categories found matching your filters.
+                @else
+                    No categories yet.
+                @endif
+            </div>
+        @endforelse
+    </div>
+
+    <!-- Desktop Table View -->
+    <x-ui.table class="hidden md:block">
             <thead>
                 <tr>
                     <th>Category Name</th>
