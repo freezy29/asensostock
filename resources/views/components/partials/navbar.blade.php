@@ -34,7 +34,7 @@
         </label>
       </div>
     <a class="lg:hidden me-2 flex w-35 shrink-0 items-center gap-2 text-xl" href="/" aria-current="page aria-label="AsensoStock">
-     <img src="{{ asset('images/AsensoStock.svg') }}" class="w-10 rounded-full">
+     <img src="{{ asset('images/AscensoNoBG.svg') }}" class="w-10 rounded-full">
         AsensoStock
     </a>
   </div>

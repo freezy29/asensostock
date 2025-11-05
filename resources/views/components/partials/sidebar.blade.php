@@ -70,6 +70,5 @@
         </li>
         @endif
     </ul>
-
 </aside>
 </div>
