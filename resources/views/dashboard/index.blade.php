@@ -18,12 +18,15 @@
             </div>
         </div>
 
-        <!-- Total Stock Value -->
+        <!-- Total Stock Value (Cost) -->
         <div class="card bg-base-100 shadow-md border border-base-300">
             <div class="card-body">
-                <h3 class="card-title text-sm text-base-content/70">Total Stock Value</h3>
+                <h3 class="card-title text-sm text-base-content/70">Total Stock Value (Cost)</h3>
                 <p class="text-3xl font-bold">₱{{ number_format($totalStockValue, 2) }}</p>
-                <p class="text-sm text-base-content/60">Current inventory value</p>
+                <p class="text-sm text-base-content/60">Inventory at cost price</p>
+                @if(isset($totalRetailValue) && $totalRetailValue > $totalStockValue)
+                    <p class="text-xs text-base-content/50 mt-1">Retail: ₱{{ number_format($totalRetailValue, 2) }}</p>
+                @endif
             </div>
         </div>
 

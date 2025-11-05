@@ -110,8 +110,11 @@
             <!-- Total Stock Value Card -->
             <div class="card bg-base-100 shadow-md border border-base-300">
                 <div class="card-body">
-                    <h3 class="card-title text-sm text-base-content/70">Total Stock Value</h3>
+                    <h3 class="card-title text-sm text-base-content/70">Total Stock Value (Cost)</h3>
                     <p class="text-3xl font-bold">₱{{ number_format($totalStockValue, 2) }}</p>
+                    @if(isset($totalRetailValue) && $totalRetailValue > $totalStockValue)
+                        <p class="text-xs text-base-content/50 mt-1">Retail: ₱{{ number_format($totalRetailValue, 2) }}</p>
+                    @endif
                     <p class="text-sm text-base-content/60">Current inventory value</p>
                 </div>
             </div>
@@ -456,8 +459,12 @@
                                         <span class="font-medium">₱{{ number_format($product->price, 2) }}</span>
                                     </div>
                                     <div class="flex justify-between">
-                                        <span class="text-base-content/70">Stock Value:</span>
-                                        <span class="font-medium">₱{{ number_format($product->stock_quantity * $product->price, 2) }}</span>
+                                        <span class="text-base-content/70">Stock Value (Cost):</span>
+                                        <span class="font-medium">₱{{ number_format($product->getCostValue(), 2) }}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-base-content/70">Stock Value (Retail):</span>
+                                        <span class="font-medium">₱{{ number_format($product->getRetailValue(), 2) }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -475,8 +482,10 @@
                                 <th>Product Name</th>
                                 <th>Category</th>
                                 <th>Current Stock</th>
-                                <th>Price</th>
-                                <th>Stock Value</th>
+                                <th>Selling Price</th>
+                                <th>Avg Cost</th>
+                                <th>Stock Value (Cost)</th>
+                                <th>Stock Value (Retail)</th>
                                 <th>Transaction Count</th>
                             </tr>
                         </thead>
@@ -487,12 +496,14 @@
                                     <td>{{ $product->category->name }}</td>
                                     <td>{{ $product->stock_quantity }} {{ $product->unit->abbreviation ?? $product->unit->name }}</td>
                                     <td>₱{{ number_format($product->price, 2) }}</td>
-                                    <td>₱{{ number_format($product->stock_quantity * $product->price, 2) }}</td>
+                                    <td>₱{{ number_format($product->getAverageCostPrice(), 2) }}</td>
+                                    <td>₱{{ number_format($product->getCostValue(), 2) }}</td>
+                                    <td>₱{{ number_format($product->getRetailValue(), 2) }}</td>
                                     <td>{{ $product->transactions_count }}</td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="text-center text-gray-500 py-6">No products found.</td>
+                                    <td colspan="8" class="text-center text-gray-500 py-6">No products found.</td>
                                 </tr>
                             @endforelse
                         </tbody>

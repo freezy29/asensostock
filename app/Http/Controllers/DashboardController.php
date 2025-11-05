@@ -30,7 +30,35 @@ class DashboardController extends Controller
         }
         
         $totalProducts = (clone $stockBase)->count();
-        $totalStockValue = (clone $stockBase)
+        
+        // Calculate total stock value using cost price (optimized with aggregation)
+        // Use raw SQL aggregation to avoid N+1 queries
+        $stockValueData = (clone $stockBase)
+            ->leftJoin('transactions', function($join) {
+                $join->on('products.id', '=', 'transactions.product_id')
+                     ->where('transactions.type', '=', 'in');
+            })
+            ->selectRaw('
+                products.id,
+                products.stock_quantity,
+                products.price,
+                COALESCE(SUM(transactions.total_amount), 0) as total_cost,
+                COALESCE(SUM(transactions.quantity), 0) as total_quantity
+            ')
+            ->groupBy('products.id', 'products.stock_quantity', 'products.price')
+            ->get();
+        
+        $totalStockValue = $stockValueData->sum(function($item) {
+            if ($item->total_quantity > 0) {
+                $avgCost = $item->total_cost / $item->total_quantity;
+            } else {
+                $avgCost = $item->price * 0.65; // Fallback
+            }
+            return round($item->stock_quantity * $avgCost, 2);
+        });
+        
+        // Calculate retail value (simple calculation)
+        $totalRetailValue = (clone $stockBase)
             ->selectRaw('SUM(stock_quantity * price) as total')
             ->first()
             ->total ?? 0;
@@ -143,6 +171,7 @@ class DashboardController extends Controller
         return view('dashboard.index', [
             'totalProducts' => $totalProducts,
             'totalStockValue' => $totalStockValue,
+            'totalRetailValue' => $totalRetailValue,
             'totalAlerts' => $totalAlerts,
             'criticalStock' => $criticalStock,
             'lowStock' => $lowStock,
