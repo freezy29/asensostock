@@ -142,8 +142,8 @@
                 <div class="mt-8 p-6 bg-base-200 rounded-lg">
                     <h3 class="text-lg font-semibold mb-4">Stock Impact</h3>
                     <div class="flex items-center gap-4">
-                        <div class="stat bg-base-100 rounded-lg p-4 flex-1">
-                            <div class="stat-title">Before Transaction</div>
+                        <div class="stat bg-base-100 rounded-lg p-4 flex-1 min-w-24">
+                            <div class="stat-title text-wrap">Before Transaction</div>
                             <div class="stat-value text-xl">
                                 @php
                                     $beforeStock = $transaction->type === 'in'
@@ -167,8 +167,8 @@
                             @endif
                         </div>
 
-                        <div class="stat bg-base-100 rounded-lg p-4 flex-1">
-                            <div class="stat-title">After Transaction</div>
+                        <div class="stat bg-base-100 rounded-lg p-4 flex-1 min-w-24">
+                            <div class="stat-title text-wrap">After Transaction</div>
                             <div class="stat-value text-xl">{{ $transaction->product->stock_quantity }}</div>
                             <div class="stat-desc">@if($transaction->product->unit->abbreviation){{ $transaction->product->unit->abbreviation }}@endif</div>
                         </div>

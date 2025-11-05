@@ -11,17 +11,17 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 //index
-Route::get('/', [ProductController::class, 'index'])->middleware('auth');
-
-//dashboard
-Route::get('/dashboard', function () {
-    return view('dashboard.index');
-})->middleware('auth')
+Route::get('/', [App\Http\Controllers\DashboardController::class, 'index'])
+    ->middleware('auth')
     ->name('dashboard.index');
 
-Route::get('/reports', function () {
-    return view('reports.index');
-})->middleware('auth')
+//dashboard
+Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])
+    ->middleware('auth')
+    ->name('dashboard.index');
+
+Route::get('/reports', [App\Http\Controllers\ReportsController::class, 'index'])
+    ->middleware('auth')
     ->name('reports.index');
 
 Route::middleware(['auth', 'role:super_admin,admin'])->group(function () {

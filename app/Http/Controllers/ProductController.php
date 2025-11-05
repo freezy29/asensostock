@@ -150,12 +150,16 @@ class ProductController extends Controller
 
             // If initial stock is provided, create an initial stock-in transaction
             if ($stockQuantity > 0) {
+                // Use estimated cost (65% of selling price) for new products
+                // This is a reasonable default, but actual costs should be entered via transactions
+                $estimatedCostPrice = $validated['price'] * 0.65;
+                
                 Transaction::create([
                     'product_id' => $product->id,
                     'type' => 'in',
                     'quantity' => $stockQuantity,
-                    'cost_price' => $validated['price'] * 0.65, // Estimate cost as 65% of price
-                    'total_amount' => ($validated['price'] * 0.65) * $stockQuantity,
+                    'cost_price' => $estimatedCostPrice,
+                    'total_amount' => $estimatedCostPrice * $stockQuantity,
                     'user_id' => auth()->user()->id,
                 ]);
             }
@@ -258,8 +262,9 @@ class ProductController extends Controller
                 $adjustmentType = $stockDifference > 0 ? 'in' : 'out';
                 $adjustmentQuantity = abs($stockDifference);
                 
-                // Calculate estimated cost price (use product's current price as reference)
-                $estimatedCostPrice = $product->price * 0.65;
+                // Use latest cost price if available, otherwise estimate
+                // This provides more accurate cost tracking than always using 65%
+                $estimatedCostPrice = $product->getLatestCostPrice();
                 
                 Transaction::create([
                     'product_id' => $product->id,

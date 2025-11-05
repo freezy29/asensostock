@@ -31,6 +31,24 @@ class TransactionController extends Controller
             $query->where('type', $request->type);
         }
 
+        // Apply date range filters if provided
+        if ($request->filled('start_date')) {
+            $startDate = \Carbon\Carbon::parse($request->start_date)->startOfDay();
+            $query->where('created_at', '>=', $startDate);
+        }
+
+        if ($request->filled('end_date')) {
+            $endDate = \Carbon\Carbon::parse($request->end_date)->endOfDay();
+            $query->where('created_at', '<=', $endDate);
+        }
+
+        // Apply category filter if provided
+        if ($request->filled('category')) {
+            $query->whereHas('product', function ($q) use ($request) {
+                $q->where('category_id', $request->category);
+            });
+        }
+
         $transactions = $query->orderBy('created_at', 'desc')
             ->paginate(10)
             ->withQueryString();
@@ -184,8 +202,38 @@ class TransactionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Transaction $transaction)
     {
-        //
+        $this->authorize('delete', $transaction);
+
+        $product = $transaction->product;
+
+        if (!$product) {
+            return redirect()->route('transactions.index')
+                ->with('error', 'Cannot delete transaction: Associated product not found.');
+        }
+
+        // Use database transaction to ensure data consistency
+        DB::transaction(function () use ($transaction, $product) {
+            // Revert the stock impact of this transaction
+            if ($transaction->type === 'in') {
+                // Transaction was stock in, so subtract to revert
+                $product->stock_quantity -= $transaction->quantity;
+            } else {
+                // Transaction was stock out, so add back to revert
+                $product->stock_quantity += $transaction->quantity;
+            }
+
+            // Ensure stock doesn't go negative (shouldn't happen, but safety check)
+            if ($product->stock_quantity < 0) {
+                throw new \Exception('Cannot delete transaction: Would result in negative stock.');
+            }
+
+            $product->save();
+            $transaction->delete();
+        });
+
+        return redirect()->route('transactions.index')
+            ->with('success', 'Transaction deleted successfully. Stock has been adjusted.');
     }
 }

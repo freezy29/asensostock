@@ -77,9 +77,6 @@
                                         </option>
                                     @endforeach
                                 </select>
-                                <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                </svg>
                             </div>
                             @error('product_category_id')
                                 <label class="label">
@@ -110,9 +107,6 @@
                                         </option>
                                     @endforeach
                                 </select>
-                                <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                </svg>
                             </div>
                             @error('product_unit_id')
                                 <label class="label">
@@ -215,35 +209,6 @@
                             @enderror
                         </div>
 
-                        <!-- Status (Admin only) -->
-                        @if (auth()->user()->role === 'admin')
-                        <div class="form-control md:col-span-2">
-                            <label class="label">
-                                <span class="label-text font-medium">Product Status</span>
-                            </label>
-                            <div class="flex items-center gap-4">
-                                <input type="hidden" name="status" value="inactive" />
-                                <input type="checkbox"
-                                       name="status"
-                                       value="active"
-                                       class="toggle toggle-primary @error('status') toggle-error @enderror"
-                                       {{ old('status', 'active') == 'active' ? 'checked' : '' }} />
-                                <span class="text-sm text-base-content/70">
-                                    {{ old('status', 'active') == 'active' ? 'Active' : 'Inactive' }}
-                                </span>
-                            </div>
-                            @error('status')
-                                <label class="label">
-                                    <span class="label-text-alt text-error flex items-center gap-1">
-                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                        </svg>
-                                        {{ $message }}
-                                    </span>
-                                </label>
-                            @enderror
-                        </div>
-                        @endif
                     </div>
                 </div>
             </div>
@@ -251,14 +216,14 @@
             <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row gap-3 justify-end">
                 <a href="{{ route('products.index') }}"
-                   class="btn btn-outline btn-sm md:btn-md">
+                   class="btn btn-outline btn-sm md:btn-md min-h-10">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                     Cancel
                 </a>
                 <button type="submit"
-                        class="btn btn-primary btn-sm md:btn-md">
+                        class="btn btn-primary btn-sm md:btn-md min-h-10">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                     </svg>

@@ -14,9 +14,7 @@ return new class extends Migration
         Schema::create('units', function (Blueprint $table) {
             $table->id();
             $table->string('name', 150);
-            $table->string('abbreviation')->nullable();
-            $table->foreignId('base_unit_id')->nullable()->constrained('units')->nullOnDelete();
-            $table->decimal('quantity_per_base_unit', 10, 4)->nullable()->default(1);
+            $table->string('abbreviation')->unique();
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->softDeletes();
             $table->timestamps();
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('unit_types');
+        Schema::dropIfExists('units');
     }
 };
