@@ -202,8 +202,38 @@ class TransactionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Transaction $transaction)
     {
-        //
+        $this->authorize('delete', $transaction);
+
+        $product = $transaction->product;
+
+        if (!$product) {
+            return redirect()->route('transactions.index')
+                ->with('error', 'Cannot delete transaction: Associated product not found.');
+        }
+
+        // Use database transaction to ensure data consistency
+        DB::transaction(function () use ($transaction, $product) {
+            // Revert the stock impact of this transaction
+            if ($transaction->type === 'in') {
+                // Transaction was stock in, so subtract to revert
+                $product->stock_quantity -= $transaction->quantity;
+            } else {
+                // Transaction was stock out, so add back to revert
+                $product->stock_quantity += $transaction->quantity;
+            }
+
+            // Ensure stock doesn't go negative (shouldn't happen, but safety check)
+            if ($product->stock_quantity < 0) {
+                throw new \Exception('Cannot delete transaction: Would result in negative stock.');
+            }
+
+            $product->save();
+            $transaction->delete();
+        });
+
+        return redirect()->route('transactions.index')
+            ->with('success', 'Transaction deleted successfully. Stock has been adjusted.');
     }
 }

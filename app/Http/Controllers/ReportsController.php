@@ -36,7 +36,35 @@ class ReportsController extends Controller
         
         $totalProducts = Product::count();
         $activeProducts = (clone $stockQuery)->count();
-        $totalStockValue = (clone $stockQuery)
+        
+        // Calculate stock value using cost price (optimized with aggregation)
+        // Use raw SQL aggregation to avoid N+1 queries
+        $stockValueData = (clone $stockQuery)
+            ->leftJoin('transactions', function($join) {
+                $join->on('products.id', '=', 'transactions.product_id')
+                     ->where('transactions.type', '=', 'in');
+            })
+            ->selectRaw('
+                products.id,
+                products.stock_quantity,
+                products.price,
+                COALESCE(SUM(transactions.total_amount), 0) as total_cost,
+                COALESCE(SUM(transactions.quantity), 0) as total_quantity
+            ')
+            ->groupBy('products.id', 'products.stock_quantity', 'products.price')
+            ->get();
+        
+        $totalStockValue = $stockValueData->sum(function($item) {
+            if ($item->total_quantity > 0) {
+                $avgCost = $item->total_cost / $item->total_quantity;
+            } else {
+                $avgCost = $item->price * 0.65; // Fallback
+            }
+            return round($item->stock_quantity * $avgCost, 2);
+        });
+        
+        // Calculate retail value (simple calculation)
+        $totalRetailValue = (clone $stockQuery)
             ->selectRaw('SUM(stock_quantity * price) as total')
             ->first()
             ->total ?? 0;
@@ -67,14 +95,33 @@ class ReportsController extends Controller
             }])
             ->get()
             ->map(function($category) {
-                $products = Product::where('category_id', $category->id)
+                // Optimize: Use aggregation query to calculate cost value efficiently
+                // First, get products with their transaction aggregates
+                $productsData = Product::where('category_id', $category->id)
                     ->where('status', 'active')
+                    ->leftJoin('transactions', function($join) {
+                        $join->on('products.id', '=', 'transactions.product_id')
+                             ->where('transactions.type', '=', 'in');
+                    })
+                    ->selectRaw('
+                        products.id,
+                        products.stock_quantity,
+                        products.price,
+                        COALESCE(SUM(transactions.total_amount), 0) as total_cost,
+                        COALESCE(SUM(transactions.quantity), 0) as total_trans_quantity
+                    ')
+                    ->groupBy('products.id', 'products.stock_quantity', 'products.price')
                     ->get();
                 
-                $totalValue = $products->sum(function($product) {
-                    return $product->stock_quantity * $product->price;
+                $totalQuantity = $productsData->sum('stock_quantity');
+                $totalValue = $productsData->sum(function($item) {
+                    if ($item->total_trans_quantity > 0) {
+                        $avgCost = $item->total_cost / $item->total_trans_quantity;
+                    } else {
+                        $avgCost = $item->price * 0.65; // Fallback
+                    }
+                    return round($item->stock_quantity * $avgCost, 2);
                 });
-                $totalQuantity = $products->sum('stock_quantity');
                 
                 return [
                     'name' => $category->name,
@@ -200,6 +247,7 @@ class ReportsController extends Controller
             'totalProducts' => $totalProducts,
             'activeProducts' => $activeProducts,
             'totalStockValue' => $totalStockValue,
+            'totalRetailValue' => $totalRetailValue,
             'criticalStock' => $criticalStock,
             'lowStock' => $lowStock,
             'zeroStock' => $zeroStock,
@@ -306,14 +354,16 @@ class ReportsController extends Controller
                 
                 // Top Products
                 fputcsv($file, ['MOST ACTIVE PRODUCTS']);
-                fputcsv($file, ['Product Name', 'Category', 'Current Stock', 'Price', 'Stock Value', 'Transaction Count']);
+                fputcsv($file, ['Product Name', 'Category', 'Current Stock', 'Selling Price', 'Cost Price', 'Stock Value (Cost)', 'Stock Value (Retail)', 'Transaction Count']);
                 foreach ($topProducts as $product) {
                     fputcsv($file, [
                         $product->name,
                         $product->category->name,
                         $product->stock_quantity . ' ' . ($product->unit->abbreviation ?? $product->unit->name),
                         '₱' . number_format($product->price, 2),
-                        '₱' . number_format($product->stock_quantity * $product->price, 2),
+                        '₱' . number_format($product->getAverageCostPrice(), 2),
+                        '₱' . number_format($product->getCostValue(), 2),
+                        '₱' . number_format($product->getRetailValue(), 2),
                         $product->transactions_count
                     ]);
                 }

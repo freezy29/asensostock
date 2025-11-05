@@ -98,7 +98,8 @@
 
                         <div>
                             <div class="text-sm text-base-content/70 mb-1">Total Inventory Value</div>
-                            <div class="font-medium text-lg">₱{{ number_format($product->stock_quantity * $product->price, 2) }}</div>
+                            <div class="font-medium text-lg">₱{{ number_format($product->getCostValue(), 2) }}</div>
+                            <div class="text-sm text-base-content/60">Retail: ₱{{ number_format($product->getRetailValue(), 2) }}</div>
                         </div>
 
                         <div>
