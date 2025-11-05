@@ -14,6 +14,9 @@
 
                 @canany(['update', 'delete'], $product)
                 <div class="flex gap-2">
+                    <a href="{{ route('transactions.create', ['product_id' => $product->id]) }}" class="btn btn-outline btn-sm">
+                        Record Transaction
+                    </a>
                     <x-ui.buttons.edit href="{{ route('products.edit', $product->id) }}">
                         Edit Product
                     </x-ui.buttons.edit>

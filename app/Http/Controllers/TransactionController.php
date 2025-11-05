@@ -81,7 +81,8 @@ class TransactionController extends Controller
         ]);
 
         $validated['user_id'] = auth()->user()->id;
-        $product = Product::find($validated['product_id']);
+        // Lock the product row to prevent concurrent stock updates
+        $product = Product::where('id', $validated['product_id'])->lockForUpdate()->first();
 
         // Validate product exists
         if (!$product) {
@@ -105,7 +106,9 @@ class TransactionController extends Controller
 
         // Use database transaction to ensure data consistency
         DB::transaction(function () use ($validated, $product, $newStock) {
-            $product->update(['stock_quantity' => $newStock]);
+            // Re-fetch with lock inside the transaction to be safe
+            $lockedProduct = Product::where('id', $product->id)->lockForUpdate()->first();
+            $lockedProduct->update(['stock_quantity' => $newStock]);
             Transaction::create($validated);
         });
 
@@ -151,8 +154,8 @@ class TransactionController extends Controller
         $validated['total_amount'] = $validated['cost_price'] * $validated['quantity'];
 
         // Get the old transaction values for stock recalculation
-        $oldProduct = Product::find($transaction->product_id);
-        $newProduct = Product::find($validated['product_id']);
+        $oldProduct = Product::where('id', $transaction->product_id)->lockForUpdate()->first();
+        $newProduct = Product::where('id', $validated['product_id'])->lockForUpdate()->first();
 
         if (!$newProduct) {
             return back()->withErrors(['product_id' => 'Selected product not found.']);
@@ -172,9 +175,7 @@ class TransactionController extends Controller
                 $oldProduct->save();
             }
 
-            // Step 2: Apply the new transaction's stock impact
-            // Refresh newProduct to get current stock (which may have been affected if same product)
-            $newProduct->refresh();
+            // Step 2: Apply the new transaction's stock impact (row locked)
 
             // Check if we need to validate stock availability for stock out
             if ($validated['type'] === 'out') {
@@ -216,20 +217,22 @@ class TransactionController extends Controller
         // Use database transaction to ensure data consistency
         DB::transaction(function () use ($transaction, $product) {
             // Revert the stock impact of this transaction
+            // Lock product row
+            $lockedProduct = Product::where('id', $product->id)->lockForUpdate()->first();
             if ($transaction->type === 'in') {
                 // Transaction was stock in, so subtract to revert
-                $product->stock_quantity -= $transaction->quantity;
+                $lockedProduct->stock_quantity -= $transaction->quantity;
             } else {
                 // Transaction was stock out, so add back to revert
-                $product->stock_quantity += $transaction->quantity;
+                $lockedProduct->stock_quantity += $transaction->quantity;
             }
 
             // Ensure stock doesn't go negative (shouldn't happen, but safety check)
-            if ($product->stock_quantity < 0) {
+            if ($lockedProduct->stock_quantity < 0) {
                 throw new \Exception('Cannot delete transaction: Would result in negative stock.');
             }
 
-            $product->save();
+            $lockedProduct->save();
             $transaction->delete();
         });
 
