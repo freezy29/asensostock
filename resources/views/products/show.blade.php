@@ -17,16 +17,6 @@
                     <x-ui.buttons.edit href="{{ route('products.edit', $product->id) }}">
                         Edit Product
                     </x-ui.buttons.edit>
-
-                    <x-ui.buttons.delete action="{{ route('products.destroy', $product->id) }}">
-                        <x-slot:onclick>
-                            @if($product->transactions()->count() > 0)
-                                return confirm('Are you sure you want to delete this product? This product has {{ $product->transactions()->count() }} transaction(s). Products with transactions cannot be deleted. Consider deactivating it instead.')
-                            @else
-                                return confirm('Are you sure you want to delete this product?')
-                            @endif
-                        </x-slot:onclick>
-                    </x-ui.buttons.delete>
                 </div>
                 @endcanany
 

@@ -73,15 +73,7 @@
                         @canany(['update', 'delete'], $unit)
                             <x-ui.buttons.edit href="{{ route('units.edit', $unit->id) }}">
                             </x-ui.buttons.edit>
-                            <x-ui.buttons.delete action="{{ route('units.destroy', $unit->id) }}">
-                                <x-slot:onclick>
-                                    @if($unit->products_count > 0)
-                                        return confirm('Are you sure you want to delete this unit? This unit is currently being used by {{ $unit->products_count }} product(s). Deleting it will cause errors. Please change those products to use a different unit first.')
-                                    @else
-                                        return confirm('Are you sure you want to delete this unit?')
-                                    @endif
-                                </x-slot:onclick>
-                            </x-ui.buttons.delete>
+                            
                         @endcanany
                     </div>
                 </div>
@@ -135,16 +127,7 @@
 
                         <x-ui.buttons.edit href="{{ route('units.edit', $unit->id) }}">
                         </x-ui.buttons.edit>
-
-                        <x-ui.buttons.delete action="{{ route('units.destroy', $unit->id) }}">
-                            <x-slot:onclick>
-                                @if($unit->products_count > 0)
-                                    return confirm('Are you sure you want to delete this unit? This unit is currently being used by {{ $unit->products_count }} product(s). Deleting it will cause errors. Please change those products to use a different unit first.')
-                                @else
-                                    return confirm('Are you sure you want to delete this unit?')
-                                @endif
-                            </x-slot:onclick>
-                        </x-ui.buttons.delete>
+                        
                     @endcanany
 
                     </td>

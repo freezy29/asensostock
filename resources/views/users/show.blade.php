@@ -16,12 +16,6 @@
                     <x-ui.buttons.edit href="{{ route('users.edit', $user->id) }}">
                         Edit User
                     </x-ui.buttons.edit>
-
-                    <x-ui.buttons.delete action="{{ route('users.destroy', $user->id) }}">
-                        <x-slot:onclick>
-                            return confirm('Are you sure you want to delete this user?')
-                        </x-slot:onclick>
-                    </x-ui.buttons.delete>
                 </div>
 
         </x-partials.header>

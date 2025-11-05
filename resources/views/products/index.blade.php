@@ -144,18 +144,7 @@
                         @canany(['update', 'delete'], $product)
                             <x-ui.buttons.edit href="{{ route('products.edit', $product->id) }}">
                             </x-ui.buttons.edit>
-                            <x-ui.buttons.delete action="{{ route('products.destroy', $product->id) }}">
-                                <x-slot:onclick>
-                                    @php
-                                        $transactionsCount = $product->transactions()->count();
-                                    @endphp
-                                    @if($transactionsCount > 0)
-                                        return confirm('Are you sure you want to delete this product? This product has {{ $transactionsCount }} transaction(s). Products with transactions cannot be deleted. Consider deactivating it instead.')
-                                    @else
-                                        return confirm('Are you sure you want to delete this product?')
-                                    @endif
-                                </x-slot:onclick>
-                            </x-ui.buttons.delete>
+                            
                         @endcanany
                     </div>
                 </div>
@@ -225,19 +214,7 @@
 
                         <x-ui.buttons.edit href="{{ route('products.edit', $product->id) }}">
                         </x-ui.buttons.edit>
-
-                        <x-ui.buttons.delete action="{{ route('products.destroy', $product->id) }}">
-                            <x-slot:onclick>
-                                @php
-                                    $transactionsCount = $product->transactions()->count();
-                                @endphp
-                                @if($transactionsCount > 0)
-                                    return confirm('Are you sure you want to delete this product? This product has {{ $transactionsCount }} transaction(s). Products with transactions cannot be deleted. Consider deactivating it instead.')
-                                @else
-                                    return confirm('Are you sure you want to delete this product?')
-                                @endif
-                            </x-slot:onclick>
-                        </x-ui.buttons.delete>
+                        
                     @endcanany
 
                     </td>

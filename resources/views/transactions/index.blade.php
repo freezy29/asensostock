@@ -86,11 +86,7 @@
                         @canany(['update', 'delete'], $transaction)
                             <x-ui.buttons.edit href="{{ route('transactions.edit', $transaction->id) }}">
                             </x-ui.buttons.edit>
-                            <x-ui.buttons.delete action="{{ route('transactions.destroy', $transaction->id) }}">
-                                <x-slot:onclick>
-                                    return confirm('Are you sure you want to delete this transaction?')
-                                </x-slot:onclick>
-                            </x-ui.buttons.delete>
+                            
                         @endcanany
                     </div>
                 </div>
@@ -151,12 +147,7 @@
 
                         <x-ui.buttons.edit href="{{ route('transactions.edit', $transaction->id) }}">
                         </x-ui.buttons.edit>
-
-                        <x-ui.buttons.delete action="{{ route('transactions.destroy', $transaction->id) }}">
-                            <x-slot:onclick>
-                                return confirm('Are you sure you want to delete this transaction?')
-                            </x-slot:onclick>
-                        </x-ui.buttons.delete>
+                        
                     @endcanany
 
                     </td>

@@ -173,6 +173,37 @@ class UserController extends Controller
     }
 
     /**
+     * Deactivate a user (set status to inactive).
+     */
+    public function deactivate(User $user)
+    {
+        $this->authorize('update', $user);
+
+        // Prevent deactivating yourself to avoid lockout
+        if (auth()->id() === $user->id) {
+            return redirect()->route('users.index')->with('error', 'You cannot deactivate your own account.');
+        }
+
+        $user->status = 'inactive';
+        $user->save();
+
+        return redirect()->route('users.index')->with('success', 'User deactivated.');
+    }
+
+    /**
+     * Reactivate a user (set status to active).
+     */
+    public function reactivate(User $user)
+    {
+        $this->authorize('update', $user);
+
+        $user->status = 'active';
+        $user->save();
+
+        return redirect()->route('users.index')->with('success', 'User reactivated.');
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(User $user)
