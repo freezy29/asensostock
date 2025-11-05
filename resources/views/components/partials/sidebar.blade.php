@@ -5,8 +5,8 @@
 
         <div class="hidden lg:flex item-center">
             <a class="flex shrink-0 items-center justify-center gap-2 text-xl" href="/" aria-current="page aria-label="AsensoStock">
-             <img src="{{ asset('images/AsensoStock.svg') }}" class="w-10 rounded-full">
-                AsensoStock
+             <img src="{{ asset('images/AscensoNoBG.svg') }}" class="w-20 rounded-full">
+            <span class='font-bold'>  AsensoStock </span>
             </a>
         </div>
 

@@ -26,7 +26,7 @@
         </div>
 
 
-        <div class="relative max-w-[100vw] px-6 pb-6">
+        <div class="relative max-w-[100vw] px-6 pb-6 top-5">
 
         @if (session('success'))
         <div class="toast toast-top toast-center z-100">

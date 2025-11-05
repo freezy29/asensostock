@@ -15,7 +15,7 @@
                 <div class="hero-content text-center p-0">
 
                 <div class="max-w-md mx-auto">
-                    <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight">Welcome Back To <span class="text-primary">AscensoStock!</span></h1>
+                    <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight">Welcome Back To <span class="text-primary">AsensoStock!</span></h1>
                       <p class="italic py-6 font-medium">
                         Count less, control more — Inventory made simple to the core.
                       </p>
