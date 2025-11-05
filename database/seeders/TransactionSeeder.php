@@ -33,20 +33,20 @@ class TransactionSeeder extends Seeder
 
         // Create transactions over the past 30 days
         $now = Carbon::now();
-        
+
         // For each product, create some initial stock-in transactions
         foreach ($products as $product) {
             $baseCostPrice = $product->price * 0.65; // Assume 65% of selling price as cost
-            
+
             // Initial stock-in (when product was first added)
             $initialDate = $now->copy()->subDays(rand(20, 30));
             $initialQuantity = rand(100, 200);
-            
+
             $transactions[] = [
                 'product_id' => $product->id,
                 'type' => 'in',
                 'quantity' => $initialQuantity,
-                'cost_price' => round($baseCostPrice, 2),
+                'price' => round($baseCostPrice, 2),
                 'total_amount' => round($baseCostPrice * $initialQuantity, 2),
                 'user_id' => $users->random()->id,
                 'created_at' => $initialDate,
@@ -59,12 +59,12 @@ class TransactionSeeder extends Seeder
                 $date = $now->copy()->subDays(rand(1, 25));
                 $quantity = rand(20, 80);
                 $costVariation = $baseCostPrice * (1 + (rand(-10, 10) / 100)); // ±10% price variation
-                
+
                 $transactions[] = [
                     'product_id' => $product->id,
                     'type' => 'in',
                     'quantity' => $quantity,
-                    'cost_price' => round($costVariation, 2),
+                    'price' => round($costVariation, 2),
                     'total_amount' => round($costVariation * $quantity, 2),
                     'user_id' => $users->random()->id,
                     'created_at' => $date,
@@ -78,12 +78,12 @@ class TransactionSeeder extends Seeder
                 $date = $now->copy()->subDays(rand(1, 20));
                 $quantity = rand(5, 30);
                 $costVariation = $baseCostPrice * (1 + (rand(-5, 5) / 100)); // Smaller variation for sales
-                
+
                 $transactions[] = [
                     'product_id' => $product->id,
                     'type' => 'out',
                     'quantity' => $quantity,
-                    'cost_price' => round($costVariation, 2),
+                    'price' => round($costVariation, 2),
                     'total_amount' => round($costVariation * $quantity, 2),
                     'user_id' => $users->random()->id,
                     'created_at' => $date,
@@ -116,7 +116,7 @@ class TransactionSeeder extends Seeder
                 'product_id' => $product->id,
                 'type' => 'in',
                 'quantity' => 5 + ($idx * 3),
-                'cost_price' => round($baseCostPrice, 2),
+                'price' => round($baseCostPrice, 2),
                 'total_amount' => round($baseCostPrice * (5 + ($idx * 3)), 2),
                 'user_id' => optional($adminUser)->id,
                 'created_at' => $today->copy()->subHours(3 + $idx),
@@ -127,7 +127,7 @@ class TransactionSeeder extends Seeder
                 'product_id' => $product->id,
                 'type' => 'out',
                 'quantity' => 2 + $idx,
-                'cost_price' => round($baseCostPrice, 2),
+                'price' => round($baseCostPrice, 2),
                 'total_amount' => round($baseCostPrice * (2 + $idx), 2),
                 'user_id' => optional($staffUser)->id,
                 'created_at' => $today->copy()->subHours(1 + $idx),
@@ -141,13 +141,13 @@ class TransactionSeeder extends Seeder
             $totalIn = Transaction::where('product_id', $product->id)
                 ->where('type', 'in')
                 ->sum('quantity');
-            
+
             $totalOut = Transaction::where('product_id', $product->id)
                 ->where('type', 'out')
                 ->sum('quantity');
-            
+
             $calculatedStock = $totalIn - $totalOut;
-            
+
             // Only update if calculated stock is positive and reasonable
             if ($calculatedStock >= 0 && $calculatedStock <= 1000) {
                 $product->stock_quantity = $calculatedStock;
