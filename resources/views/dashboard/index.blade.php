@@ -227,8 +227,8 @@
                         </div>
                     @endforelse
                 </div>
-            </div>
-        </div>
+    </div>
+</div>
 
         <!-- Top Products by Activity -->
         <div class="card bg-base-100 shadow-md border border-base-300">

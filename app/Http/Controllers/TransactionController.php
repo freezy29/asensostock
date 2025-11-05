@@ -81,28 +81,30 @@ class TransactionController extends Controller
         ]);
 
         $validated['user_id'] = auth()->user()->id;
+        $product = Product::find($validated['product_id']);
+
+        // Validate product exists
+        if (!$product) {
+            return back()->withErrors(['product_id' => 'Selected product not found.']);
+        }
+
+        // Calculate new stock based on transaction type
+        $newStock = 0;
+        if ($validated['type'] === 'in') {
+            $newStock = $product->stock_quantity + $validated['quantity'];
+        } else {
+            // Validate sufficient stock for stock out
+            if ($product->stock_quantity < $validated['quantity']) {
+                return back()->withErrors(['quantity' => 'Insufficient stock. Available: ' . $product->stock_quantity]);
+            }
+            $newStock = $product->stock_quantity - $validated['quantity'];
+        }
+
         // Calculate total_amount
         $validated['total_amount'] = $validated['cost_price'] * $validated['quantity'];
 
-        // Use database transaction + row lock to prevent race conditions
-        DB::transaction(function () use ($validated) {
-            // Lock the product row for update
-            $product = Product::where('id', $validated['product_id'])->lockForUpdate()->first();
-
-            if (!$product) {
-                throw new \Exception('Selected product not found.');
-            }
-
-            // Recalculate new stock with locked quantity
-            if ($validated['type'] === 'in') {
-                $newStock = $product->stock_quantity + $validated['quantity'];
-            } else {
-                if ($product->stock_quantity < $validated['quantity']) {
-                    throw new \Exception('Insufficient stock. Available: ' . $product->stock_quantity);
-                }
-                $newStock = $product->stock_quantity - $validated['quantity'];
-            }
-
+        // Use database transaction to ensure data consistency
+        DB::transaction(function () use ($validated, $product, $newStock) {
             $product->update(['stock_quantity' => $newStock]);
             Transaction::create($validated);
         });

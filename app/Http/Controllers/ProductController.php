@@ -115,7 +115,7 @@ class ProductController extends Controller
             'product_unit_id' => 'required|exists:units,id',
             'stock_quantity' => 'required|integer|min:0',
             'price' => 'required|numeric|min:0.01',
-            'critical_level' => 'required|integer|min:1',
+            'critical_level' => 'required|integer|min:0',
         ], [
             'price.min' => 'Price must be greater than 0.',
         ]);
@@ -215,7 +215,7 @@ class ProductController extends Controller
             'product_unit_id' => 'required|exists:units,id',
             'stock_quantity' => 'required|integer|min:0',
             'price' => 'required|numeric|min:0.01',
-            'critical_level' => 'required|integer|min:1',
+            'critical_level' => 'required|integer|min:0',
         ], [
             'price.min' => 'Price must be greater than 0.',
         ]);
