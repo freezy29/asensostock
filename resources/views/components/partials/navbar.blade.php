@@ -132,7 +132,7 @@
         class="menu menu-lg dropdown-content bg-base-100 text-base-content rounded-box z-50 mt-3 w-56 p-2 shadow-lg">
          @auth
             <li class="md:hidden">
-              <div class="flex items-center gap-3 px-2 py-2">
+              <a class="flex items-center gap-3 px-2 py-2" href="{{ route('profile.show') }}">
                 <div class="avatar">
                   <div class="w-8 rounded-full">
                     <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->first_name . " " . auth()->user()->last_name) }}&background=random" />
@@ -142,11 +142,11 @@
                   <p class="font-semibold text-sm leading-tight truncate">{{ auth()->user()->first_name . " " .  auth()->user()->last_name }}</p>
                   <p class="text-xs opacity-70">{{ (auth()->user()->role === 'super_admin') ? 'Super Admin' : ucfirst(auth()->user()->role) }}</p>
                 </div>
-              </div>
+              </a>
             </li>
          @endauth
 
-            <li><a href="{{ route('profile.show') }}">Profile</a></li>
+            <li class="hidden md:block"><a href="{{ route('profile.show') }}">Profile</a></li>
             <div class="divider -my-1"></div>
               <form method="POST" action="/logout" class="inline">
                 @csrf

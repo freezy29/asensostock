@@ -4,7 +4,7 @@
    <div class="navbar sticky bg-primary text-primary-content top-0 z-30 py-0 px-4 items-center flex">
 
         <div class="hidden lg:flex item-center h-full">
-            <a class="flex shrink-0 items-center justify-center gap-2 text-xl h-full" href="/" aria-current="page aria-label="AsensoStock">
+            <a class="flex shrink-0 items-center justify-center text-xl h-full" href="/" aria-current="page aria-label="AsensoStock">
              <img src="{{ asset('images/AscensoNoBG.svg') }}" class="w-16 rounded-full">
             <span class='font-bold'>  AsensoStock </span>
             </a>
