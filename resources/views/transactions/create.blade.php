@@ -40,9 +40,9 @@
                                 <select name="product_id"
                                         class="select select-bordered w-full @error('product_id') select-error @enderror"
                                         required>
-                                    <option disabled selected value="">Select a product</option>
+                                    <option disabled value="">Select a product</option>
                                     @foreach(\App\Models\Product::where('status', 'active')->orderBy('name')->get() as $product)
-                                        <option value="{{ $product->id }}" {{ old('product_id') == $product->id ? 'selected' : '' }}>
+                                        <option value="{{ $product->id }}" {{ old('product_id', request('product_id')) == $product->id ? 'selected' : '' }}>
                                             {{ $product->name }} (Stock: {{ $product->stock_quantity }}@if($product->unit->abbreviation) {{ $product->unit->abbreviation }}@endif)
                                         </option>
                                     @endforeach

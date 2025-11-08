@@ -10,13 +10,12 @@ class TransactionPolicy
 {
     /**
      * Determine whether the user can view any models.
+     * Note: All authenticated users can access the transactions list,
+     * but data is filtered by ownership in TransactionController::index()
+     * to ensure staff only see their own transactions.
      */
     public function viewAny(User $user): bool
     {
-        if (!$user) {
-            return false;
-        }
-
         return true;
     }
 
@@ -25,11 +24,13 @@ class TransactionPolicy
      */
     public function view(User $user, Transaction $transaction): bool
     {
-        if (!$user) {
-            return false;
+        // Staff can only view their own transactions
+        if ($user->role === 'staff') {
+            return $transaction->user_id === $user->id;
         }
 
-        return true;
+        // Admin and super_admin can view all transactions
+        return in_array($user->role, ['admin', 'super_admin']);
     }
 
     /**
@@ -37,10 +38,6 @@ class TransactionPolicy
      */
     public function create(User $user): bool
     {
-        if (!$user) {
-            return false;
-        }
-
         return true;
     }
 

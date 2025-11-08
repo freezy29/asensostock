@@ -176,11 +176,11 @@ class UnitController extends Controller
     {
         $this->authorize('delete', $unit);
 
-        // Prevent deletion of units that have products using them
-        $productsCount = $unit->products()->count();
-        if ($productsCount > 0) {
+        // Check for active products using this unit (soft delete check)
+        $activeProductsCount = $unit->products()->whereNull('deleted_at')->count();
+        if ($activeProductsCount > 0) {
             return redirect()->route('units.index')
-                ->with('error', "Cannot delete this unit. It is currently being used by {$productsCount} product(s). Please change those products to use a different unit first.");
+                ->with('error', "Cannot delete this unit. It is currently being used by {$activeProductsCount} active product(s). Please change those products to use a different unit first.");
         }
 
         $unit->delete();

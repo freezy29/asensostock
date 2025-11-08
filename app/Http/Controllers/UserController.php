@@ -90,8 +90,8 @@ class UserController extends Controller
             'first_name' => 'required|max:255',
             'last_name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
-            'phone' => 'nullable|',
-            'password' => 'required|string|confirmed',
+            'phone' => 'nullable|string|max:20',
+            'password' => 'required|string|min:8|confirmed',
             'role' => 'nullable|in:admin,staff',
         ]);
 
@@ -141,8 +141,8 @@ class UserController extends Controller
             'first_name' => 'required|max:255',
             'last_name' => 'required|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
-            'phone' => 'nullable',
-            'password' => 'nullable|string|confirmed|',
+            'phone' => 'nullable|string|max:20',
+            'password' => 'nullable|string|min:8|confirmed',
             'role' => 'nullable|in:admin,staff',
         ]);
 
@@ -173,11 +173,55 @@ class UserController extends Controller
     }
 
     /**
+     * Deactivate a user (set status to inactive).
+     */
+    public function deactivate(User $user)
+    {
+        $this->authorize('update', $user);
+
+        // Prevent deactivating yourself to avoid lockout
+        if (auth()->id() === $user->id) {
+            return redirect()->route('users.index')->with('error', 'You cannot deactivate your own account.');
+        }
+
+        $user->status = 'inactive';
+        $user->save();
+
+        return redirect()->route('users.index')->with('success', 'User deactivated.');
+    }
+
+    /**
+     * Reactivate a user (set status to active).
+     */
+    public function reactivate(User $user)
+    {
+        $this->authorize('update', $user);
+
+        $user->status = 'active';
+        $user->save();
+
+        return redirect()->route('users.index')->with('success', 'User reactivated.');
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(User $user)
     {
         $this->authorize('delete', $user);
+
+        // Prevent deleting yourself
+        if (auth()->id() === $user->id) {
+            return redirect()->route('users.index')
+                ->with('error', 'You cannot delete your own account.');
+        }
+
+        // Check for transactions - users with transaction history should not be deleted
+        $transactionsCount = $user->transactions()->count();
+        if ($transactionsCount > 0) {
+            return redirect()->route('users.index')
+                ->with('error', "Cannot delete this user. They have {$transactionsCount} transaction(s) in the system. Consider deactivating them instead.");
+        }
 
         $user->delete();
 

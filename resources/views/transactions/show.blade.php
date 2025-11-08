@@ -17,12 +17,6 @@
                     <x-ui.buttons.edit href="{{ route('transactions.edit', $transaction->id) }}">
                         Edit Transaction
                     </x-ui.buttons.edit>
-
-                    <x-ui.buttons.delete action="{{ route('transactions.destroy', $transaction->id) }}">
-                        <x-slot:onclick>
-                            return confirm('Are you sure you want to delete this transaction? This will affect stock levels.')
-                        </x-slot:onclick>
-                    </x-ui.buttons.delete>
                 </div>
                 @endcanany
 

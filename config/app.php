@@ -123,4 +123,17 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Inventory Business Rules
+    |--------------------------------------------------------------------------
+    |
+    | Maximum allowed cost price as ratio of selling price.
+    | 1.0 = cost cannot exceed selling price (strict, recommended)
+    | 1.5 = cost can be up to 150% of selling price (flexible)
+    |
+    */
+
+    'max_cost_to_selling_ratio' => env('MAX_COST_TO_SELLING_RATIO', 1.0),
+
 ];

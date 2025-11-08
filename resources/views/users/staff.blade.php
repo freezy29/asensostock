@@ -71,13 +71,11 @@
                         <x-ui.buttons.edit href="{{ route('users.edit', $user->id) }}">
                         </x-ui.buttons.edit>
 
-                        @can('delete', $user)
-                        <x-ui.buttons.delete action="{{ route('users.destroy', $user->id) }}">
-                            <x-slot:onclick>
-                                return confirm('Are you sure you want to delete this user?')
-                            </x-slot:onclick>
-                        </x-ui.buttons.delete>
-                        @endcan
+                        <x-ui.buttons.view href="{{ route('users.show', $user->id) }}">
+                        </x-ui.buttons.view>
+                        
+                        <x-ui.buttons.edit href="{{ route('users.edit', $user->id) }}">
+                        </x-ui.buttons.edit>
                     </td>
 
                 </tr>

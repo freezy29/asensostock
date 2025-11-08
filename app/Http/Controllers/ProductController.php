@@ -114,10 +114,11 @@ class ProductController extends Controller
             'product_category_id' => 'required|exists:categories,id',
             'product_unit_id' => 'required|exists:units,id',
             'stock_quantity' => 'required|integer|min:0',
-            'price' => 'required|numeric|min:0.01',
+            'price' => 'required|numeric|min:0.01|max:999999.99',
             'critical_level' => 'required|integer|min:0',
         ], [
             'price.min' => 'Price must be greater than 0.',
+            'price.max' => 'Price cannot exceed ₱999,999.99.',
         ]);
 
         // Validate that category and unit are active
@@ -218,10 +219,11 @@ class ProductController extends Controller
             'product_category_id' => 'required|exists:categories,id',
             'product_unit_id' => 'required|exists:units,id',
             'stock_quantity' => 'required|integer|min:0',
-            'price' => 'required|numeric|min:0.01',
+            'price' => 'required|numeric|min:0.01|max:999999.99',
             'critical_level' => 'required|integer|min:0',
         ], [
             'price.min' => 'Price must be greater than 0.',
+            'price.max' => 'Price cannot exceed ₱999,999.99.',
         ]);
 
         // Validate that category and unit are active
@@ -236,10 +238,10 @@ class ProductController extends Controller
             return back()->withErrors(['product_unit_id' => 'Selected unit is not active.'])->withInput();
         }
 
-        // Check if stock quantity changed manually
-        $oldStock = $product->stock_quantity;
-        $newStock = $validated['stock_quantity'];
-        $stockDifference = $newStock - $oldStock;
+        // Prevent direct stock edits
+        if ($request->filled('stock_quantity') && (int)$request->input('stock_quantity') !== (int)$product->stock_quantity) {
+            return back()->withErrors(['stock_quantity' => 'Adjust stock via Transactions. Direct stock edits are not allowed.'])->withInput();
+        }
 
         // Map form fields to database columns
         $validated['category_id'] = $validated['product_category_id'];
@@ -254,35 +256,11 @@ class ProductController extends Controller
             $validated['status'] = 'active';
         }
 
-        DB::transaction(function () use ($validated, $product, $stockDifference, $oldStock) {
+        DB::transaction(function () use ($validated, $product) {
             $product->update($validated);
-
-            // If stock was manually adjusted, create an adjustment transaction
-            if ($stockDifference != 0) {
-                $adjustmentType = $stockDifference > 0 ? 'in' : 'out';
-                $adjustmentQuantity = abs($stockDifference);
-                
-                // Use latest cost price if available, otherwise estimate
-                // This provides more accurate cost tracking than always using 65%
-                $estimatedCostPrice = $product->getLatestCostPrice();
-                
-                Transaction::create([
-                    'product_id' => $product->id,
-                    'type' => $adjustmentType,
-                    'quantity' => $adjustmentQuantity,
-                    'cost_price' => $estimatedCostPrice,
-                    'total_amount' => $estimatedCostPrice * $adjustmentQuantity,
-                    'user_id' => auth()->user()->id,
-                ]);
-            }
         });
 
-        $message = 'Product updated successfully!';
-        if ($stockDifference != 0) {
-            $message .= ' Stock adjustment transaction has been created.';
-        }
-
-        return redirect()->route('products.index')->with('success', $message);
+        return redirect()->route('products.index')->with('success', 'Product updated successfully!');
     }
 
     /**

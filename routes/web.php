@@ -26,6 +26,9 @@ Route::get('/reports', [App\Http\Controllers\ReportsController::class, 'index'])
 
 Route::middleware(['auth', 'role:super_admin,admin'])->group(function () {
     Route::resource('users', UserController::class);
+    // User status management
+    Route::post('users/{user}/deactivate', [UserController::class, 'deactivate'])->name('users.deactivate');
+    Route::post('users/{user}/reactivate', [UserController::class, 'reactivate'])->name('users.reactivate');
 });
 
 Route::middleware(['auth', 'role:admin,super_admin'])->group(function () {

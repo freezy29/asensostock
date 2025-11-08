@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Transaction;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class TransactionController extends Controller
 {
@@ -17,6 +18,11 @@ class TransactionController extends Controller
     public function index(Request $request)
     {
         $query = Transaction::with(['product.unit', 'user']);
+
+        // Staff can only see their own transactions
+        if (auth()->user()->role === 'staff') {
+            $query->where('user_id', auth()->id());
+        }
 
         // Apply search filter
         if ($request->filled('search')) {
@@ -77,37 +83,94 @@ class TransactionController extends Controller
             'product_id' => 'required|exists:products,id',
             'type' => 'required|in:in,out',
             'quantity' => 'required|integer|min:1',
-            'cost_price' => 'required|numeric|min:0',
+            'cost_price' => 'required|numeric|min:0.01|max:999999.99',
+        ], [
+            'cost_price.min' => 'Cost price must be greater than 0.',
+            'cost_price.max' => 'Cost price cannot exceed ₱999,999.99.',
         ]);
 
         $validated['user_id'] = auth()->user()->id;
-        $product = Product::find($validated['product_id']);
-
-        // Validate product exists
-        if (!$product) {
-            return back()->withErrors(['product_id' => 'Selected product not found.']);
-        }
-
-        // Calculate new stock based on transaction type
-        $newStock = 0;
-        if ($validated['type'] === 'in') {
-            $newStock = $product->stock_quantity + $validated['quantity'];
-        } else {
-            // Validate sufficient stock for stock out
-            if ($product->stock_quantity < $validated['quantity']) {
-                return back()->withErrors(['quantity' => 'Insufficient stock. Available: ' . $product->stock_quantity]);
-            }
-            $newStock = $product->stock_quantity - $validated['quantity'];
-        }
-
-        // Calculate total_amount
         $validated['total_amount'] = $validated['cost_price'] * $validated['quantity'];
 
+        // Business rule: Validate cost price vs selling price
+        if ($validated['type'] === 'in') {
+            $product = Product::find($validated['product_id']);
+            
+            if ($product) {
+                $sellingPrice = $product->price;
+                $costPrice = $validated['cost_price'];
+                
+                // Get threshold from config (default: 1.0 = 100% = cost cannot exceed selling price)
+                $maxCostRatio = config('app.max_cost_to_selling_ratio', 1.0);
+                $maxAllowedCost = $sellingPrice * $maxCostRatio;
+                
+                if ($costPrice > $maxAllowedCost) {
+                    $percentage = number_format(($costPrice / $sellingPrice) * 100, 1);
+                    
+                    return back()->withErrors([
+                        'cost_price' => sprintf(
+                            'Cost price (₱%s) cannot exceed %s%% of selling price (₱%s). ' .
+                            'Current: %s%%. If this is correct, please update the product selling price first.',
+                            number_format($costPrice, 2),
+                            number_format($maxCostRatio * 100, 0),
+                            number_format($sellingPrice, 2),
+                            $percentage
+                        )
+                    ])->withInput();
+                }
+                
+                // Soft warning if cost exceeds selling price but within threshold
+                if ($costPrice > $sellingPrice && $costPrice <= $maxAllowedCost) {
+                    session()->flash('warning', 
+                        'Note: Cost price exceeds selling price. This may indicate a loss-making product.');
+                }
+            }
+        }
+
         // Use database transaction to ensure data consistency
-        DB::transaction(function () use ($validated, $product, $newStock) {
-            $product->update(['stock_quantity' => $newStock]);
-            Transaction::create($validated);
-        });
+        // Lock and calculate stock INSIDE transaction to prevent race conditions
+        try {
+            DB::transaction(function () use ($validated) {
+                // Lock product row to prevent concurrent stock updates
+                $lockedProduct = Product::where('id', $validated['product_id'])->lockForUpdate()->first();
+
+                // Validate product exists
+                if (!$lockedProduct) {
+                    throw new \Exception('Selected product not found.');
+                }
+
+                // Calculate new stock based on transaction type using locked value
+                $newStock = 0;
+                if ($validated['type'] === 'in') {
+                    $newStock = $lockedProduct->stock_quantity + $validated['quantity'];
+                } else {
+                    // Validate sufficient stock for stock out
+                    if ($lockedProduct->stock_quantity < $validated['quantity']) {
+                        throw new \Exception('Insufficient stock. Available: ' . $lockedProduct->stock_quantity);
+                    }
+                    $newStock = $lockedProduct->stock_quantity - $validated['quantity'];
+                }
+
+                // Update stock and create transaction atomically
+                $lockedProduct->update(['stock_quantity' => $newStock]);
+                Transaction::create($validated);
+            });
+        } catch (\Exception $e) {
+            // Convert exceptions to user-friendly error messages
+            if (str_contains($e->getMessage(), 'Selected product not found')) {
+                return back()->withErrors(['product_id' => 'Selected product not found.'])->withInput();
+            }
+            if (str_contains($e->getMessage(), 'Insufficient stock')) {
+                // Extract stock number from error message (format: "Insufficient stock. Available: 50")
+                preg_match('/Available:\s*(\d+)/', $e->getMessage(), $matches);
+                $availableStock = $matches[1] ?? 0;
+                return back()->withErrors(['quantity' => 'Insufficient stock. Available: ' . $availableStock])->withInput();
+            }
+            throw $e; // Re-throw if it's an unexpected exception
+        }
+
+        // Clear navbar cache since stock levels changed
+        Cache::forget('navbar_stock_alerts');
 
         return redirect()->route('transactions.index')->with('success', 'Transaction recorded successfully!');
     }
@@ -117,6 +180,8 @@ class TransactionController extends Controller
      */
     public function show(Transaction $transaction)
     {
+        $this->authorize('view', $transaction);
+
         $transaction->load(['product', 'user']);
 
         return view('transactions.show', ['transaction' => $transaction]);
@@ -145,14 +210,52 @@ class TransactionController extends Controller
             'product_id' => 'required|exists:products,id',
             'type' => 'required|in:in,out',
             'quantity' => 'required|integer|min:1',
-            'cost_price' => 'required|numeric|min:0',
+            'cost_price' => 'required|numeric|min:0.01|max:999999.99',
+        ], [
+            'cost_price.min' => 'Cost price must be greater than 0.',
+            'cost_price.max' => 'Cost price cannot exceed ₱999,999.99.',
         ]);
 
         $validated['total_amount'] = $validated['cost_price'] * $validated['quantity'];
 
+        // Business rule: Validate cost price vs selling price
+        if ($validated['type'] === 'in') {
+            $product = Product::find($validated['product_id']);
+            
+            if ($product) {
+                $sellingPrice = $product->price;
+                $costPrice = $validated['cost_price'];
+                
+                // Get threshold from config (default: 1.0 = 100% = cost cannot exceed selling price)
+                $maxCostRatio = config('app.max_cost_to_selling_ratio', 1.0);
+                $maxAllowedCost = $sellingPrice * $maxCostRatio;
+                
+                if ($costPrice > $maxAllowedCost) {
+                    $percentage = number_format(($costPrice / $sellingPrice) * 100, 1);
+                    
+                    return back()->withErrors([
+                        'cost_price' => sprintf(
+                            'Cost price (₱%s) cannot exceed %s%% of selling price (₱%s). ' .
+                            'Current: %s%%. If this is correct, please update the product selling price first.',
+                            number_format($costPrice, 2),
+                            number_format($maxCostRatio * 100, 0),
+                            number_format($sellingPrice, 2),
+                            $percentage
+                        )
+                    ])->withInput();
+                }
+                
+                // Soft warning if cost exceeds selling price but within threshold
+                if ($costPrice > $sellingPrice && $costPrice <= $maxAllowedCost) {
+                    session()->flash('warning', 
+                        'Note: Cost price exceeds selling price. This may indicate a loss-making product.');
+                }
+            }
+        }
+
         // Get the old transaction values for stock recalculation
-        $oldProduct = Product::find($transaction->product_id);
-        $newProduct = Product::find($validated['product_id']);
+        $oldProduct = Product::where('id', $transaction->product_id)->lockForUpdate()->first();
+        $newProduct = Product::where('id', $validated['product_id'])->lockForUpdate()->first();
 
         if (!$newProduct) {
             return back()->withErrors(['product_id' => 'Selected product not found.']);
@@ -172,9 +275,7 @@ class TransactionController extends Controller
                 $oldProduct->save();
             }
 
-            // Step 2: Apply the new transaction's stock impact
-            // Refresh newProduct to get current stock (which may have been affected if same product)
-            $newProduct->refresh();
+            // Step 2: Apply the new transaction's stock impact (row locked)
 
             // Check if we need to validate stock availability for stock out
             if ($validated['type'] === 'out') {
@@ -194,6 +295,9 @@ class TransactionController extends Controller
             // Step 3: Update the transaction record
             $transaction->update($validated);
         });
+
+        // Clear navbar cache since stock levels changed
+        Cache::forget('navbar_stock_alerts');
 
         return redirect()->route('transactions.show', $transaction->id)
             ->with('success', 'Transaction updated successfully!');
@@ -216,22 +320,27 @@ class TransactionController extends Controller
         // Use database transaction to ensure data consistency
         DB::transaction(function () use ($transaction, $product) {
             // Revert the stock impact of this transaction
+            // Lock product row
+            $lockedProduct = Product::where('id', $product->id)->lockForUpdate()->first();
             if ($transaction->type === 'in') {
                 // Transaction was stock in, so subtract to revert
-                $product->stock_quantity -= $transaction->quantity;
+                $lockedProduct->stock_quantity -= $transaction->quantity;
             } else {
                 // Transaction was stock out, so add back to revert
-                $product->stock_quantity += $transaction->quantity;
+                $lockedProduct->stock_quantity += $transaction->quantity;
             }
 
             // Ensure stock doesn't go negative (shouldn't happen, but safety check)
-            if ($product->stock_quantity < 0) {
+            if ($lockedProduct->stock_quantity < 0) {
                 throw new \Exception('Cannot delete transaction: Would result in negative stock.');
             }
 
-            $product->save();
+            $lockedProduct->save();
             $transaction->delete();
         });
+
+        // Clear navbar cache since stock levels changed
+        Cache::forget('navbar_stock_alerts');
 
         return redirect()->route('transactions.index')
             ->with('success', 'Transaction deleted successfully. Stock has been adjusted.');
