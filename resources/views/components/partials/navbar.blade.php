@@ -1,17 +1,4 @@
 <nav class="navbar w-full py-0 bg-primary text-primary-content px-4 ">
-  @php
-    // Only show alerts for active products (inactive products shouldn't trigger alerts)
-    $lowStockBase = \App\Models\Product::where('status', 'active');
-    $lowStockQuery = (clone $lowStockBase)
-        ->whereRaw('stock_quantity <= (critical_level * 1.5)')
-        ->orderBy('updated_at', 'desc');
-    $lowStockCount = (clone $lowStockQuery)->count();
-    $criticalCount = (clone $lowStockBase)
-        ->whereRaw('stock_quantity <= critical_level')
-        ->count();
-    $viewAllStatus = 'alerts';
-    $lowStockItems = (clone $lowStockQuery)->take(6)->get();
-  @endphp
   <div class="navbar-start flex flex-1 item-center gap-2 ">
     <div class="lg:hidden">
         <label for="drawer" aria-label="open sidebar" class="btn btn-square btn-ghost">

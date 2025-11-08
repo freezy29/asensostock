@@ -210,6 +210,19 @@ class UserController extends Controller
     {
         $this->authorize('delete', $user);
 
+        // Prevent deleting yourself
+        if (auth()->id() === $user->id) {
+            return redirect()->route('users.index')
+                ->with('error', 'You cannot delete your own account.');
+        }
+
+        // Check for transactions - users with transaction history should not be deleted
+        $transactionsCount = $user->transactions()->count();
+        if ($transactionsCount > 0) {
+            return redirect()->route('users.index')
+                ->with('error', "Cannot delete this user. They have {$transactionsCount} transaction(s) in the system. Consider deactivating them instead.");
+        }
+
         $user->delete();
 
         return redirect()->route('users.index')->with('success', 'User deleted from the list!');

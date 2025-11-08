@@ -150,6 +150,13 @@ class CategoryController extends Controller
     {
         $this->authorize('delete', $category);
 
+        // Check for active products using this category (soft delete check)
+        $activeProductsCount = $category->products()->whereNull('deleted_at')->count();
+        if ($activeProductsCount > 0) {
+            return redirect()->route('categories.index')
+                ->with('error', "Cannot delete this category. It is currently being used by {$activeProductsCount} active product(s). Please change those products to use a different category first.");
+        }
+
         $category->delete();
 
         return redirect()->route('categories.index')->with('success', 'Category deleted from the list!');

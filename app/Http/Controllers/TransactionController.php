@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Transaction;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class TransactionController extends Controller
 {
@@ -81,36 +82,52 @@ class TransactionController extends Controller
         ]);
 
         $validated['user_id'] = auth()->user()->id;
-        // Lock the product row to prevent concurrent stock updates
-        $product = Product::where('id', $validated['product_id'])->lockForUpdate()->first();
-
-        // Validate product exists
-        if (!$product) {
-            return back()->withErrors(['product_id' => 'Selected product not found.']);
-        }
-
-        // Calculate new stock based on transaction type
-        $newStock = 0;
-        if ($validated['type'] === 'in') {
-            $newStock = $product->stock_quantity + $validated['quantity'];
-        } else {
-            // Validate sufficient stock for stock out
-            if ($product->stock_quantity < $validated['quantity']) {
-                return back()->withErrors(['quantity' => 'Insufficient stock. Available: ' . $product->stock_quantity]);
-            }
-            $newStock = $product->stock_quantity - $validated['quantity'];
-        }
-
-        // Calculate total_amount
         $validated['total_amount'] = $validated['cost_price'] * $validated['quantity'];
 
         // Use database transaction to ensure data consistency
-        DB::transaction(function () use ($validated, $product, $newStock) {
-            // Re-fetch with lock inside the transaction to be safe
-            $lockedProduct = Product::where('id', $product->id)->lockForUpdate()->first();
-            $lockedProduct->update(['stock_quantity' => $newStock]);
-            Transaction::create($validated);
-        });
+        // Lock and calculate stock INSIDE transaction to prevent race conditions
+        try {
+            DB::transaction(function () use ($validated) {
+                // Lock product row to prevent concurrent stock updates
+                $lockedProduct = Product::where('id', $validated['product_id'])->lockForUpdate()->first();
+
+                // Validate product exists
+                if (!$lockedProduct) {
+                    throw new \Exception('Selected product not found.');
+                }
+
+                // Calculate new stock based on transaction type using locked value
+                $newStock = 0;
+                if ($validated['type'] === 'in') {
+                    $newStock = $lockedProduct->stock_quantity + $validated['quantity'];
+                } else {
+                    // Validate sufficient stock for stock out
+                    if ($lockedProduct->stock_quantity < $validated['quantity']) {
+                        throw new \Exception('Insufficient stock. Available: ' . $lockedProduct->stock_quantity);
+                    }
+                    $newStock = $lockedProduct->stock_quantity - $validated['quantity'];
+                }
+
+                // Update stock and create transaction atomically
+                $lockedProduct->update(['stock_quantity' => $newStock]);
+                Transaction::create($validated);
+            });
+        } catch (\Exception $e) {
+            // Convert exceptions to user-friendly error messages
+            if (str_contains($e->getMessage(), 'Selected product not found')) {
+                return back()->withErrors(['product_id' => 'Selected product not found.'])->withInput();
+            }
+            if (str_contains($e->getMessage(), 'Insufficient stock')) {
+                // Extract stock number from error message (format: "Insufficient stock. Available: 50")
+                preg_match('/Available:\s*(\d+)/', $e->getMessage(), $matches);
+                $availableStock = $matches[1] ?? 0;
+                return back()->withErrors(['quantity' => 'Insufficient stock. Available: ' . $availableStock])->withInput();
+            }
+            throw $e; // Re-throw if it's an unexpected exception
+        }
+
+        // Clear navbar cache since stock levels changed
+        Cache::forget('navbar_stock_alerts');
 
         return redirect()->route('transactions.index')->with('success', 'Transaction recorded successfully!');
     }
@@ -196,6 +213,9 @@ class TransactionController extends Controller
             $transaction->update($validated);
         });
 
+        // Clear navbar cache since stock levels changed
+        Cache::forget('navbar_stock_alerts');
+
         return redirect()->route('transactions.show', $transaction->id)
             ->with('success', 'Transaction updated successfully!');
     }
@@ -235,6 +255,9 @@ class TransactionController extends Controller
             $lockedProduct->save();
             $transaction->delete();
         });
+
+        // Clear navbar cache since stock levels changed
+        Cache::forget('navbar_stock_alerts');
 
         return redirect()->route('transactions.index')
             ->with('success', 'Transaction deleted successfully. Stock has been adjusted.');
