@@ -113,7 +113,7 @@ class ProductController extends Controller
             'name' => 'required|max:255',
             'product_category_id' => 'required|exists:categories,id',
             'product_unit_id' => 'required|exists:units,id',
-            // Stock quantity cannot be edited directly. Adjust via transactions.
+            'stock_quantity' => 'required|integer|min:0',
             'price' => 'required|numeric|min:0.01',
             'critical_level' => 'required|integer|min:0',
         ], [

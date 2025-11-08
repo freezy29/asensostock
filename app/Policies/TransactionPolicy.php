@@ -13,10 +13,6 @@ class TransactionPolicy
      */
     public function viewAny(User $user): bool
     {
-        if (!$user) {
-            return false;
-        }
-
         return true;
     }
 
@@ -25,10 +21,6 @@ class TransactionPolicy
      */
     public function view(User $user, Transaction $transaction): bool
     {
-        if (!$user) {
-            return false;
-        }
-
         return true;
     }
 
@@ -37,10 +29,6 @@ class TransactionPolicy
      */
     public function create(User $user): bool
     {
-        if (!$user) {
-            return false;
-        }
-
         return true;
     }
 
