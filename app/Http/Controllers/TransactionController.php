@@ -92,6 +92,41 @@ class TransactionController extends Controller
         $validated['user_id'] = auth()->user()->id;
         $validated['total_amount'] = $validated['cost_price'] * $validated['quantity'];
 
+        // Business rule: Validate cost price vs selling price
+        if ($validated['type'] === 'in') {
+            $product = Product::find($validated['product_id']);
+            
+            if ($product) {
+                $sellingPrice = $product->price;
+                $costPrice = $validated['cost_price'];
+                
+                // Get threshold from config (default: 1.0 = 100% = cost cannot exceed selling price)
+                $maxCostRatio = config('app.max_cost_to_selling_ratio', 1.0);
+                $maxAllowedCost = $sellingPrice * $maxCostRatio;
+                
+                if ($costPrice > $maxAllowedCost) {
+                    $percentage = number_format(($costPrice / $sellingPrice) * 100, 1);
+                    
+                    return back()->withErrors([
+                        'cost_price' => sprintf(
+                            'Cost price (₱%s) cannot exceed %s%% of selling price (₱%s). ' .
+                            'Current: %s%%. If this is correct, please update the product selling price first.',
+                            number_format($costPrice, 2),
+                            number_format($maxCostRatio * 100, 0),
+                            number_format($sellingPrice, 2),
+                            $percentage
+                        )
+                    ])->withInput();
+                }
+                
+                // Soft warning if cost exceeds selling price but within threshold
+                if ($costPrice > $sellingPrice && $costPrice <= $maxAllowedCost) {
+                    session()->flash('warning', 
+                        'Note: Cost price exceeds selling price. This may indicate a loss-making product.');
+                }
+            }
+        }
+
         // Use database transaction to ensure data consistency
         // Lock and calculate stock INSIDE transaction to prevent race conditions
         try {
@@ -182,6 +217,41 @@ class TransactionController extends Controller
         ]);
 
         $validated['total_amount'] = $validated['cost_price'] * $validated['quantity'];
+
+        // Business rule: Validate cost price vs selling price
+        if ($validated['type'] === 'in') {
+            $product = Product::find($validated['product_id']);
+            
+            if ($product) {
+                $sellingPrice = $product->price;
+                $costPrice = $validated['cost_price'];
+                
+                // Get threshold from config (default: 1.0 = 100% = cost cannot exceed selling price)
+                $maxCostRatio = config('app.max_cost_to_selling_ratio', 1.0);
+                $maxAllowedCost = $sellingPrice * $maxCostRatio;
+                
+                if ($costPrice > $maxAllowedCost) {
+                    $percentage = number_format(($costPrice / $sellingPrice) * 100, 1);
+                    
+                    return back()->withErrors([
+                        'cost_price' => sprintf(
+                            'Cost price (₱%s) cannot exceed %s%% of selling price (₱%s). ' .
+                            'Current: %s%%. If this is correct, please update the product selling price first.',
+                            number_format($costPrice, 2),
+                            number_format($maxCostRatio * 100, 0),
+                            number_format($sellingPrice, 2),
+                            $percentage
+                        )
+                    ])->withInput();
+                }
+                
+                // Soft warning if cost exceeds selling price but within threshold
+                if ($costPrice > $sellingPrice && $costPrice <= $maxAllowedCost) {
+                    session()->flash('warning', 
+                        'Note: Cost price exceeds selling price. This may indicate a loss-making product.');
+                }
+            }
+        }
 
         // Get the old transaction values for stock recalculation
         $oldProduct = Product::where('id', $transaction->product_id)->lockForUpdate()->first();
