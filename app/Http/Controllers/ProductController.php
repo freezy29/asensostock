@@ -114,10 +114,11 @@ class ProductController extends Controller
             'product_category_id' => 'required|exists:categories,id',
             'product_unit_id' => 'required|exists:units,id',
             'stock_quantity' => 'required|integer|min:0',
-            'price' => 'required|numeric|min:0.01',
+            'price' => 'required|numeric|min:0.01|max:999999.99',
             'critical_level' => 'required|integer|min:0',
         ], [
             'price.min' => 'Price must be greater than 0.',
+            'price.max' => 'Price cannot exceed ₱999,999.99.',
         ]);
 
         // Validate that category and unit are active
@@ -218,10 +219,11 @@ class ProductController extends Controller
             'product_category_id' => 'required|exists:categories,id',
             'product_unit_id' => 'required|exists:units,id',
             'stock_quantity' => 'required|integer|min:0',
-            'price' => 'required|numeric|min:0.01',
+            'price' => 'required|numeric|min:0.01|max:999999.99',
             'critical_level' => 'required|integer|min:0',
         ], [
             'price.min' => 'Price must be greater than 0.',
+            'price.max' => 'Price cannot exceed ₱999,999.99.',
         ]);
 
         // Validate that category and unit are active

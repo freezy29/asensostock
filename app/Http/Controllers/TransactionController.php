@@ -78,7 +78,10 @@ class TransactionController extends Controller
             'product_id' => 'required|exists:products,id',
             'type' => 'required|in:in,out',
             'quantity' => 'required|integer|min:1',
-            'cost_price' => 'required|numeric|min:0',
+            'cost_price' => 'required|numeric|min:0.01|max:999999.99',
+        ], [
+            'cost_price.min' => 'Cost price must be greater than 0.',
+            'cost_price.max' => 'Cost price cannot exceed ₱999,999.99.',
         ]);
 
         $validated['user_id'] = auth()->user()->id;
@@ -165,7 +168,10 @@ class TransactionController extends Controller
             'product_id' => 'required|exists:products,id',
             'type' => 'required|in:in,out',
             'quantity' => 'required|integer|min:1',
-            'cost_price' => 'required|numeric|min:0',
+            'cost_price' => 'required|numeric|min:0.01|max:999999.99',
+        ], [
+            'cost_price.min' => 'Cost price must be greater than 0.',
+            'cost_price.max' => 'Cost price cannot exceed ₱999,999.99.',
         ]);
 
         $validated['total_amount'] = $validated['cost_price'] * $validated['quantity'];
