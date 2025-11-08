@@ -214,7 +214,7 @@
 
                         <x-ui.buttons.edit href="{{ route('products.edit', $product->id) }}">
                         </x-ui.buttons.edit>
-                        
+
                     @endcanany
 
                     </td>
