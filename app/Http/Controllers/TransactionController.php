@@ -19,6 +19,11 @@ class TransactionController extends Controller
     {
         $query = Transaction::with(['product.unit', 'user']);
 
+        // Staff can only see their own transactions
+        if (auth()->user()->role === 'staff') {
+            $query->where('user_id', auth()->id());
+        }
+
         // Apply search filter
         if ($request->filled('search')) {
             $search = $request->search;
@@ -140,6 +145,8 @@ class TransactionController extends Controller
      */
     public function show(Transaction $transaction)
     {
+        $this->authorize('view', $transaction);
+
         $transaction->load(['product', 'user']);
 
         return view('transactions.show', ['transaction' => $transaction]);
